@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="default">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-线程同步-锁" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/04/线程同步-锁/" class="article-date">
+  <time datetime="2018-09-04T13:03:31.111Z" itemprop="datePublished">2018-09-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/04/线程同步-锁/">线程同步-锁</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="锁概述"><a href="#锁概述" class="headerlink" title="锁概述"></a>锁概述</h2><p>锁是解决线程安全问题的最基本的解决方案。通过加锁，使得会发生线程安全问题的代码单线程串行。从而解决线程安全问题。</p>
+<h4 id="锁的分类"><a href="#锁的分类" class="headerlink" title="锁的分类"></a>锁的分类</h4><h6 id="公平锁和非公平锁"><a href="#公平锁和非公平锁" class="headerlink" title="公平锁和非公平锁"></a>公平锁和非公平锁</h6><p>公平锁是按照锁申请的顺序来分配锁资源。<br>非公平锁是允许插队的，可能后申请的线程比先申请的线程优先获取锁。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java中锁一般默认都是非公平锁。因为公平锁为了保障公平往往会增加线程的唤醒和暂停。例如一个</span><br><span class="line">运行中的线程要获取锁必须先检查有没有其他排队的线程，有就需要一次暂停。所以公平锁的开销比</span><br><span class="line">公平锁大。公平锁适用于锁持有时间相对长或者线程申请锁平均间隔时间相对大的情况。</span><br></pre></td></tr></table></figure></p>
+<h4 id="内部锁-synchronized"><a href="#内部锁-synchronized" class="headerlink" title="内部锁 synchronized"></a>内部锁 synchronized</h4><p>内部锁是一种排他锁，可以保证原子性，可见性和有序性。</p>
+<h6 id="通过synchronized关键字使用。有三种用法："><a href="#通过synchronized关键字使用。有三种用法：" class="headerlink" title="通过synchronized关键字使用。有三种用法："></a>通过synchronized关键字使用。有三种用法：</h6><ol>
+<li>同步代码快</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">   <span class="keyword">private</span> <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> Object o=<span class="keyword">new</span> Object();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="comment">//可以用一任意对象作为锁。用同个对象锁的synchronized代码块，只有获取到该对象锁的才能进去。</span></span><br><span class="line">	<span class="keyword">synchronized</span> (o) &#123;</span><br><span class="line">		<span class="keyword">while</span>(i&lt;<span class="number">100</span>)&#123;</span><br><span class="line">			i++;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.同步方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">   <span class="keyword">private</span> <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">   <span class="comment">//同步方法的锁对象用的是this</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">		<span class="keyword">while</span>(i&lt;<span class="number">100</span>)&#123;</span><br><span class="line">			i++;</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.同步静态方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">   <span class="comment">//静态同步方法的锁对象是该类字节码对象，XX.class</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">while</span>(i&lt;<span class="number">100</span>)&#123;</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="显示锁-Lock"><a href="#显示锁-Lock" class="headerlink" title="显示锁 Lock"></a>显示锁 Lock</h4><p>显示锁是1.5加入jdk的。作用与内部锁相同，用于作为线程同步机制。它提供了内部锁没有的特效，但并不能替代内部锁。</p>
+<h6 id="Lock使用"><a href="#Lock使用" class="headerlink" title="Lock使用"></a>Lock使用</h6><p>一个Lock接口的实例就是一个显示锁。通过lock方法加锁，和unlock方法释放锁。类java.util.concurrent.locks.ReentrantLock是Lock的实现。Lock既支持公平锁，也支持非公平锁。默认使用非公平锁。可以通过构造函数设置 <code>new ReentrantLock(boolean isFair)</code></p>
+<p>Lock API<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Lock</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取锁</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//如果线程未被中断，则获取锁</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//锁没被占用才能获取锁</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//在给定时间内获取空闲锁</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> time, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//释放锁</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取监视器</span></span><br><span class="line">    <span class="function">Condition <span class="title">newCondition</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Lock使用</p>
+<p>注意:锁的释放一定要在finally里释放，防止锁泄露。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">//新建一个锁对象 </span></span><br><span class="line">   Lock lock =<span class="keyword">new</span>  ReentrantLock();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	Runnable runnable = <span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">	</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		    <span class="comment">//获取锁</span></span><br><span class="line">			lock.lock();</span><br><span class="line">			<span class="keyword">try</span>&#123;</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">while</span>(i&lt;<span class="number">100</span>)&#123;</span><br><span class="line">					System.out.println(i++);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">			    <span class="comment">//释放锁</span></span><br><span class="line">				lock.unlock();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;;</span><br><span class="line">	</span><br><span class="line">	&#125;;</span><br><span class="line">	Thread thread = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line">	Thread thread2 = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line">	thread.start();</span><br><span class="line">	thread2.start();</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		Thread.sleep(<span class="number">10000</span>);</span><br><span class="line">	&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">		e.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h6 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h6><p>读写锁是一种改进型的排他锁。将读和写的锁分离。可以多个线程进行读操作,但是读操作时不允许写操作。一个线程进行写操作时，其他线程不能进行读和写操作。</p>
+<p>读写锁分为读锁和写锁</p>
+<ol>
+<li>读锁：一个线程持有读锁不会妨碍其他线程获取读锁。</li>
+<li>写锁：一个线程持有写锁，其他线程无法获取读锁和写锁。</li>
+</ol>
+<p>读写锁使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> ReadWriteLock readWriteLock= <span class="keyword">new</span> ReentrantReadWriteLock();</span><br><span class="line"><span class="keyword">private</span>  <span class="keyword">final</span> Lock readLock = readWriteLock.readLock();</span><br><span class="line"><span class="keyword">private</span>  <span class="keyword">final</span> Lock writeLock = readWriteLock.writeLock();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">read</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="comment">//获取读锁</span></span><br><span class="line">	readLock.lock();</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		<span class="comment">//读取共享变量</span></span><br><span class="line">	&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">		readLock.unlock();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//获取写锁</span></span><br><span class="line">	writeLock.lock();</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		<span class="comment">//写共享变量</span></span><br><span class="line">	&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">		writeLock.unlock();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>读写锁适用于读操作比写操作频繁且读操作持有锁时间比较长的情况。</p>
+<h4 id="内部锁和显示锁的区别"><a href="#内部锁和显示锁的区别" class="headerlink" title="内部锁和显示锁的区别"></a>内部锁和显示锁的区别</h4><ol>
+<li>内部锁基于代码块的锁，没有灵活性可言。显示锁可以灵活使用，但也意味容易出错。例如显示锁容易导致锁泄露（即锁没有释放），内部锁不存在锁泄露。</li>
+<li>内部锁获取锁只能阻塞（相当于显示锁的lock）。显示锁可以有tryLock方法。有闲置的锁就可以获取锁放回true，否则返回false，不会造成阻塞。 </li>
+<li>内部锁的线程通信 notify/notifyAll/wait。显示锁可以通过一个或多个Condition来处理等待唤醒，更加灵活。</li>
+</ol>
+<h4 id="锁适用情况"><a href="#锁适用情况" class="headerlink" title="锁适用情况"></a>锁适用情况</h4><p>多线程共享一组数据，一个线程有以下操作时</p>
+<ol>
+<li>check-then-act,读取共享数据判断下个操作是什么。</li>
+<li>read-modify-write,读取共享数据，修改再写回。如：i++</li>
+<li>多个线程对多个共享数据更新，如果多个共享数据时有关联的。如：服务器ip，端口。就需要加锁保持原子性。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/04/线程同步-锁/" data-id="cjlnqxnx4000cektwehj4ehfk" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-多线程之线程安全" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/04/多线程之线程安全/" class="article-date">
+  <time datetime="2018-09-04T13:03:31.109Z" itemprop="datePublished">2018-09-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/04/多线程之线程安全/">多线程之线程安全</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="多线程存在的问题"><a href="#多线程存在的问题" class="headerlink" title="多线程存在的问题"></a>多线程存在的问题</h2><p>多线程运用得好可以大大提高系统的性能。但是使用不当也会对系统造成毁灭性灾难。</p>
+<ol>
+<li>线程安全问题。多个线程操作共享数据时,会产生线程安全问题。导致读取脏数据或者丢失更新等问题</li>
+<li>线程活性问题。由于程序问题导致一个线程一直处于非Runnable状态或者处于Runnable状态但执行的任务没有紧张称为线程活性问题。例如：两个线程，线程1需要先占用锁1，再占用锁2。线程2需要先占用锁2，再占用锁1。这是如果线程1占用了锁1，线程2占用了锁2。他们都占用了对方需要的锁，双方都阻塞等待对方的锁释放，导致死锁。</li>
+<li>上下文切换。线程切换引起的上下文切换，会增加系统消耗。</li>
+</ol>
+<h4 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h4><p> 线程安全问题是多个线程在操作共享数据引起的。要保证线程安全，就需要保证对共享数据的操作有三个性质：原子性，可见性和有序性。</p>
+<h6 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h6><p>原子性是指涉及共享数据的操作对别的线程是不可分割的。即其他线程只能看到该操作未发生或者已经结束。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">注意 i++ 并不是原子性操作,i++实际上是一个`read-modify-write`操作。</span><br><span class="line">1. 先读取出i的值</span><br><span class="line">2. 修改i的值</span><br><span class="line">3. 写回内存</span><br></pre></td></tr></table></figure></p>
+<h6 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h6><p>可见性是指一个线程对共享数据修改后，其他线程可以看到修改后的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 由于java内存模型中,每个线程都有一个工作内存。在对共享数据进行修改和读取时，</span><br><span class="line">是先对工作内存中的数据进行操作。所以其他线程读取的共享变量可能是脏数据,无法保证可见性。</span><br><span class="line">2. 重排序导致的有序性问题也是影响可见性的重要因素。</span><br></pre></td></tr></table></figure></p>
+<p><strong>Java内存模型</strong><br>java内存模型，简称JMM。java线程之间的通信是通过JMM控制的。JMM定义了线程和主内存之间的抽象关系：线程之间的共享变量存储在主内存中，每个线程都有其工作内存，存有共享变量的副本。线程对共享变量的读写都是先对工作内存进行，工作内存在将共享变量和内存同步。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">工作内存是抽象概念，并非真实存在。它蕴含了缓存，写缓存区，寄存器还有其他硬件等。</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/68A6474D626F4568B15913F0B4AB9DC7?method=download&amp;shareKey=3f9fc493b14ff7b7ca38d547ec75d313" alt="image"></p>
+<h6 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h6><p>JIT编译器为了优化系统，会对代码进行重排序。重排序按照as-if-serial语义，保证重排序后在单线程时运行结果是一样的。但是多线程时，无法保证有序性。</p>
+<p>代码经过各级重排序优化再最终执行<br><img src="https://note.youdao.com/yws/api/personal/file/88D236CC75C74444AEB30053E30250C7?method=download&amp;shareKey=0de6137d55f9cec58b71542913d75af5" alt="image"></p>
+<p>happens-before规则是JMM对多线程重排序的约束规则，遵循happens-before规则的重排序不会改变多线程的执行结果。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a=<span class="number">1</span>; <span class="comment">//A</span></span><br><span class="line"><span class="keyword">int</span> b=<span class="number">3</span>; <span class="comment">//B</span></span><br><span class="line"><span class="keyword">int</span> c=a+b; <span class="comment">//C</span></span><br></pre></td></tr></table></figure>
+<p>A happens-before B(非必须)</p>
+<p>A happens-before C</p>
+<p>B happens-before C</p>
+<p>JMM对happens-before的定义：</p>
+<ol>
+<li>如果一个操作happens-before另一个操作，那么操作一的执行结果对第二个操作时可见的，并且第一个操作执行顺序在第二个操作之前。</li>
+<li>两个操作如果存在happens-before规则，并不意味者java平台会按照happens-before的执行顺序执行。如果重排序的执行结果和按happens-before顺序执行的结果一致的话，jmm允许这种排序。</li>
+</ol>
+<p>规则1是JMM对程序员的保证，而规则2是JMM对编译器和处理器重排序的约束</p>
+<p>下面是happens-before原则规则：</p>
+<ol>
+<li>程序次序规则：一个线程内，按照代码顺序，书写在前面的操作先行发生于书写在后面的操作；</li>
+<li>锁定规则：一个unLock操作先行发生于后面对同一个锁额lock操作；</li>
+<li>volatile变量规则：对一个变量的写操作先行发生于后面对这个变量的读操作；</li>
+<li>传递规则：如果操作A先行发生于操作B，而操作B又先行发生于操作C，则可以得出操作A先行发生于操作C；</li>
+<li>线程启动规则：Thread对象的start()方法先行发生于此线程的每个一个动作；</li>
+<li>线程中断规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生；</li>
+<li>线程终结规则：线程中所有的操作都先行发生于线程的终止检测，我们可以通过Thread.join()方法结束、Thread.isAlive()的返回值手段检测到线程已经终止执行；</li>
+<li>对象终结规则：一个对象的初始化完成先行发生于他的finalize()方法的开始；</li>
+</ol>
+<p>happens-before规则也保证了可见性，先执行的操作结果对后面执行的操作是可见的。</p>
+<p><strong>happens-before推导</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> flag;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> i;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">read</span><span class="params">()</span></span>&#123;</span><br><span class="line">    i=<span class="number">1</span>;   <span class="comment">//1</span></span><br><span class="line">    flag=<span class="keyword">true</span>;  <span class="comment">//2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">write</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(flag)&#123;   <span class="comment">// 3</span></span><br><span class="line">        <span class="keyword">int</span> j=i;  <span class="comment">//4  </span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>根据程序规则，1 happens-before 2   ; 3 happens-before 4</li>
+<li>根据volatile规则,2 happens-before 3</li>
+<li>根据传递性规则,由 1 happens-before 2,2 happens-before 3,3 happens-before 4  =&gt; 1 happens before 4</li>
+</ol>
+<p><img src="https://note.youdao.com/yws/api/personal/file/9701E3594CC7474CB01BA2B3D7FE4333?method=download&amp;shareKey=6ea8df4834bcf1dd13d9d714b15b72d7" alt="image"></p>
+<h4 id="线程安全解决方案"><a href="#线程安全解决方案" class="headerlink" title="线程安全解决方案"></a>线程安全解决方案</h4><p>多线程安全问题是因为多个线程同时操作共享变量，缺乏同步机制来协调线程间数据的访问和活动。jdk提供了锁，volatile关键字等线程同步机制</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/04/多线程之线程安全/" data-id="cjlnqxnx00009ektww1qrhh6d" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-多线程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/04/多线程/" class="article-date">
+  <time datetime="2018-09-04T13:03:31.108Z" itemprop="datePublished">2018-09-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/04/多线程/">多线程基础</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="多线程的概念"><a href="#多线程的概念" class="headerlink" title="多线程的概念"></a>多线程的概念</h1><p>进程是程序运行的实例。启动一个java程序其实就是启动了一个jvm的进程。进程是程序向操作系统申请资源<code>(内存空间、文件句柄等)</code>的基本单位。</p>
+<p>线程是进程中可以独立执行的最小单位。</p>
+<p>进程和线程的关系，可以比喻成一个项目组和组员的关系。项目组完成一个项目需要需求，开发，测试。这些往往都是并行的。需要需求，开发和测试人员协作完成。他们共享项目组的资源，如需求文档，功能代码等。</p>
+<h4 id="为什么需要线程"><a href="#为什么需要线程" class="headerlink" title="为什么需要线程"></a>为什么需要线程</h4><ol>
+<li>提高cpu的利用率。因为cpu的执行速率是远远高于io操作的。如果单线程运行，遇到io操作，系统会一直等待io完成再往下执行。这段io操作的时间内浪费了cpu的性能。</li>
+<li>提高响应速率。为了用户的体验，在使用GUI软件时，一个慢的IO操作不至于会使软件”冻住”。</li>
+<li>充分利用多核。对应已经普及的多核计算机，多线程可以重复利用其性能。</li>
+</ol>
+<h4 id="java中的线程"><a href="#java中的线程" class="headerlink" title="java中的线程"></a>java中的线程</h4><p>java中的线程是通过java.lang.Thread类来实现。一个Thread或其子类就是一个线程。</p>
+<h6 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h6><p>创建执行线程的方式有三种:</p>
+<p>Thread类的构造函数大概可以分为要Runnable和不需要Runnable两种。 Thread()和 Thread(Runnable)。所以可以根据这两种方式来创建一个线程。</p>
+<ol>
+<li><p>继承Thread</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">//1.继承Thread类</span></span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">ThreadDemo</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">       <span class="comment">//2.重写run方法。</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// 业务逻辑</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">       <span class="comment">//new 一个Thread对象</span></span><br><span class="line">	Thread thread = <span class="keyword">new</span> ThreadDemo();</span><br><span class="line">       <span class="comment">//调用start方法启动一个线程。线程启动后会执行run方法。</span></span><br><span class="line">	thread.start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实现Runnable接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">//1.实现Runnable类</span></span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">RunnableDemo</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">       <span class="comment">//2.实现run方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// 业务逻辑</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//new 一Runnable实现类</span></span><br><span class="line">	Runnable run  = <span class="keyword">new</span> RunnableDemo();</span><br><span class="line">	<span class="comment">//通过Runnable构造Thread</span></span><br><span class="line">	Thread thread2 = <span class="keyword">new</span> Thread(run);</span><br><span class="line">	<span class="comment">//启动线程</span></span><br><span class="line">	thread2.start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>上面两种线程都没有返回值,jdk1.5后出现了callable能创建具有返回值的线程。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">//实现Callable接口</span></span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">CallableDemo</span> <span class="keyword">implements</span> <span class="title">Callable</span>&lt;<span class="title">String</span>&gt;</span>&#123;</span><br><span class="line">       <span class="comment">//实现call方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"callable"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//callable有两种使用方式：</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//1.通过线程池</span></span><br><span class="line">    <span class="comment">//创建线程池</span></span><br><span class="line">   	ExecutorService threadService = Executors.newSingleThreadExecutor();</span><br><span class="line">   	<span class="comment">//提交callable任务</span></span><br><span class="line">	Future&lt;String&gt; submit = threadService.submit(<span class="keyword">new</span> CallableDemo());</span><br><span class="line">	<span class="comment">//阻塞获取返回值</span></span><br><span class="line">	String object = submit.get();</span><br><span class="line">	System.out.println(object);</span><br><span class="line">	</span><br><span class="line"><span class="comment">//2. 通过FutureTask</span></span><br><span class="line">  FutureTask&lt;String&gt; task1 = <span class="keyword">new</span> FutureTask&lt;String&gt;(<span class="keyword">new</span> CallableDemo() &#123;</span><br><span class="line">	&#125;);</span><br><span class="line">     Thread thread1 = <span class="keyword">new</span> Thread(task1);</span><br><span class="line">     thread1.start();</span><br><span class="line">     System.out.println(task1.get());</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h6 id="三种创建线程方式的差异"><a href="#三种创建线程方式的差异" class="headerlink" title="三种创建线程方式的差异"></a>三种创建线程方式的差异</h6><p>callable和runnable除了callable可以有返回值，其他的都一样。实际上callable最终会被构造成一个实现Runnable接口的类。例如上面的FutureTask。</p>
+<p>主要分析Runnable方式和继承Thread这两种方式。</p>
+<ol>
+<li><p>继承Thread是通过继承的方式，实现Runnable是一种组合的方式。组合相对于继承更加低耦合和灵活。《Effictive java》中也提到复合优先于继承的观点。</p>
+</li>
+<li><p>实现Runnable的方式，容易线程间实现资源的共享。因为一个Runnable对象可以用来创建多个线程。对象的成员变量被多个线程共享。这也使得我们要注意线程安全问题。</p>
+</li>
+</ol>
+<h4 id="线程的属性"><a href="#线程的属性" class="headerlink" title="线程的属性"></a>线程的属性</h4><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>编号（ID）</td>
+<td>用于标识不同线程</td>
+</tr>
+<tr>
+<td>名称（Name）</td>
+<td>用于区分不同线程 默认:”thread-0” .可以设置。</td>
+</tr>
+<tr>
+<td>线程类别（Daemon）</td>
+<td>可以设置守护线程。主线程结束，守护线程也会结束</td>
+</tr>
+<tr>
+<td>优先级（Priority）</td>
+<td>可以设置线程优先级，1-10.默认5.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h4><p>借用一张图:<br><img src="https://note.youdao.com/yws/api/personal/file/55616AC83B744E26ACBAA931E0803D8D?method=download&amp;shareKey=bdcec2e1b4fa67fd7f8d3765591de31c" alt="image"></p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>创建(New)</td>
+<td>线程被创建未启动。java中就是还没调用start方法之前</td>
+</tr>
+<tr>
+<td>可运行(Runnable)</td>
+<td>该状态下有两种情况，一种是获取到cpu的时间片</td>
+</tr>
+<tr>
+<td>阻塞（BLOCKED）</td>
+<td>发起阻塞IO或者争取独占锁资源。该状态不占用cpu</td>
+</tr>
+<tr>
+<td>等待（Waiting）</td>
+<td>执行特定的方法会，等待其他线程唤醒</td>
+</tr>
+<tr>
+<td>有时限等待（Timed Waiting）</td>
+<td>和Waiting状态类似，但是Timed Waiting是有时限的，指定时间到会结束等待状态</td>
+</tr>
+<tr>
+<td>消亡（Terminated）</td>
+<td>run方法执行完毕或者发生异常。</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/04/多线程/" data-id="cjlnqxnwz0008ektw0ihsxjnv" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/09/04/synchronized原理/">synchronized原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/ReentrantLock中的公平锁和非公平锁的原理/">ReentrantLock中的公平锁和非公平锁的原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/JUC之AQS中的CLH队列/">JUC之AQS中的CLH队列</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/JUC之AQS/">JUC之AQS</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/JUC之Semaphore/">JUC之Semaphore</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

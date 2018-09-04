@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>synchronized原理 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去改代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitorsynchronized使通过monitor来实现互斥。每个对象内部都有一个唯一的monitor，存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="synchronized原理">
+<meta property="og:url" content="http://yoursite.com/2018/09/04/synchronized原理/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去改代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitorsynchronized使通过monitor来实现互斥。每个对象内部都有一个唯一的monitor，存">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/1a8cdefa5fa131d2017c8e82ac728e90/xmlnote/C7DE743A9F5244208EA772F699033C26/141293">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/1a8cdefa5fa131d2017c8e82ac728e90/xmlnote/CE7382C710F3457CB58F5137E3602170/141287">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/BC90336355F14C128F54B137230BC6FB/141388">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/86761F8533F04F8ABCA733376A0EB1EB/141391">
+<meta property="og:updated_time" content="2018-09-04T13:31:04.622Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="synchronized原理">
+<meta name="twitter:description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去改代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitorsynchronized使通过monitor来实现互斥。每个对象内部都有一个唯一的monitor，存">
+<meta name="twitter:image" content="https://note.youdao.com/yws/public/resource/1a8cdefa5fa131d2017c8e82ac728e90/xmlnote/C7DE743A9F5244208EA772F699033C26/141293">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-synchronized原理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/04/synchronized原理/" class="article-date">
+  <time datetime="2018-09-04T13:03:31.128Z" itemprop="datePublished">2018-09-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      synchronized原理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>synchronized关键字是jdk提供用于实现内部锁。</p>
+<h4 id="synchronized实现机制"><a href="#synchronized实现机制" class="headerlink" title="synchronized实现机制"></a>synchronized实现机制</h4><p>synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去改代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。</p>
+<h6 id="monitor"><a href="#monitor" class="headerlink" title="monitor"></a>monitor</h6><p>synchronized使通过monitor来实现互斥。每个对象内部都有一个唯一的monitor，存在java对象头中，这也是syncrhoized叫做内部锁的原因。synchronized(lock)时，是获取到了lock对象的monitor.而没有获取到锁的线程进入同步队列等待锁的释放再尝试获取。其中monitor的本质是依赖于底层操作系统的Mutex Lock实现，操作系统实现线程之间的切换需要从用户态到内核态的切换，切换成本非常高。</p>
+<h6 id="javap反汇编分析"><a href="#javap反汇编分析" class="headerlink" title="javap反汇编分析"></a>javap反汇编分析</h6><p>通过javap将下列代码反汇编<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> i=<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>)&#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">       i++;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>test1用synchronized代码块，通过monitorenter获取锁，执行完后用monitorexit释放锁。<br><img src="https://note.youdao.com/yws/public/resource/1a8cdefa5fa131d2017c8e82ac728e90/xmlnote/C7DE743A9F5244208EA772F699033C26/141293" alt="image"></p>
+<p>test2是synchronized方法，jvm通过ACC_SYNCHRONIZED标志，内部实现。<br><img src="https://note.youdao.com/yws/public/resource/1a8cdefa5fa131d2017c8e82ac728e90/xmlnote/CE7382C710F3457CB58F5137E3602170/141287" alt="image"></p>
+<h2 id="Synchronized-1-6的优化"><a href="#Synchronized-1-6的优化" class="headerlink" title="Synchronized 1.6的优化"></a>Synchronized 1.6的优化</h2><p>锁的强度分四种级别，依次是：无锁状态、偏向锁状态、轻量级锁状态、重量级锁状态。他们会随着竞争的激烈而逐渐升级。</p>
+<h4 id="适应自旋锁"><a href="#适应自旋锁" class="headerlink" title="适应自旋锁"></a>适应自旋锁</h4><p>线程的阻塞和唤醒需要cpu从用户态切换成内核态，给cpu造成很大的负担。而往往一个线程从阻塞到唤醒只经历很短的一段时间，所以引入自旋锁。通过无意义的循环进行等待锁释放，而不会立刻进入阻塞，这就是自旋。因为自旋是会消耗cpu的，所以要有个自旋次数限制，达到自旋次数还未获取锁就进入阻塞。适应自旋锁会根据自旋获取锁的成功率来调整自旋次数，如果获取锁成功率高会调高自旋次数，否则反之。</p>
+<h4 id="锁消除"><a href="#锁消除" class="headerlink" title="锁消除"></a>锁消除</h4><p>为了保证数据的完整性，我们在进行操作时需要对这部分操作进行同步控制，但是在有些情况下，JVM检测到不可能存在共享数据竞争，这是JVM会对这些同步锁进行锁消除。锁消除的依据是逃逸分析的数据支持。</p>
+<h4 id="锁粗化"><a href="#锁粗化" class="headerlink" title="锁粗化"></a>锁粗化</h4><p>使用锁时，我们会尽力将锁的范围缩小，只在操作共享变量时同步以减小锁竞争的范围。但是如果一系列的连续加锁解锁操作，可能会导致不必要的性能损耗，所以就是将多个连续的加锁、解锁操作连接在一起，扩展成一个范围更大的锁，这就是锁粗化。</p>
+<h4 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mark Word是hotSpot虚拟机的对象的对象头中，用于存储对象滋生运行时数据，如hashcode,GC分代年龄、锁状态标志，线程持有锁,偏向线程id,偏向时间戳等信息。</span><br></pre></td></tr></table></figure>
+<p>引入轻量级锁的主要目的是在多没有多线程竞争的前提下，通过cas减少重量锁的使用。<br><img src="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/BC90336355F14C128F54B137230BC6FB/141388" alt="image"></p>
+<h4 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h4><p>偏向锁比轻量级锁效率更高，不需要进行cas。只需要检查是否为偏向锁、锁标识为以及ThreadID即可。</p>
+<p><img src="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/86761F8533F04F8ABCA733376A0EB1EB/141391" alt="image"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/04/synchronized原理/" data-id="cjlnqxnwy0007ektw2zofe3cs" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/09/04/ReentrantLock中的公平锁和非公平锁的原理/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">ReentrantLock中的公平锁和非公平锁的原理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/09/04/synchronized原理/">synchronized原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/ReentrantLock中的公平锁和非公平锁的原理/">ReentrantLock中的公平锁和非公平锁的原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/JUC之AQS中的CLH队列/">JUC之AQS中的CLH队列</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/JUC之AQS/">JUC之AQS</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/JUC之Semaphore/">JUC之Semaphore</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

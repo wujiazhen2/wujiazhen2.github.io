@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>ReentrantLock中的公平锁和非公平锁的原理 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ReentrantLockReentrantLock内部是通过AQS实现锁的功能，有公平锁和非公平锁两种实现。  公平锁，即锁的获取顺序按线程申请锁的先后顺序。 非公平锁，当一个线程t1申请锁时，锁刚好释放。即使已有其他线程在t1之前申请锁排队，线程t1还是会获取锁。这样减少了线程的等待唤醒的可能，减少上下文切换带来的开销。因为获取锁的顺序和申请顺序可能不一致所以叫非公平锁。  前置技能(先了解前">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ReentrantLock中的公平锁和非公平锁的原理">
+<meta property="og:url" content="http://yoursite.com/2018/09/04/ReentrantLock中的公平锁和非公平锁的原理/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="ReentrantLockReentrantLock内部是通过AQS实现锁的功能，有公平锁和非公平锁两种实现。  公平锁，即锁的获取顺序按线程申请锁的先后顺序。 非公平锁，当一个线程t1申请锁时，锁刚好释放。即使已有其他线程在t1之前申请锁排队，线程t1还是会获取锁。这样减少了线程的等待唤醒的可能，减少上下文切换带来的开销。因为获取锁的顺序和申请顺序可能不一致所以叫非公平锁。  前置技能(先了解前">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-09-04T13:31:13.688Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ReentrantLock中的公平锁和非公平锁的原理">
+<meta name="twitter:description" content="ReentrantLockReentrantLock内部是通过AQS实现锁的功能，有公平锁和非公平锁两种实现。  公平锁，即锁的获取顺序按线程申请锁的先后顺序。 非公平锁，当一个线程t1申请锁时，锁刚好释放。即使已有其他线程在t1之前申请锁排队，线程t1还是会获取锁。这样减少了线程的等待唤醒的可能，减少上下文切换带来的开销。因为获取锁的顺序和申请顺序可能不一致所以叫非公平锁。  前置技能(先了解前">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-ReentrantLock中的公平锁和非公平锁的原理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/04/ReentrantLock中的公平锁和非公平锁的原理/" class="article-date">
+  <time datetime="2018-09-04T13:03:31.127Z" itemprop="datePublished">2018-09-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ReentrantLock中的公平锁和非公平锁的原理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><p>ReentrantLock内部是通过AQS实现锁的功能，有公平锁和非公平锁两种实现。</p>
+<ol>
+<li>公平锁，即锁的获取顺序按线程申请锁的先后顺序。</li>
+<li>非公平锁，当一个线程t1申请锁时，锁刚好释放。即使已有其他线程在t1之前申请锁排队，线程t1还是会获取锁。这样减少了线程的等待唤醒的可能，减少上下文切换带来的开销。因为获取锁的顺序和申请顺序可能不一致所以叫非公平锁。</li>
+</ol>
+<p>前置技能(先了解前置技能才好看懂)</p>
+<ol>
+<li>AQS</li>
+<li>CLH</li>
+</ol>
+<h4 id="ReentrantLock中的Sync"><a href="#ReentrantLock中的Sync" class="headerlink" title="ReentrantLock中的Sync"></a>ReentrantLock中的Sync</h4><p>Sync是个抽象类，非公平锁和公平锁都基于这个类实现。这里实现了非公平的占用锁方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">abstract static class Sync extends AbstractQueuedSynchronizer &#123;</span><br><span class="line">       ...</span><br><span class="line">       /**</span><br><span class="line">        *非公平锁的占用方法</span><br><span class="line">        */</span><br><span class="line">       final boolean nonfairTryAcquire(int acquires) &#123;</span><br><span class="line">           //获取当前的线程</span><br><span class="line">           final Thread current = Thread.currentThread();</span><br><span class="line">           //获取当前的锁占用状态</span><br><span class="line">           int c = getState();</span><br><span class="line">           //state==0则说明没有线程占用锁</span><br><span class="line">           if (c == 0) &#123;</span><br><span class="line">               //此时会直接把锁给当前线程，而不去判断CLH队列中的是否已有等待线程。</span><br><span class="line">               if (compareAndSetState(0, acquires)) &#123;</span><br><span class="line">                   setExclusiveOwnerThread(current);</span><br><span class="line">                   return true;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           //这里是重入锁的处理，当前线程重入锁，state+1</span><br><span class="line">           else if (current == getExclusiveOwnerThread()) &#123;</span><br><span class="line">               int nextc = c + acquires;</span><br><span class="line">               if (nextc &lt; 0) // overflow</span><br><span class="line">                   throw new Error(&quot;Maximum lock count exceeded&quot;);</span><br><span class="line">               setState(nextc);</span><br><span class="line">               return true;</span><br><span class="line">           &#125;</span><br><span class="line">           return false;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       ...</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="非公平锁"><a href="#非公平锁" class="headerlink" title="非公平锁"></a>非公平锁</h4><p>ReentrantLock中的非公平锁实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">static final class NonfairSync extends Sync &#123;</span><br><span class="line">        private static final long serialVersionUID = 7316153563782823691L;</span><br><span class="line"></span><br><span class="line">       </span><br><span class="line">        final void lock() &#123;</span><br><span class="line">            //当前线程进来先直接用cas尝试占用锁，失败再调用acquire</span><br><span class="line">            if (compareAndSetState(0, 1))</span><br><span class="line">                setExclusiveOwnerThread(Thread.currentThread());</span><br><span class="line">            else</span><br><span class="line">                acquire(1);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        //acquire会调用tryAcquire判断占用锁是否成功，这里直接调用了Sync的非公平锁处理方法</span><br><span class="line">        protected final boolean tryAcquire(int acquires) &#123;</span><br><span class="line">            return nonfairTryAcquire(acquires);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="公平锁"><a href="#公平锁" class="headerlink" title="公平锁"></a>公平锁</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">FairSync</span> <span class="keyword">extends</span> <span class="title">Sync</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">3000897897090466540L</span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            acquire(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         *公平锁的处理</span></span><br><span class="line"><span class="comment">         * </span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">final</span> Thread current = Thread.currentThread();</span><br><span class="line">            <span class="keyword">int</span> c = getState();</span><br><span class="line">            <span class="keyword">if</span> (c == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">//会判断队列中是否有等待线程，有则获取锁失败，进入队列等待。</span></span><br><span class="line">                <span class="keyword">if</span> (!hasQueuedPredecessors() &amp;&amp;</span><br><span class="line">                    compareAndSetState(<span class="number">0</span>, acquires)) &#123;</span><br><span class="line">                    setExclusiveOwnerThread(current);</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (current == getExclusiveOwnerThread()) &#123;</span><br><span class="line">                <span class="keyword">int</span> nextc = c + acquires;</span><br><span class="line">                <span class="keyword">if</span> (nextc &lt; <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"Maximum lock count exceeded"</span>);</span><br><span class="line">                setState(nextc);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ol>
+<li>非公平锁减少了线程发生等待唤醒的可能，节省了上下文切换的开销。</li>
+<li>公平锁适合锁持有事件较长或者线程申请锁的间隔事件相对长的情况。</li>
+<li>总的来所，公平锁的开销比非公平锁大，所以ReentrantLock默认支持的是非公平锁。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/04/ReentrantLock中的公平锁和非公平锁的原理/" data-id="cjlnqxnwv0005ektwedjvthk9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/04/synchronized原理/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          synchronized原理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/09/04/JUC之AQS中的CLH队列/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">JUC之AQS中的CLH队列</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/09/04/synchronized原理/">synchronized原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/ReentrantLock中的公平锁和非公平锁的原理/">ReentrantLock中的公平锁和非公平锁的原理</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/JUC之AQS中的CLH队列/">JUC之AQS中的CLH队列</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/JUC之AQS/">JUC之AQS</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/JUC之Semaphore/">JUC之Semaphore</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
