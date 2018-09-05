@@ -62,78 +62,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-线程同步-volatile关键字" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/05/线程同步-volatile关键字/" class="article-date">
-  <time datetime="2018-09-05T02:06:01.000Z" itemprop="datePublished">2018-09-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/05/线程同步-volatile关键字/">线程同步-volatile关键字</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一旦一个共享变量（类的成员变量、类的静态成员变量）被volatile修饰之后，那么就具备了两层语义：</p>
-<ol>
-<li><p>保证了不同线程对这个变量进行操作时的可见性，即一个线程修改了某个变量的值，这新值对其他线程来说是立即可见的。</p>
-</li>
-<li><p>禁止进行指令重排序。</p>
-</li>
-</ol>
-<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span>  <span class="keyword">boolean</span> stop=<span class="keyword">true</span>;</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">	</span><br><span class="line">	Runnable run1 = <span class="keyword">new</span> Runnable()&#123;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">			<span class="keyword">while</span>(stop)&#123;</span><br><span class="line">				<span class="comment">//处理业务</span></span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(<span class="string">"2......end"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;;</span><br><span class="line">   	Thread thread=<span class="keyword">new</span> Thread(run1);</span><br><span class="line">   	thread.start();</span><br><span class="line">	Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">	stop=<span class="keyword">false</span>;</span><br><span class="line">	System.out.println(<span class="string">"1......end"</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//等待程序运行</span></span><br><span class="line">	thread.join();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这段Demo，给线程run1设置了一个结束标志stop,主线程等待一秒后会将介素标志stop设置为false,理论上线程run1就因为stop=false而run方法结束。但是以上代码运行并没有结束。说明stop的修改对线程run1是不可见的。</p>
-<p>实际上是因为stop字段没有用volatile修饰，JIT编译器并不知道它是多线程共享的变量。所以为了提高代码效率，会对代码进行优化成等同以下结果：</p>
-<p>run方法优化<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">    <span class="comment">//处理业务</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>所以run1线程一直循环。如果用volatile修饰stop变量即可，解决。</p>
-<h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><h6 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a>内存屏障</h6><p>内存屏障（Memory Barrier）是一种CPU指令，内存屏障用于插入两个指令之间使用，其作用是禁止重排序和刷新处理器缓存和冲刷处理器缓存来保证可见性。Java编译器也会根据内存屏障的规则禁止重排序。</p>
-<p>JMM种定义了这四类存储屏障</p>
-<ol>
-<li><p>LoadLoad屏障：对于这样的语句Load1; LoadLoad; Load2，在Load2及后续读取操作要读取的数据被访问前，保证Load1要读取的数据被读取完毕。</p>
-</li>
-<li><p>StoreStore屏障：对于这样的语句Store1; StoreStore; Store2，在Store2及后续写入操作执行前，保证Store1的写入操作对其它处理器可见。</p>
-</li>
-<li><p>LoadStore屏障：对于这样的语句Load1; LoadStore; Store2，在Store2及后续写入操作被刷出前，保证Load1要读取的数据被读取完毕。</p>
-</li>
-<li><p>StoreLoad屏障：对于这样的语句Store1; StoreLoad;<br>Load2，在Load2及后续所有读取操作执行前，保证Store1的写入对所有处理器可见。它的开销是四种屏障中最大的。        在大多数处理器的实现中，这个屏障是个万能屏障，兼具其它三种内存屏障的功能。</p>
-</li>
-</ol>
-<p>总结：java内存屏障由store和load两两组合，store和load的拼接顺序也表示者这个内存屏障的功能。例如LoadStore,前面的操作Load会在后面的Store执行前执行完毕。</p>
-<h6 id="volatile种的内存屏障"><a href="#volatile种的内存屏障" class="headerlink" title="volatile种的内存屏障"></a>volatile种的内存屏障</h6><p>读操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">volatile读操作</span><br><span class="line">    ⬇</span><br><span class="line">LoadLoad</span><br><span class="line">    ⬇</span><br><span class="line">LoadStore</span><br></pre></td></tr></table></figure></p>
-<p>volatile变量读操作后加入LoadLoad和LoadStore，保障volatile变量读操作后的所有普通读写操作都不能和volatile读操作重排序。</p>
-<p>写操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">StoreStore</span><br><span class="line">    ⬇</span><br><span class="line">volatile写操作</span><br><span class="line">    ⬇</span><br><span class="line">StoreLoad</span><br></pre></td></tr></table></figure></p>
-<p>volatile变量写操作之前加StoreStore屏障，禁止上面的普通写操作不能和volatile写操作重排序</p>
-<p>volatile变量写操作之后加StoreLoad屏障，防止上面的volatile写和下面可能存在的volatile读/写重排序</p>
-<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><ol>
-<li>作为状态变量。如上面Demo，用于线程结束的标志。可以通知线程结束。</li>
-<li>某些场景代替锁。如多个线程共享一组可变变量，要保证这些变量更新的原子性。可以将这些变量封装成对象，用volatile修饰。对这些变量更新操作可以是创建一个对象并赋予引用，volatile保证了可见性和有序性。</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/05/线程同步-volatile关键字/" data-id="cjloj3mvs000jtktwu3z9hwqc" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-线程同步-锁" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/09/05/线程同步-锁/" class="article-date">
@@ -195,7 +123,184 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/05/线程同步-锁/" data-id="cjloj3mvu000ltktw6h5q9z2j" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/05/线程同步-锁/" data-id="cjloj54gm000j3stw5ts0m7q0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-线程同步-CAS与原子变量" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/05/线程同步-CAS与原子变量/" class="article-date">
+  <time datetime="2018-09-05T02:06:01.000Z" itemprop="datePublished">2018-09-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/05/线程同步-CAS与原子变量/">线程同步-CAS与原子变量</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><p>锁的开销极大。在某些场景，如保证一个变量的 read-modify-write操作的原子性。这种场景可以通过使用CAS解决而不需要用到锁。</p>
+<p>CAS,Compare and swap 比较并交换，是一种乐观锁的实现方式。是一个中由处理器保证原子性的if-then-act操作。它通过提供一个变量内存位置,预期值(旧值)和新值。将预期值和变量的当前值进行比较，如果相等即证明变量并没有被改变，将该变量修改成新值。如果不相等则进行重试（预期值会重新加载）,直到成功。</p>
+<p>Unsafe类中通过CAS修改int类型变量源码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">*var1  AtomicInteger对象</span></span><br><span class="line"><span class="comment">*var2  内存偏移量</span></span><br><span class="line"><span class="comment">*var4  增加的值</span></span><br><span class="line"><span class="comment">*var5  获取的变量原值，保存在var5用于当预期值</span></span><br><span class="line"><span class="comment">*compareAndSwapInt会比较内存值和var5相等的话就会改变内存值（即AtomicIntege * r对象中的变量）。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAddInt</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">int</span> var4)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">int</span> var5;</span><br><span class="line">      <span class="keyword">do</span> &#123;</span><br><span class="line">          <span class="comment">//获取内存的当前值</span></span><br><span class="line">          var5 = <span class="keyword">this</span>.getIntVolatile(var1, var2);</span><br><span class="line">      &#125; <span class="keyword">while</span>(!<span class="keyword">this</span>.compareAndSwapInt(var1, var2, var5, var5 + var4));</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> var5;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="原子变量"><a href="#原子变量" class="headerlink" title="原子变量"></a>原子变量</h4><p>以上代码是原子遍历AtomicInteger自增代码的实现片段。JDK基于CAS提供了保证共享变量read-modify-write操作原子性的类。</p>
+<table>
+<thead>
+<tr>
+<th>分组</th>
+<th>类名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基本类型</td>
+<td>AtomicInteger,AtomicLong,AtomicBoolean</td>
+</tr>
+<tr>
+<td>数组类型</td>
+<td>AtomicIntegerArray,AtomicLongArray,AtomicReferenceArray</td>
+</tr>
+<tr>
+<td>字段更新</td>
+<td>AtomicIntegerFieldUpdater,AtomicLongFieldUpdater,AtomicReferenceFieldUpdater</td>
+</tr>
+<tr>
+<td>引用型</td>
+<td>AtomicReference,AtomicStampedReference,AtomicMarkableReference</td>
+</tr>
+</tbody>
+</table>
+<h6 id="AtomicInteger"><a href="#AtomicInteger" class="headerlink" title="AtomicInteger"></a>AtomicInteger</h6><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int accumulateAndGet(int x, IntBinaryOperator accumulatorFunction)</td>
+<td>使用将给定函数应用于当前值和给定值的结果原子更新当前值，返回更新后的值。  </td>
+</tr>
+<tr>
+<td>int addAndGet(int delta)</td>
+<td>将给定的值原子地添加到当前值。  </td>
+</tr>
+<tr>
+<td>boolean compareAndSet(int expect, int update)</td>
+<td>如果当前值 ==为预期值，则将该值原子设置为给定的更新值。  </td>
+</tr>
+<tr>
+<td>int decrementAndGet()</td>
+<td>原子减1当前值。  </td>
+</tr>
+<tr>
+<td>double doubleValue()</td>
+<td>返回此值 AtomicInteger为 double一个宽元转换后。  </td>
+</tr>
+<tr>
+<td>float floatValue()</td>
+<td>返回此值 AtomicInteger为 float一个宽元转换后。  </td>
+</tr>
+<tr>
+<td>int get()</td>
+<td>获取当前值。  </td>
+</tr>
+<tr>
+<td>int getAndAccumulate(int x, IntBinaryOperator accumulatorFunction)</td>
+<td>使用给定函数应用给当前值和给定值的结果原子更新当前值，返回上一个值。  </td>
+</tr>
+<tr>
+<td>int getAndAdd(int delta)</td>
+<td>将给定的值原子地添加到当前值。  </td>
+</tr>
+<tr>
+<td>int getAndDecrement()</td>
+<td>原子减1当前值。  </td>
+</tr>
+<tr>
+<td>int getAndIncrement()</td>
+<td>原子上增加一个当前值。  </td>
+</tr>
+<tr>
+<td>int getAndSet(int newValue)</td>
+<td>将原子设置为给定值并返回旧值。  </td>
+</tr>
+<tr>
+<td>int getAndUpdate(IntUnaryOperator updateFunction)</td>
+<td>用应用给定函数的结果原子更新当前值，返回上一个值。  </td>
+</tr>
+<tr>
+<td>int incrementAndGet()</td>
+<td>原子上增加一个当前值。  </td>
+</tr>
+<tr>
+<td>int intValue()</td>
+<td>将 AtomicInteger的值作为 int 。  </td>
+</tr>
+<tr>
+<td>void lazySet(int newValue)</td>
+<td>最终设定为给定值。  </td>
+</tr>
+<tr>
+<td>long longValue()</td>
+<td>返回此值 AtomicInteger为 long一个宽元转换后。  </td>
+</tr>
+<tr>
+<td>void set(int newValue)</td>
+<td>设置为给定值。  </td>
+</tr>
+<tr>
+<td>String toString()</td>
+<td>返回当前值的String表示形式。  </td>
+</tr>
+<tr>
+<td>int updateAndGet(IntUnaryOperator updateFunction)</td>
+<td>使用给定函数的结果原子更新当前值，返回更新的值。  </td>
+</tr>
+<tr>
+<td>boolean weakCompareAndSet(int expect, int update)</td>
+<td>如果当前值 ==为预期值，则将值设置为给定更新值。  </td>
+</tr>
+</tbody>
+</table>
+<p>####　ABA问题<br>以上说到，CAS是将预期值和内存当前值比较，通过比较结果来判断其他线程是否修改过该变量。但是如果存在其他线程修改变量后又改回原值（即预期值），在某些场景就会存在问题。</p>
+<h6 id="ABA问题例子"><a href="#ABA问题例子" class="headerlink" title="ABA问题例子"></a>ABA问题例子</h6><p>银行账户 500元（共享变量）</p>
+<ol>
+<li>要取出50元，机器故障发送了2个请求A,B，此时两个请求的期望值都是500，新值450</li>
+<li>A请求执行完后，内存值变成450。所以第二个请求是不会成功的。</li>
+<li>但是如果在B请求执行前，C又往账户存了50块。这时银行帐号变成500。B请求预期值满足提交成功，银行账户最终存款为 450。</li>
+</ol>
+<p>这种情况下，存款少了50块。</p>
+<h6 id="ABA解决方案。"><a href="#ABA解决方案。" class="headerlink" title="ABA解决方案。"></a>ABA解决方案。</h6><p>ABA问题可以通过版本号来解决，每次修改操作都添加一个版本号。例如刚才的取款操作加个版本号 1，在存款操作执行后版本号+1，变为2。取款的第二次请求执行时就会判断版本号不是1，执行失败。</p>
+<p>ABA问题，原子变量AtomicStampedReference，AtomicMarkableReference用于解决ABA问题。</p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
+<li>CAS只能保证一个共享变量的操作的原子性（原子性操作+原子性操作≠原子操作），如果要保持多个共享变量的操作的原子性，就必须使用锁。</li>
+<li>如果变量更新多次失败，循环时间长开销大。</li>
+<li>ABA问题</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/05/线程同步-CAS与原子变量/" data-id="cjloj54gn000l3stws09dj31n" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
@@ -250,7 +355,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/05/线程间协作-等待唤醒机制/" data-id="cjloj3mvv000ntktwuratbk7i" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/05/线程间协作-等待唤醒机制/" data-id="cjloj54gp000n3stw4fxayshh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
@@ -312,7 +417,7 @@
       <ul>
         
           <li>
-            <a href="/2018/09/05/synchronized原理/">synchronized原理</a>
+            <a href="/2018/09/05/多线程/">多线程基础</a>
           </li>
         
           <li>
@@ -320,15 +425,15 @@
           </li>
         
           <li>
-            <a href="/2018/09/05/JUC之CountDownLatch/">JUC之CountDownLatch</a>
-          </li>
-        
-          <li>
-            <a href="/2018/09/05/JUC之CyclicBarrier/">JUC之CyclicBarrier</a>
+            <a href="/2018/09/05/JUC之AQS中的CLH队列/">JUC之AQS中的CLH队列</a>
           </li>
         
           <li>
             <a href="/2018/09/05/JUC之Semaphore/">JUC之Semaphore</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/05/JUC之CyclicBarrier/">JUC之CyclicBarrier</a>
           </li>
         
       </ul>
