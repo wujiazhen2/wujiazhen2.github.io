@@ -88,7 +88,7 @@
 <meta property="og:description" content="多线程的概念进程是程序运行的实例。启动一个java程序其实就是启动了一个jvm的进程。进程是程序向操作系统申请资源(内存空间、文件句柄等)的基本单位。 线程是进程中可以独立执行的最小单位。 进程和线程的关系，可以比喻成一个项目组和组员的关系。项目组完成一个项目需要需求，开发，测试。这些往往都是并行的。需要需求，开发和测试人员协作完成。他们共享项目组的资源，如需求文档，功能代码等。 为什么需要线程">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/55616AC83B744E26ACBAA931E0803D8D?method=download&shareKey=bdcec2e1b4fa67fd7f8d3765591de31c">
-<meta property="og:updated_time" content="2018-09-05T03:35:41.026Z">
+<meta property="og:updated_time" content="2018-09-05T03:43:05.429Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="多线程基础">
 <meta name="twitter:description" content="多线程的概念进程是程序运行的实例。启动一个java程序其实就是启动了一个jvm的进程。进程是程序向操作系统申请资源(内存空间、文件句柄等)的基本单位。 线程是进程中可以独立执行的最小单位。 进程和线程的关系，可以比喻成一个项目组和组员的关系。项目组完成一个项目需要需求，开发，测试。这些往往都是并行的。需要需求，开发和测试人员协作完成。他们共享项目组的资源，如需求文档，功能代码等。 为什么需要线程">
@@ -302,7 +302,7 @@
       
 
       
-        <h1 id="多线程的概念"><a href="#多线程的概念" class="headerlink" title="多线程的概念"></a>多线程的概念</h1><p>进程是程序运行的实例。启动一个java程序其实就是启动了一个jvm的进程。进程是程序向操作系统申请资源<code>(内存空间、文件句柄等)</code>的基本单位。</p>
+        <h4 id="多线程的概念"><a href="#多线程的概念" class="headerlink" title="多线程的概念"></a>多线程的概念</h4><p>进程是程序运行的实例。启动一个java程序其实就是启动了一个jvm的进程。进程是程序向操作系统申请资源<code>(内存空间、文件句柄等)</code>的基本单位。</p>
 <p>线程是进程中可以独立执行的最小单位。</p>
 <p>进程和线程的关系，可以比喻成一个项目组和组员的关系。项目组完成一个项目需要需求，开发，测试。这些往往都是并行的。需要需求，开发和测试人员协作完成。他们共享项目组的资源，如需求文档，功能代码等。</p>
 <h4 id="为什么需要线程"><a href="#为什么需要线程" class="headerlink" title="为什么需要线程"></a>为什么需要线程</h4><ol>
@@ -428,8 +428,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/06/多线程之线程安全/" rel="prev" title="synchronized原理">
-                synchronized原理 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/06/多线程之线程安全/" rel="prev" title="线程安全和JMM">
+                线程安全和JMM <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -553,7 +553,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#多线程的概念"><span class="nav-number">1.</span> <span class="nav-text">多线程的概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么需要线程"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">为什么需要线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java中的线程"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">java中的线程</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#创建线程"><span class="nav-number">1.0.0.2.0.1.</span> <span class="nav-text">创建线程</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#三种创建线程方式的差异"><span class="nav-number">1.0.0.2.0.2.</span> <span class="nav-text">三种创建线程方式的差异</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程的属性"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">线程的属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程的状态"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">线程的状态</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#多线程的概念"><span class="nav-number">1.</span> <span class="nav-text">多线程的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么需要线程"><span class="nav-number">2.</span> <span class="nav-text">为什么需要线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java中的线程"><span class="nav-number">3.</span> <span class="nav-text">java中的线程</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#创建线程"><span class="nav-number">3.0.1.</span> <span class="nav-text">创建线程</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#三种创建线程方式的差异"><span class="nav-number">3.0.2.</span> <span class="nav-text">三种创建线程方式的差异</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程的属性"><span class="nav-number">4.</span> <span class="nav-text">线程的属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程的状态"><span class="nav-number">5.</span> <span class="nav-text">线程的状态</span></a></li></ol></div>
             
 
           </div>
