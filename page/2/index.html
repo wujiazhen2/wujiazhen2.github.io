@@ -123,7 +123,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/04/线程同步-锁/" data-id="cjlnqxnx4000cektwehj4ehfk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/04/线程同步-锁/" data-id="cjlog5y16000bo8twj0tueu9p" class="article-share-link">Share</a>
       
       
     </footer>
@@ -143,16 +143,6 @@
   <div class="article-inner">
     
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/04/多线程之线程安全/">多线程之线程安全</a>
-    </h1>
-  
-
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="多线程存在的问题"><a href="#多线程存在的问题" class="headerlink" title="多线程存在的问题"></a>多线程存在的问题</h2><p>多线程运用得好可以大大提高系统的性能。但是使用不当也会对系统造成毁灭性灾难。</p>
@@ -163,7 +153,14 @@
 </ol>
 <h4 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h4><p> 线程安全问题是多个线程在操作共享数据引起的。要保证线程安全，就需要保证对共享数据的操作有三个性质：原子性，可见性和有序性。</p>
 <h6 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h6><p>原子性是指涉及共享数据的操作对别的线程是不可分割的。即其他线程只能看到该操作未发生或者已经结束。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">注意 i++ 并不是原子性操作,i++实际上是一个`read-modify-write`操作。</span><br><span class="line">1. 先读取出i的值</span><br><span class="line">2. 修改i的值</span><br><span class="line">3. 写回内存</span><br></pre></td></tr></table></figure></p>
-<h6 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h6><p>可见性是指一个线程对共享数据修改后，其他线程可以看到修改后的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 由于java内存模型中,每个线程都有一个工作内存。在对共享数据进行修改和读取时，</span><br><span class="line">是先对工作内存中的数据进行操作。所以其他线程读取的共享变量可能是脏数据,无法保证可见性。</span><br><span class="line">2. 重排序导致的有序性问题也是影响可见性的重要因素。</span><br></pre></td></tr></table></figure></p>
+<h6 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h6><p>可见性是指一个线程对共享数据修改后，其他线程可以看到修改后的值。</p>
+<p><strong>导致可见性的原因</strong></p>
+<ol>
+<li><p>由于java内存模型中,每个线程都有一个工作内存。在对共享数据进行修改和读取时，<br>是先对工作内存中的数据进行操作。所以其他线程读取的共享变量可能是脏数据,无法保证可见性。</p>
+</li>
+<li><p>重排序导致的有序性问题也是影响可见性的重要因素。</p>
+</li>
+</ol>
 <p><strong>Java内存模型</strong><br>java内存模型，简称JMM。java线程之间的通信是通过JMM控制的。JMM定义了线程和主内存之间的抽象关系：线程之间的共享变量存储在主内存中，每个线程都有其工作内存，存有共享变量的副本。线程对共享变量的读写都是先对工作内存进行，工作内存在将共享变量和内存同步。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">工作内存是抽象概念，并非真实存在。它蕴含了缓存，写缓存区，寄存器还有其他硬件等。</span><br></pre></td></tr></table></figure></p>
 <p><img src="https://note.youdao.com/yws/api/personal/file/68A6474D626F4568B15913F0B4AB9DC7?method=download&amp;shareKey=3f9fc493b14ff7b7ca38d547ec75d313" alt="image"></p>
 <h6 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h6><p>JIT编译器为了优化系统，会对代码进行重排序。重排序按照as-if-serial语义，保证重排序后在单线程时运行结果是一样的。但是多线程时，无法保证有序性。</p>
@@ -203,7 +200,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/04/多线程之线程安全/" data-id="cjlnqxnx00009ektww1qrhh6d" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/04/多线程之线程安全/" data-id="cjlog5y0w0004o8twswvh03my" class="article-share-link">Share</a>
       
       
     </footer>
@@ -329,7 +326,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/04/多线程/" data-id="cjlnqxnwz0008ektw0ihsxjnv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/04/多线程/" data-id="cjlog5y130009o8tw75wzrzu7" class="article-share-link">Share</a>
       
       
     </footer>
