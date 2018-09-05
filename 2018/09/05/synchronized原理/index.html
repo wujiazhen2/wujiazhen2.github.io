@@ -8,7 +8,7 @@
   <title>synchronized原理 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去改代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitorsynchronized使通过monitor来实现互斥。每个对象内部都有一个唯一的monitor，存">
-<meta name="keywords" content="thread">
+<meta name="keywords" content="多线程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="synchronized原理">
 <meta property="og:url" content="http://yoursite.com/2018/09/05/synchronized原理/index.html">
@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://note.youdao.com/yws/public/resource/1a8cdefa5fa131d2017c8e82ac728e90/xmlnote/CE7382C710F3457CB58F5137E3602170/141287">
 <meta property="og:image" content="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/BC90336355F14C128F54B137230BC6FB/141388">
 <meta property="og:image" content="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/86761F8533F04F8ABCA733376A0EB1EB/141391">
-<meta property="og:updated_time" content="2018-09-05T02:17:29.033Z">
+<meta property="og:updated_time" content="2018-09-05T02:33:13.562Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="synchronized原理">
 <meta name="twitter:description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去改代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitorsynchronized使通过monitor来实现互斥。每个对象内部都有一个唯一的monitor，存">
@@ -110,10 +110,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/05/synchronized原理/" data-id="cjloj10u0000c2ktwb9ubbk4o" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/05/synchronized原理/" data-id="cjloj3mvk000atktwdur2c323" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/thread/">thread</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
 
     </footer>
   </div>
@@ -122,9 +122,9 @@
 <nav id="article-nav">
   
   
-    <a href="/2018/09/05/JUC之CountDownLatch/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/09/05/JUC之AQS/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">JUC之CountDownLatch</div>
+      <div class="article-nav-title">JUC之AQS</div>
     </a>
   
 </nav>
@@ -143,7 +143,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/">thread</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
     </div>
   </div>
 
@@ -153,7 +153,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/thread/" style="font-size: 10px;">thread</a>
+      <a href="/tags/多线程/" style="font-size: 10px;">多线程</a>
     </div>
   </div>
 
@@ -179,19 +179,19 @@
           </li>
         
           <li>
+            <a href="/2018/09/05/JUC之AQS/">JUC之AQS</a>
+          </li>
+        
+          <li>
             <a href="/2018/09/05/JUC之CountDownLatch/">JUC之CountDownLatch</a>
           </li>
         
           <li>
-            <a href="/2018/09/05/JUC之AQS中的CLH队列/">JUC之AQS中的CLH队列</a>
+            <a href="/2018/09/05/JUC之CyclicBarrier/">JUC之CyclicBarrier</a>
           </li>
         
           <li>
-            <a href="/2018/09/05/ReentrantLock中的公平锁和非公平锁的原理/">ReentrantLock中的公平锁和非公平锁的原理</a>
-          </li>
-        
-          <li>
-            <a href="/2018/09/05/JUC之AQS/">JUC之AQS</a>
+            <a href="/2018/09/05/JUC之Semaphore/">JUC之Semaphore</a>
           </li>
         
       </ul>

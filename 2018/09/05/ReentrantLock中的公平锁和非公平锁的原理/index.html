@@ -8,14 +8,14 @@
   <title>ReentrantLock中的公平锁和非公平锁的原理 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="ReentrantLockReentrantLock内部是通过AQS实现锁的功能，有公平锁和非公平锁两种实现。  公平锁，即锁的获取顺序按线程申请锁的先后顺序。 非公平锁，当一个线程t1申请锁时，锁刚好释放。即使已有其他线程在t1之前申请锁排队，线程t1还是会获取锁。这样减少了线程的等待唤醒的可能，减少上下文切换带来的开销。因为获取锁的顺序和申请顺序可能不一致所以叫非公平锁。  前置技能(先了解前">
-<meta name="keywords" content="thread">
+<meta name="keywords" content="多线程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ReentrantLock中的公平锁和非公平锁的原理">
 <meta property="og:url" content="http://yoursite.com/2018/09/05/ReentrantLock中的公平锁和非公平锁的原理/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="ReentrantLockReentrantLock内部是通过AQS实现锁的功能，有公平锁和非公平锁两种实现。  公平锁，即锁的获取顺序按线程申请锁的先后顺序。 非公平锁，当一个线程t1申请锁时，锁刚好释放。即使已有其他线程在t1之前申请锁排队，线程t1还是会获取锁。这样减少了线程的等待唤醒的可能，减少上下文切换带来的开销。因为获取锁的顺序和申请顺序可能不一致所以叫非公平锁。  前置技能(先了解前">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-09-05T02:17:26.682Z">
+<meta property="og:updated_time" content="2018-09-05T02:33:11.464Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ReentrantLock中的公平锁和非公平锁的原理">
 <meta name="twitter:description" content="ReentrantLockReentrantLock内部是通过AQS实现锁的功能，有公平锁和非公平锁两种实现。  公平锁，即锁的获取顺序按线程申请锁的先后顺序。 非公平锁，当一个线程t1申请锁时，锁刚好释放。即使已有其他线程在t1之前申请锁排队，线程t1还是会获取锁。这样减少了线程的等待唤醒的可能，减少上下文切换带来的开销。因为获取锁的顺序和申请顺序可能不一致所以叫非公平锁。  前置技能(先了解前">
@@ -109,10 +109,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/05/ReentrantLock中的公平锁和非公平锁的原理/" data-id="cjloj10tv00062ktwvcyun16t" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/05/ReentrantLock中的公平锁和非公平锁的原理/" data-id="cjloj3mvi0008tktwrzzptekq" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/thread/">thread</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
 
     </footer>
   </div>
@@ -120,19 +120,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/09/05/JUC之AQS中的CLH队列/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/09/05/JUC之Semaphore/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          JUC之AQS中的CLH队列
+          JUC之Semaphore
         
       </div>
     </a>
   
   
-    <a href="/2018/09/05/JUC之AQS/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/09/05/JUC之AQS中的CLH队列/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">JUC之AQS</div>
+      <div class="article-nav-title">JUC之AQS中的CLH队列</div>
     </a>
   
 </nav>
@@ -151,7 +151,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/">thread</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
     </div>
   </div>
 
@@ -161,7 +161,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/thread/" style="font-size: 10px;">thread</a>
+      <a href="/tags/多线程/" style="font-size: 10px;">多线程</a>
     </div>
   </div>
 
@@ -187,19 +187,19 @@
           </li>
         
           <li>
+            <a href="/2018/09/05/JUC之AQS/">JUC之AQS</a>
+          </li>
+        
+          <li>
             <a href="/2018/09/05/JUC之CountDownLatch/">JUC之CountDownLatch</a>
           </li>
         
           <li>
-            <a href="/2018/09/05/JUC之AQS中的CLH队列/">JUC之AQS中的CLH队列</a>
+            <a href="/2018/09/05/JUC之CyclicBarrier/">JUC之CyclicBarrier</a>
           </li>
         
           <li>
-            <a href="/2018/09/05/ReentrantLock中的公平锁和非公平锁的原理/">ReentrantLock中的公平锁和非公平锁的原理</a>
-          </li>
-        
-          <li>
-            <a href="/2018/09/05/JUC之AQS/">JUC之AQS</a>
+            <a href="/2018/09/05/JUC之Semaphore/">JUC之Semaphore</a>
           </li>
         
       </ul>
