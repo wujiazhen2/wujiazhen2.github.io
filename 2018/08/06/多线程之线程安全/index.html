@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/68A6474D626F4568B15913F0B4AB9DC7?method=download&shareKey=3f9fc493b14ff7b7ca38d547ec75d313">
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/88D236CC75C74444AEB30053E30250C7?method=download&shareKey=0de6137d55f9cec58b71542913d75af5">
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/9701E3594CC7474CB01BA2B3D7FE4333?method=download&shareKey=6ea8df4834bcf1dd13d9d714b15b72d7">
-<meta property="og:updated_time" content="2018-09-05T03:46:40.992Z">
+<meta property="og:updated_time" content="2018-09-05T03:48:53.863Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线程安全和JMM">
 <meta name="twitter:description" content="多线程存在的问题多线程运用得好可以大大提高系统的性能。但是使用不当也会对系统造成毁灭性灾难。  线程安全问题。多个线程操作共享数据时,会产生线程安全问题。导致读取脏数据或者丢失更新等问题 线程活性问题。由于程序问题导致一个线程一直处于非Runnable状态或者处于Runnable状态但执行的任务没有紧张称为线程活性问题。例如：两个线程，线程1需要先占用锁1，再占用锁2。线程2需要先占用锁2，再占用">
@@ -354,7 +354,11 @@
 <li>根据传递性规则,由 1 happens-before 2,2 happens-before 3,3 happens-before 4  =&gt; 1 happens before 4</li>
 </ol>
 <p><img src="https://note.youdao.com/yws/api/personal/file/9701E3594CC7474CB01BA2B3D7FE4333?method=download&amp;shareKey=6ea8df4834bcf1dd13d9d714b15b72d7" alt="image"></p>
-<h4 id="线程安全解决方案"><a href="#线程安全解决方案" class="headerlink" title="线程安全解决方案"></a>线程安全解决方案</h4><p>多线程安全问题是因为多个线程同时操作共享变量，缺乏同步机制来协调线程间数据的访问和活动。jdk提供了锁，volatile关键字等线程同步机制</p>
+<h4 id="线程安全解决方案"><a href="#线程安全解决方案" class="headerlink" title="线程安全解决方案"></a>线程安全解决方案</h4><p>多线程安全问题是因为多个线程同时操作共享变量，缺乏同步机制来协调线程间数据的访问和活动。</p>
+<ol>
+<li>避免多线程操作共享变量</li>
+<li>利用jdk提供了锁，volatile关键字等线程同步机制</li>
+</ol>
 
       
     </div>

@@ -504,7 +504,11 @@
 <li>根据传递性规则,由 1 happens-before 2,2 happens-before 3,3 happens-before 4  =&gt; 1 happens before 4</li>
 </ol>
 <p><img src="https://note.youdao.com/yws/api/personal/file/9701E3594CC7474CB01BA2B3D7FE4333?method=download&amp;shareKey=6ea8df4834bcf1dd13d9d714b15b72d7" alt="image"></p>
-<h4 id="线程安全解决方案"><a href="#线程安全解决方案" class="headerlink" title="线程安全解决方案"></a>线程安全解决方案</h4><p>多线程安全问题是因为多个线程同时操作共享变量，缺乏同步机制来协调线程间数据的访问和活动。jdk提供了锁，volatile关键字等线程同步机制</p>
+<h4 id="线程安全解决方案"><a href="#线程安全解决方案" class="headerlink" title="线程安全解决方案"></a>线程安全解决方案</h4><p>多线程安全问题是因为多个线程同时操作共享变量，缺乏同步机制来协调线程间数据的访问和活动。</p>
+<ol>
+<li>避免多线程操作共享变量</li>
+<li>利用jdk提供了锁，volatile关键字等线程同步机制</li>
+</ol>
 
           
         
@@ -633,7 +637,7 @@
 <li>充分利用多核。对应已经普及的多核计算机，多线程可以重复利用其性能。</li>
 </ol>
 <h4 id="java中的线程"><a href="#java中的线程" class="headerlink" title="java中的线程"></a>java中的线程</h4><p>java中的线程是通过java.lang.Thread类来实现。一个Thread或其子类就是一个线程。</p>
-<h6 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h6><p>创建执行线程的方式有三种:</p>
+<h5 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h5><p>创建执行线程的方式有三种:</p>
 <p>Thread类的构造函数大概可以分为要Runnable和不需要Runnable两种。 Thread()和 Thread(Runnable)。所以可以根据这两种方式来创建一个线程。</p>
 <ol>
 <li><p>继承Thread</p>
@@ -645,7 +649,7 @@
 </ol>
 <p>上面两种线程都没有返回值,jdk1.5后出现了callable能创建具有返回值的线程。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">//实现Callable接口</span></span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">CallableDemo</span> <span class="keyword">implements</span> <span class="title">Callable</span>&lt;<span class="title">String</span>&gt;</span>&#123;</span><br><span class="line">       <span class="comment">//实现call方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"callable"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//callable有两种使用方式：</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//1.通过线程池</span></span><br><span class="line">    <span class="comment">//创建线程池</span></span><br><span class="line">   	ExecutorService threadService = Executors.newSingleThreadExecutor();</span><br><span class="line">   	<span class="comment">//提交callable任务</span></span><br><span class="line">	Future&lt;String&gt; submit = threadService.submit(<span class="keyword">new</span> CallableDemo());</span><br><span class="line">	<span class="comment">//阻塞获取返回值</span></span><br><span class="line">	String object = submit.get();</span><br><span class="line">	System.out.println(object);</span><br><span class="line">	</span><br><span class="line"><span class="comment">//2. 通过FutureTask</span></span><br><span class="line">  FutureTask&lt;String&gt; task1 = <span class="keyword">new</span> FutureTask&lt;String&gt;(<span class="keyword">new</span> CallableDemo() &#123;</span><br><span class="line">	&#125;);</span><br><span class="line">     Thread thread1 = <span class="keyword">new</span> Thread(task1);</span><br><span class="line">     thread1.start();</span><br><span class="line">     System.out.println(task1.get());</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<h6 id="三种创建线程方式的差异"><a href="#三种创建线程方式的差异" class="headerlink" title="三种创建线程方式的差异"></a>三种创建线程方式的差异</h6><p>callable和runnable除了callable可以有返回值，其他的都一样。实际上callable最终会被构造成一个实现Runnable接口的类。例如上面的FutureTask。</p>
+<h5 id="三种创建线程方式的差异"><a href="#三种创建线程方式的差异" class="headerlink" title="三种创建线程方式的差异"></a>三种创建线程方式的差异</h5><p>callable和runnable除了callable可以有返回值，其他的都一样。实际上callable最终会被构造成一个实现Runnable接口的类。例如上面的FutureTask。</p>
 <p>主要分析Runnable方式和继承Thread这两种方式。</p>
 <ol>
 <li><p>继承Thread是通过继承的方式，实现Runnable是一种组合的方式。组合相对于继承更加低耦合和灵活。《Effictive java》中也提到复合优先于继承的观点。</p>
