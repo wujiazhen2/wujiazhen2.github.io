@@ -5,11 +5,11 @@
   
 
   
-  <title>Hexo</title>
+  <title>synchronized原理 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="多线程存在的问题多线程运用得好可以大大提高系统的性能。但是使用不当也会对系统造成毁灭性灾难。  线程安全问题。多个线程操作共享数据时,会产生线程安全问题。导致读取脏数据或者丢失更新等问题 线程活性问题。由于程序问题导致一个线程一直处于非Runnable状态或者处于Runnable状态但执行的任务没有紧张称为线程活性问题。例如：两个线程，线程1需要先占用锁1，再占用锁2。线程2需要先占用锁2，再占用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="synchronized原理">
 <meta property="og:url" content="http://yoursite.com/2018/09/04/多线程之线程安全/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="多线程存在的问题多线程运用得好可以大大提高系统的性能。但是使用不当也会对系统造成毁灭性灾难。  线程安全问题。多个线程操作共享数据时,会产生线程安全问题。导致读取脏数据或者丢失更新等问题 线程活性问题。由于程序问题导致一个线程一直处于非Runnable状态或者处于Runnable状态但执行的任务没有紧张称为线程活性问题。例如：两个线程，线程1需要先占用锁1，再占用锁2。线程2需要先占用锁2，再占用">
@@ -17,9 +17,9 @@
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/68A6474D626F4568B15913F0B4AB9DC7?method=download&shareKey=3f9fc493b14ff7b7ca38d547ec75d313">
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/88D236CC75C74444AEB30053E30250C7?method=download&shareKey=0de6137d55f9cec58b71542913d75af5">
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/9701E3594CC7474CB01BA2B3D7FE4333?method=download&shareKey=6ea8df4834bcf1dd13d9d714b15b72d7">
-<meta property="og:updated_time" content="2018-09-05T01:10:41.813Z">
+<meta property="og:updated_time" content="2018-09-05T01:19:50.531Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="synchronized原理">
 <meta name="twitter:description" content="多线程存在的问题多线程运用得好可以大大提高系统的性能。但是使用不当也会对系统造成毁灭性灾难。  线程安全问题。多个线程操作共享数据时,会产生线程安全问题。导致读取脏数据或者丢失更新等问题 线程活性问题。由于程序问题导致一个线程一直处于非Runnable状态或者处于Runnable状态但执行的任务没有紧张称为线程活性问题。例如：两个线程，线程1需要先占用锁1，再占用锁2。线程2需要先占用锁2，再占用">
 <meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/68A6474D626F4568B15913F0B4AB9DC7?method=download&shareKey=3f9fc493b14ff7b7ca38d547ec75d313">
   
@@ -78,6 +78,16 @@
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      synchronized原理
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="多线程存在的问题"><a href="#多线程存在的问题" class="headerlink" title="多线程存在的问题"></a>多线程存在的问题</h2><p>多线程运用得好可以大大提高系统的性能。但是使用不当也会对系统造成毁灭性灾难。</p>
@@ -135,7 +145,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/04/多线程之线程安全/" data-id="cjlog5y0w0004o8twswvh03my" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/04/多线程之线程安全/" data-id="cjloggwhw0003agtwp60is2t2" class="article-share-link">Share</a>
       
       
     </footer>
