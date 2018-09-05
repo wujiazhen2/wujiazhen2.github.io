@@ -89,9 +89,9 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://note.youdao.com/yws/public/resource/1a8cdefa5fa131d2017c8e82ac728e90/xmlnote/C7DE743A9F5244208EA772F699033C26/141293">
 <meta property="og:image" content="https://note.youdao.com/yws/public/resource/1a8cdefa5fa131d2017c8e82ac728e90/xmlnote/CE7382C710F3457CB58F5137E3602170/141287">
-<meta property="og:image" content="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/BC90336355F14C128F54B137230BC6FB/141388">
-<meta property="og:image" content="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/86761F8533F04F8ABCA733376A0EB1EB/141391">
-<meta property="og:updated_time" content="2018-09-05T04:21:29.151Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E8%BD%BB%E9%87%8F%E9%94%81.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E5%81%8F%E5%90%91%E9%94%81.png">
+<meta property="og:updated_time" content="2018-09-05T08:04:19.685Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="synchronized原理">
 <meta name="twitter:description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去改代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitorsynchronized使通过monitor来实现互斥。每个对象内部都有一个唯一的monitor，存">
@@ -192,6 +192,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
           </a>
         </li>
       
@@ -316,9 +336,9 @@
 <h5 id="锁消除"><a href="#锁消除" class="headerlink" title="锁消除"></a>锁消除</h5><p>为了保证数据的完整性，我们在进行操作时需要对这部分操作进行同步控制，但是在有些情况下，JVM检测到不可能存在共享数据竞争，这是JVM会对这些同步锁进行锁消除。锁消除的依据是逃逸分析的数据支持。</p>
 <h5 id="锁粗化"><a href="#锁粗化" class="headerlink" title="锁粗化"></a>锁粗化</h5><p>使用锁时，我们会尽力将锁的范围缩小，只在操作共享变量时同步以减小锁竞争的范围。但是如果一系列的连续加锁解锁操作，可能会导致不必要的性能损耗，所以就是将多个连续的加锁、解锁操作连接在一起，扩展成一个范围更大的锁，这就是锁粗化。</p>
 <h5 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mark Word是hotSpot虚拟机的对象的对象头中，用于存储对象滋生运行时数据，如hashcode,GC分代年龄、锁状态标志，线程持有锁,偏向线程id,偏向时间戳等信息。</span><br></pre></td></tr></table></figure>
-<p>引入轻量级锁的主要目的是在多没有多线程竞争的前提下，通过cas减少重量锁的使用。<br><img src="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/BC90336355F14C128F54B137230BC6FB/141388" alt="image"></p>
+<p>引入轻量级锁的主要目的是在多没有多线程竞争的前提下，通过cas减少重量锁的使用。<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E8%BD%BB%E9%87%8F%E9%94%81.png" alt="image"></p>
 <h5 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h5><p>偏向锁比轻量级锁效率更高，不需要进行cas。只需要检查是否为偏向锁、锁标识为以及ThreadID即可。</p>
-<p><img src="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/86761F8533F04F8ABCA733376A0EB1EB/141391" alt="image"></p>
+<p><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E5%81%8F%E5%90%91%E9%94%81.png" alt="image"></p>
 
       
     </div>
@@ -461,6 +481,16 @@
 
           
 
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wujiazhen2" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
           
 
           

@@ -87,14 +87,14 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="多线程存在的问题多线程运用得好可以大大提高系统的性能。但是使用不当也会对系统造成毁灭性灾难。  线程安全问题。多个线程操作共享数据时,会产生线程安全问题。导致读取脏数据或者丢失更新等问题 线程活性问题。由于程序问题导致一个线程一直处于非Runnable状态或者处于Runnable状态但执行的任务没有紧张称为线程活性问题。例如：两个线程，线程1需要先占用锁1，再占用锁2。线程2需要先占用锁2，再占用">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/68A6474D626F4568B15913F0B4AB9DC7?method=download&shareKey=3f9fc493b14ff7b7ca38d547ec75d313">
-<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/88D236CC75C74444AEB30053E30250C7?method=download&shareKey=0de6137d55f9cec58b71542913d75af5">
-<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/9701E3594CC7474CB01BA2B3D7FE4333?method=download&shareKey=6ea8df4834bcf1dd13d9d714b15b72d7">
-<meta property="og:updated_time" content="2018-09-05T04:03:50.719Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/JMM.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E9%87%8D%E6%8E%92%E5%BA%8F.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/happens-before.png">
+<meta property="og:updated_time" content="2018-09-05T08:01:10.384Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线程安全和JMM">
 <meta name="twitter:description" content="多线程存在的问题多线程运用得好可以大大提高系统的性能。但是使用不当也会对系统造成毁灭性灾难。  线程安全问题。多个线程操作共享数据时,会产生线程安全问题。导致读取脏数据或者丢失更新等问题 线程活性问题。由于程序问题导致一个线程一直处于非Runnable状态或者处于Runnable状态但执行的任务没有紧张称为线程活性问题。例如：两个线程，线程1需要先占用锁1，再占用锁2。线程2需要先占用锁2，再占用">
-<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/68A6474D626F4568B15913F0B4AB9DC7?method=download&shareKey=3f9fc493b14ff7b7ca38d547ec75d313">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/JMM.png">
 
 
 
@@ -191,6 +191,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
           </a>
         </li>
       
@@ -320,9 +340,9 @@
 </li>
 </ol>
 <h6 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h6><p>java内存模型，简称JMM。java线程之间的通信是通过JMM控制的。JMM定义了线程和主内存之间的抽象关系：线程之间的共享变量存储在主内存中，每个线程都有其工作内存，存有共享变量的副本。线程对共享变量的读写都是先对工作内存进行，工作内存在将共享变量和内存同步。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">工作内存是抽象概念，并非真实存在。它蕴含了缓存，写缓存区，寄存器还有其他硬件等。</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://note.youdao.com/yws/api/personal/file/68A6474D626F4568B15913F0B4AB9DC7?method=download&amp;shareKey=3f9fc493b14ff7b7ca38d547ec75d313" alt="image"></p>
+<p><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/JMM.png" alt="image"></p>
 <h5 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h5><p>JIT编译器为了优化系统，会对代码进行重排序。重排序按照as-if-serial语义，保证重排序后在单线程时运行结果是一样的。但是多线程时，无法保证有序性。</p>
-<p>代码经过各级重排序优化再最终执行<br><img src="https://note.youdao.com/yws/api/personal/file/88D236CC75C74444AEB30053E30250C7?method=download&amp;shareKey=0de6137d55f9cec58b71542913d75af5" alt="image"></p>
+<p>代码经过各级重排序优化再最终执行<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E9%87%8D%E6%8E%92%E5%BA%8F.png" alt="image"></p>
 <h6 id="happens-before"><a href="#happens-before" class="headerlink" title="happens-before"></a>happens-before</h6><p>happens-before规则是JMM对多线程重排序的约束规则，遵循happens-before规则的重排序不会改变多线程的执行结果。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a=<span class="number">1</span>; <span class="comment">//A</span></span><br><span class="line"><span class="keyword">int</span> b=<span class="number">3</span>; <span class="comment">//B</span></span><br><span class="line"><span class="keyword">int</span> c=a+b; <span class="comment">//C</span></span><br></pre></td></tr></table></figure>
 <p>A happens-before B(非必须)</p>
@@ -352,7 +372,7 @@
 <li>根据volatile规则,2 happens-before 3</li>
 <li>根据传递性规则,由 1 happens-before 2,2 happens-before 3,3 happens-before 4  =&gt; 1 happens before 4</li>
 </ol>
-<p><img src="https://note.youdao.com/yws/api/personal/file/9701E3594CC7474CB01BA2B3D7FE4333?method=download&amp;shareKey=6ea8df4834bcf1dd13d9d714b15b72d7" alt="image"></p>
+<p><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/happens-before.png" alt="image"></p>
 <h4 id="线程安全解决方案"><a href="#线程安全解决方案" class="headerlink" title="线程安全解决方案"></a>线程安全解决方案</h4><p>多线程安全问题是因为多个线程同时操作共享变量，缺乏同步机制来协调线程间数据的访问和活动。</p>
 <ol>
 <li>避免多线程操作共享变量</li>
@@ -500,6 +520,16 @@
 
           
 
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wujiazhen2" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
           
 
           

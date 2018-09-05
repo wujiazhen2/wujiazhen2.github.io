@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="CLH队列 AQS内部维护着一个FIFO的队列，即CLH队列。AQS的同步机制就是依靠CLH队列实现的。CLH队列是FIFO的双端双向队列，实现公平锁。线程通过AQS获取锁失败，就会将线程封装成一个Node节点，插入队列尾。当有线程释放锁时，后尝试把队头的next节点占用锁。 CLH队列结构  Node类 CLH队列由Node对象组成，Node是AQS中的内部类。 重要属性 12345678910">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/DC3C5014908F4936ACA9DFD26BD95C1A?method=download&shareKey=e3874de3169589317a622cf7114c5e7a">
-<meta property="og:updated_time" content="2018-09-05T04:14:02.407Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/clh%E9%98%9F%E5%88%97.png">
+<meta property="og:updated_time" content="2018-09-05T08:03:03.234Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JUC之AQS中的CLH队列">
 <meta name="twitter:description" content="CLH队列 AQS内部维护着一个FIFO的队列，即CLH队列。AQS的同步机制就是依靠CLH队列实现的。CLH队列是FIFO的双端双向队列，实现公平锁。线程通过AQS获取锁失败，就会将线程封装成一个Node节点，插入队列尾。当有线程释放锁时，后尝试把队头的next节点占用锁。 CLH队列结构  Node类 CLH队列由Node对象组成，Node是AQS中的内部类。 重要属性 12345678910">
-<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/DC3C5014908F4936ACA9DFD26BD95C1A?method=download&shareKey=e3874de3169589317a622cf7114c5e7a">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/clh%E9%98%9F%E5%88%97.png">
 
 
 
@@ -189,6 +189,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
           </a>
         </li>
       
@@ -303,7 +323,7 @@
 
       
         <h4 id="CLH队列"><a href="#CLH队列" class="headerlink" title="CLH队列"></a>CLH队列</h4><p> AQS内部维护着一个FIFO的队列，即CLH队列。AQS的同步机制就是依靠CLH队列实现的。CLH队列是FIFO的双端双向队列，实现公平锁。线程通过AQS获取锁失败，就会将线程封装成一个Node节点，插入队列尾。当有线程释放锁时，后尝试把队头的next节点占用锁。</p>
-<h4 id="CLH队列结构"><a href="#CLH队列结构" class="headerlink" title="CLH队列结构"></a>CLH队列结构</h4><p> <img src="https://note.youdao.com/yws/api/personal/file/DC3C5014908F4936ACA9DFD26BD95C1A?method=download&amp;shareKey=e3874de3169589317a622cf7114c5e7a" alt="image"></p>
+<h4 id="CLH队列结构"><a href="#CLH队列结构" class="headerlink" title="CLH队列结构"></a>CLH队列结构</h4><p> <img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/clh%E9%98%9F%E5%88%97.png" alt="image"></p>
 <h4 id="Node类"><a href="#Node类" class="headerlink" title="Node类"></a>Node类</h4><p> CLH队列由Node对象组成，Node是AQS中的内部类。</p>
 <h5 id="重要属性"><a href="#重要属性" class="headerlink" title="重要属性"></a>重要属性</h5> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//用于标识共享锁</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> Node SHARED = <span class="keyword">new</span> Node();</span><br><span class="line"></span><br><span class="line"><span class="comment">//用于标识独占锁</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> Node EXCLUSIVE = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 因为超时或者中断，节点会被设置为取消状态，被取消的节点时不会参与到竞争中的，他会一直保持取消状态不会转变为其他状态；</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCELLED =  <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 当前节点释放锁的时候，需要唤醒下一个节点</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SIGNAL    = -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 节点在等待队列中，节点线程等待Condition唤醒</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CONDITION = -<span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 表示下一次共享式同步状态获取将会无条件地传播下去</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> PROPAGATE = -<span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 等待状态，值为上面的状态常量CANCELLED，SIGNAL，CONDITION，PROPAGATE。 */</span></span><br><span class="line"><span class="keyword">volatile</span> <span class="keyword">int</span> waitStatus;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 前驱节点 */</span></span><br><span class="line"><span class="keyword">volatile</span> Node prev;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 后继节点 */</span></span><br><span class="line"><span class="keyword">volatile</span> Node next;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 节点线程 */</span></span><br><span class="line"><span class="keyword">volatile</span> Thread thread;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line">Node nextWaiter;</span><br></pre></td></tr></table></figure>
 <h4 id="CLH队列源码执行顺序"><a href="#CLH队列源码执行顺序" class="headerlink" title="CLH队列源码执行顺序"></a>CLH队列源码执行顺序</h4><ol>
@@ -465,6 +485,16 @@
 
           
 
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wujiazhen2" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
           
 
           
