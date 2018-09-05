@@ -1,135 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="keyword"  content="">
-    <link rel="shortcut icon" href="/img/favicon.ico">
+  <meta charset="utf-8">
+  
 
-    <title>
-        
-        synchronized原理 - undefined
-        
-    </title>
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/aircloud.css">
-    <link rel="stylesheet" href="/css/gitment.css">
-    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
-    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
-    <!-- ga & ba script hoook -->
-    <script></script>
+  
+  <title>synchronized原理 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去改代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitorsynchronized使通过monitor来实现互斥。每个对象内部都有一个唯一的monitor，存">
+<meta name="keywords" content="thread">
+<meta property="og:type" content="article">
+<meta property="og:title" content="synchronized原理">
+<meta property="og:url" content="http://yoursite.com/2018/09/05/synchronized原理/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去改代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitorsynchronized使通过monitor来实现互斥。每个对象内部都有一个唯一的monitor，存">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/1a8cdefa5fa131d2017c8e82ac728e90/xmlnote/C7DE743A9F5244208EA772F699033C26/141293">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/1a8cdefa5fa131d2017c8e82ac728e90/xmlnote/CE7382C710F3457CB58F5137E3602170/141287">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/BC90336355F14C128F54B137230BC6FB/141388">
+<meta property="og:image" content="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/86761F8533F04F8ABCA733376A0EB1EB/141391">
+<meta property="og:updated_time" content="2018-09-05T02:17:29.033Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="synchronized原理">
+<meta name="twitter:description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去改代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitorsynchronized使通过monitor来实现互斥。每个对象内部都有一个唯一的monitor，存">
+<meta name="twitter:image" content="https://note.youdao.com/yws/public/resource/1a8cdefa5fa131d2017c8e82ac728e90/xmlnote/C7DE743A9F5244208EA772F699033C26/141293">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-
-<div class="site-nav-toggle" id="site-nav-toggle">
-    <button>
-        <span class="btn-bar"></span>
-        <span class="btn-bar"></span>
-        <span class="btn-bar"></span>
-    </button>
-</div>
-
-<div class="index-about">
-    <i>  </i>
-</div>
-
-<div class="index-container">
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-synchronized原理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/05/synchronized原理/" class="article-date">
+  <time datetime="2018-09-05T02:06:01.000Z" itemprop="datePublished">2018-09-05</time>
+</a>
     
-    <div class="index-left">
-        
-<div class="nav" id="nav">
-    <div class="avatar-name">
-        <div class="avatar">
-            <img src="/" />
-        </div>
-        <div class="name">
-            <i>John Doe</i>
-        </div>
-    </div>
-    <div class="contents" id="nav-content">
-        <ul>
-            <li >
-                <a href="/">
-                    <i class="iconfont icon-shouye1"></i>
-                    <span>主页</span>
-                </a>
-            </li>
-            <li >
-                <a href="/tags">
-                    <i class="iconfont icon-biaoqian1"></i>
-                    <span>标签</span>
-                </a>
-            </li>
-            <li >
-                <a href="/archives">
-                    <i class="iconfont icon-guidang2"></i>
-                    <span>存档</span>
-                </a>
-            </li>
-            <li >
-                <a href="/about/">
-                    <i class="iconfont icon-guanyu2"></i>
-                    <span>关于</span>
-                </a>
-            </li>
-            
-        </ul>
-    </div>
+  </div>
+  <div class="article-inner">
     
-        <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#synchronized实现机制"><span class="toc-text">synchronized实现机制</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#monitor"><span class="toc-text">monitor</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#javap反汇编分析"><span class="toc-text">javap反汇编分析</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Synchronized-1-6的优化"><span class="toc-text">Synchronized 1.6的优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#适应自旋锁"><span class="toc-text">适应自旋锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#锁消除"><span class="toc-text">锁消除</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#锁粗化"><span class="toc-text">锁粗化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#轻量级锁"><span class="toc-text">轻量级锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#偏向锁"><span class="toc-text">偏向锁</span></a></li></ol>
-</div>
     
-</div>
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      synchronized原理
+    </h1>
+  
 
-
-<div class="search-field" id="search-field">
-    <div class="search-container">
-        <div class="search-input">
-            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
-            <input id="search-input"/>
-            <span id="begin-search">搜索</span>
-        </div>
-        <div class="search-result-container" id="search-result-container">
-
-        </div>
-    </div>
-</div>
-        <div class="index-about-mobile">
-            <i>  </i>
-        </div>
-    </div>
+      </header>
     
-    <div class="index-middle">
-        <!-- Main Content -->
-        
-
-
-<div class="post-container">
-    <div class="post-title">
-        synchronized原理
-    </div>
-
-    <div class="post-meta">
-        <span class="attr">发布于：<span>2018-09-05 10:06:01</span></span>
-        
-        <span class="attr">标签：/
-        
-        <a class="tag" href="/tags/#thread" title="thread">thread</a>
-        <span>/</span>
-        
-        
-        </span>
-        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
-</span>
-</span>
-    </div>
-    <div class="post-content ">
+    <div class="article-entry" itemprop="articleBody">
+      
         <p>synchronized关键字是jdk提供用于实现内部锁。</p>
 <h4 id="synchronized实现机制"><a href="#synchronized实现机制" class="headerlink" title="synchronized实现机制"></a>synchronized实现机制</h4><p>synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去改代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。</p>
 <h6 id="monitor"><a href="#monitor" class="headerlink" title="monitor"></a>monitor</h6><p>synchronized使通过monitor来实现互斥。每个对象内部都有一个唯一的monitor，存在java对象头中，这也是syncrhoized叫做内部锁的原因。synchronized(lock)时，是获取到了lock对象的monitor.而没有获取到锁的线程进入同步队列等待锁的释放再尝试获取。其中monitor的本质是依赖于底层操作系统的Mutex Lock实现，操作系统实现线程之间的切换需要从用户态到内核态的切换，切换成本非常高。</p>
@@ -145,53 +107,140 @@
 <h4 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h4><p>偏向锁比轻量级锁效率更高，不需要进行cas。只需要检查是否为偏向锁、锁标识为以及ThreadID即可。</p>
 <p><img src="https://note.youdao.com/yws/public/resource/f9c7d69421d6fe631a7799292db8d931/xmlnote/86761F8533F04F8ABCA733376A0EB1EB/141391" alt="image"></p>
 
-        
-        <div id="comment-container">
-        </div>
+      
     </div>
-</div>
-    </div>
-</div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/05/synchronized原理/" data-id="cjloixu4i000djktwrwruotl0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/thread/">thread</a></li></ul>
 
-
-<footer class="footer">
-    <ul class="list-inline text-center">
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-    </ul>
+    </footer>
+  </div>
+  
     
-    <p>
-        <span id="busuanzi_container_site_pv">
-            <span id="busuanzi_value_site_pv"></span>PV
-        </span>
-        <span id="busuanzi_container_site_uv">
-            <span id="busuanzi_value_site_uv"></span>UV
-        </span>
-        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+<nav id="article-nav">
+  
+    <a href="/2018/09/05/JUC之AQS/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          JUC之AQS
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/09/05/线程同步-CAS与原子变量/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">线程同步-CAS与原子变量</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread/">thread</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/thread/" style="font-size: 10px;">thread</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/09/05/多线程/">多线程基础</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/05/JUC之AQS中的CLH队列/">JUC之AQS中的CLH队列</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/05/JUC之CountDownLatch/">JUC之CountDownLatch</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/05/JUC之CyclicBarrier/">JUC之CyclicBarrier</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/05/ReentrantLock中的公平锁和非公平锁的原理/">ReentrantLock中的公平锁和非公平锁的原理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
 </footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
 
 
 
-
+  </div>
 </body>
-
-<script>
-    // We expose some of the variables needed by the front end
-    window.hexo_search_path = ""
-    window.hexo_root = "/"
-    window.isPost = true
-</script>
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="/js/index.js"></script>
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
 </html>
