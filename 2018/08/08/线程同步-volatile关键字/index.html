@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="程序猿的博客">
 <meta property="og:description" content="volatile作用一旦一个共享变量（类的成员变量、类的静态成员变量）被volatile修饰之后，那么就具备了两层语义：  保证了不同线程对这个变量进行操作时的可见性，即一个线程修改了某个变量的值，这新值对其他线程来说是立即可见的。  禁止进行指令重排序。   例子12345678910111213141516171819202122232425private  boolean stop=true">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-05T08:31:54.119Z">
+<meta property="og:updated_time" content="2018-09-06T02:10:09.076Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线程同步-volatile关键字">
 <meta name="twitter:description" content="volatile作用一旦一个共享变量（类的成员变量、类的静态成员变量）被volatile修饰之后，那么就具备了两层语义：  保证了不同线程对这个变量进行操作时的可见性，即一个线程修改了某个变量的值，这新值对其他线程来说是立即可见的。  禁止进行指令重排序。   例子12345678910111213141516171819202122232425private  boolean stop=true">
@@ -366,7 +366,7 @@
 <li><p>StoreLoad屏障：对于这样的语句Store1; StoreLoad;<br>Load2，在Load2及后续所有读取操作执行前，保证Store1的写入对所有处理器可见。它的开销是四种屏障中最大的。        在大多数处理器的实现中，这个屏障是个万能屏障，兼具其它三种内存屏障的功能。</p>
 </li>
 </ol>
-<p>总结：java内存屏障由store和load两两组合，store和load的拼接顺序也表示者这个内存屏障的功能。例如LoadStore,前面的操作Load会在后面的Store执行前执行完毕。</p>
+<p>总结：java内存屏障由store和load两两组合，store和load的拼接顺序也表示着这个内存屏障的功能。例如LoadStore,前面的读操作Load会在后面的写操作Store执行前执行完毕。<br>执行完毕，意味中处理结果对后面的操作可见。</p>
 <h5 id="volatile中的内存屏障"><a href="#volatile中的内存屏障" class="headerlink" title="volatile中的内存屏障"></a>volatile中的内存屏障</h5><p>读操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">volatile读操作</span><br><span class="line">    ⬇</span><br><span class="line">LoadLoad</span><br><span class="line">    ⬇</span><br><span class="line">LoadStore</span><br></pre></td></tr></table></figure></p>
 <p>volatile变量读操作后加入LoadLoad和LoadStore，保障volatile变量读操作后的所有普通读写操作都不能和volatile读操作重排序。</p>
 <p>写操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">StoreStore</span><br><span class="line">    ⬇</span><br><span class="line">volatile写操作</span><br><span class="line">    ⬇</span><br><span class="line">StoreLoad</span><br></pre></td></tr></table></figure></p>
