@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/JMM.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E9%87%8D%E6%8E%92%E5%BA%8F.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/happens-before.png">
-<meta property="og:updated_time" content="2018-09-06T02:40:41.108Z">
+<meta property="og:updated_time" content="2018-09-06T08:03:37.595Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线程安全和JMM">
 <meta name="twitter:description" content="多线程存在的问题多线程运用得好可以大大提高系统的性能。但是使用不当也会对系统造成毁灭性灾难。  线程安全问题。多个线程操作共享数据时,会产生线程安全问题。导致读取脏数据或者丢失更新等问题 线程活性问题。由于程序问题导致一个线程一直处于非Runnable状态或者处于Runnable状态但执行的任务没有紧张称为线程活性问题。例如：两个线程，线程1需要先占用锁1，再占用锁2。线程2需要先占用锁2，再占用">
@@ -379,7 +379,8 @@
 <li>如果一个操作happens-before另一个操作，那么操作一的执行结果对第二个操作时可见的，并且第一个操作执行顺序在第二个操作之前。</li>
 <li>两个操作如果存在happens-before规则，并不意味者java平台会按照happens-before的执行顺序执行。如果重排序的执行结果和按happens-before顺序执行的结果一致的话，jmm允许这种排序。</li>
 </ol>
-<p>定义1是JMM对程序员的保证，程序员关注结果，即最终的执行结果和按执行顺序执行的结果一致。<br>定义2是JMM对编译器和处理器重排序的约束。</p>
+<p>定义1是JMM对程序员的保证.程序员关注结果,最终的执行结果和按执行顺序执行的结果一致。</p>
+<p>定义2是JMM对编译器和处理器重排序的约束。</p>
 <p>两者并不冲突。</p>
 <p>下面是happens-before规则：</p>
 <ol>
@@ -524,7 +525,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
