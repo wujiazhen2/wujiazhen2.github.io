@@ -508,14 +508,15 @@
 <p>test1用synchronized代码块，通过monitorenter获取锁，执行完后用monitorexit释放锁。<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/synchronized%E6%B1%87%E7%BC%96.png" alt="image"></p>
 <p>test2是synchronized方法，jvm通过ACC_SYNCHRONIZED标志，内部实现。<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/synchronized2.png" alt="image"></p>
 <h4 id="Synchronized-1-6的优化"><a href="#Synchronized-1-6的优化" class="headerlink" title="Synchronized 1.6的优化"></a>Synchronized 1.6的优化</h4><p>锁的强度分四种级别，依次是：无锁状态、偏向锁状态、轻量级锁状态、重量级锁状态。他们会随着竞争的激烈而逐渐升级。</p>
+<p>锁的相关信息存在对象的对象头的Mark Word：<br>Mark Word是hotSpot虚拟机的对象的对象头中的一部分，用于存储对象滋生运行时数据，如hashcode,GC分代年龄、锁状态标志，线程持有锁,偏向线程id,偏向时间戳等信息。</p>
+<p><strong>Mark Word结构</strong><br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/MarkWord.png" alt="image"></p>
 <h5 id="适应自旋锁"><a href="#适应自旋锁" class="headerlink" title="适应自旋锁"></a>适应自旋锁</h5><p>线程的阻塞和唤醒需要cpu从用户态切换成内核态，给cpu造成很大的负担。而往往一个线程从阻塞到唤醒只经历很短的一段时间，所以引入自旋锁。通过无意义的循环进行等待锁释放，而不会立刻进入阻塞，这就是自旋。因为自旋是会消耗cpu的，所以要有个自旋次数限制，达到自旋次数还未获取锁就进入阻塞。适应自旋锁会根据自旋获取锁的成功率来调整自旋次数，如果获取锁成功率高会调高自旋次数，否则反之。</p>
 <h5 id="锁消除"><a href="#锁消除" class="headerlink" title="锁消除"></a>锁消除</h5><p>为了保证数据的完整性，我们在进行操作时需要对这部分操作进行同步控制，但是在有些情况下，JVM检测到不可能存在共享数据竞争，这是JVM会对这些同步锁进行锁消除。锁消除的依据是JIT编译器借助逃逸分析技术分析锁对象是否只能给一个线程访问而没发布到其他线程，锁消除就是在JIT生成动态字节码时消除moniterenter(申请锁)和moniterexit（释放锁）两个字节码指令。</p>
 <p>注意：锁消除并不意味着可以随意加锁，JIT只会对执行频率足够多的地方进行优化。</p>
 <h5 id="锁粗化"><a href="#锁粗化" class="headerlink" title="锁粗化"></a>锁粗化</h5><p>使用锁时，我们会尽力将锁的范围缩小，只在操作共享变量时同步以减小锁竞争的范围。但是如果一系列的连续加锁解锁操作，频繁的获取释放锁可能会导致不必要的性能损耗，所以就是将多个连续的加锁、解锁操作（锁对象相同）连接在一起，扩展成一个范围更大的锁，这就是锁粗化。</p>
-<h5 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mark Word是hotSpot虚拟机的对象的对象头中，用于存储对象滋生运行时数据，如hashcode,GC分代年龄、锁状态标志，线程持有锁,偏向线程id,偏向时间戳等信息。</span><br></pre></td></tr></table></figure>
-<p>引入轻量级锁的主要目的是在多没有多线程竞争的前提下，通过cas减少重量锁的使用。<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E8%BD%BB%E9%87%8F%E9%94%81.png" alt="image"></p>
-<h5 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h5><p>偏向锁比轻量级锁效率更高，不需要进行cas。只需要检查是否为偏向锁、锁标识为以及ThreadID即可。</p>
+<h5 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h5><p>大部分锁并没有被争用，且在其生命周期内也许至多被一个线程持有。所以一个内部锁第一次被获取时，会将Mark Word的偏向线程设为获取锁的线程，是否偏向锁标志设为1。获取偏向锁后不需要再执行cas,偏向锁只有竞争时才释放锁。<br>其他线程来竞争cas更新Mark Word失败，则说明存在争用，撤销偏向锁，锁升级为轻量锁</p>
 <p><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E5%81%8F%E5%90%91%E9%94%81.png" alt="image"></p>
+<h5 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h5><p>引入轻量级锁的主要目的是在没有多线程竞争的前提下，通过cas减少重量锁的使用。轻量锁依据是大部分锁再同步周期内不存在竞争。轻量锁进入同步代码块会先通过cas修改Mark Word，将锁标志位改成00表示轻量锁。再执行完代码块释放锁时会再次通过cas修改Mark Word。如果修改失败则说明同步周期内存在竞争，锁升级为重量锁。<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E8%BD%BB%E9%87%8F%E9%94%81.png" alt="image"></p>
 
           
         
