@@ -715,7 +715,7 @@
 <h5 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h5><p>可见性是指一个线程对共享数据修改后，其他线程可以看到修改后的值。</p>
 <h6 id="导致可见性的原因"><a href="#导致可见性的原因" class="headerlink" title="导致可见性的原因"></a>导致可见性的原因</h6><ol>
 <li>由于java内存模型中,每个线程都有一个工作内存。在对共享数据进行修改和读取时，<br>是先对工作内存中的数据进行操作。所以其他线程读取的共享变量可能是脏数据,无法保证可见性。</li>
-<li>有序性影响可见性。重排序后，一个线程对共享变量的更新对其他线程来说可能变得不可见。</li>
+<li>有序性影响可见性。重排序后，一个线程对共享变量的更新对其他线程来说可能变得不可见。如原顺序，操作1-&gt;操作2，操作2读取操作1的结果 。重排序后顺序, 操作2-&gt;操作1。操作1的结果对操作2是不可见的。</li>
 </ol>
 <h6 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h6><p>java内存模型，简称JMM。java线程之间的通信是通过JMM控制的。JMM定义了线程和主内存之间的抽象关系：线程之间的共享变量存储在主内存中，每个线程都有其工作内存，存有共享变量的副本。线程对共享变量的读写都是先对工作内存进行，工作内存再将共享变量和内存同步。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">工作内存是抽象概念，并非真实存在。它蕴含了缓存，写缓存区，寄存器还有其他硬件等。</span><br></pre></td></tr></table></figure></p>
 <p><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/JMM.png" alt="image"></p>
@@ -731,7 +731,8 @@
 <li>如果一个操作happens-before另一个操作，那么操作一的执行结果对第二个操作时可见的，并且第一个操作执行顺序在第二个操作之前。</li>
 <li>两个操作如果存在happens-before规则，并不意味者java平台会按照happens-before的执行顺序执行。如果重排序的执行结果和按happens-before顺序执行的结果一致的话，jmm允许这种排序。</li>
 </ol>
-<p>规则1是JMM对程序员的保证，而规则2是JMM对编译器和处理器重排序的约束</p>
+<p>定义1是JMM对程序员的保证，程序员关注结果，即最终的执行结果和按执行顺序执行的结果一致。<br>定义2是JMM对编译器和处理器重排序的约束。</p>
+<p>两者并不冲突。</p>
 <p>下面是happens-before规则：</p>
 <ol>
 <li>程序次序规则：一个线程内，按照代码顺序，书写在前面的操作先行发生于书写在后面的操作；</li>
