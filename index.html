@@ -249,6 +249,169 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/06/死锁/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wujiazhen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/06/死锁/" itemprop="url">死锁</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-06T20:37:48+08:00">
+                2018-09-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>死锁是常见的线程活性问题。多个线程互相等待对方而导致永远暂停称为死锁。常见的死锁q情况是线程A持有锁L1的情况下申请锁L2,线程B持有锁L2申请锁L1。线程A等待锁L2释放，线程B等待锁L1释放，从而互相等待永远暂停。</p>
+<h1 id="死锁的必要条件"><a href="#死锁的必要条件" class="headerlink" title="死锁的必要条件"></a>死锁的必要条件</h1><ol>
+<li>资源互斥,资源同时只能被一个线程占用。</li>
+<li>资源不可抢夺，资源被一个线程占用时，其他线程无法抢夺。</li>
+<li>占用并等待资源，线程持有资源，并申请另外的资源而进入等待时。不会释放现有资源。</li>
+<li>循环等待资源，线程A持有锁L1的情况下申请锁L2,线程B持有锁L2申请锁L1。线程A等待锁L2释放，线程B等待锁L1释放。A持有L1等L2,B持有L2等L1 这就是循环等待。</li>
+</ol>
+<h1 id="哲学家用餐问题"><a href="#哲学家用餐问题" class="headerlink" title="哲学家用餐问题"></a>哲学家用餐问题</h1><p>哲学家用餐问题是经典的死锁问题。一群哲学家围着一个大圆桌坐下，每个哲学家面前都有一个碗和一根筷子。哲学家要么思考要么吃饭。哲学家吃饭时总是先拿起左手边的筷子再拿起右手边的筷子。只有拿到2根筷子的哲学家可以吃饭。哲学家吃饭吃着会放下筷子，再次思考。</p>
+<p>将问题简化，假设只有2个哲学家。哲学家p1想吃饭，先拿起他左边的筷子c1。这时哲学家p2也想吃饭,拿起他左边的筷子c2。哲学家相当于线程，筷子相当于锁。这样就进入死锁状态。<br><img src="https://github.com/wujiazhen2/pict/blob/master/thread/%E5%93%B2%E5%AD%A6%E5%AE%B6.png?raw=true" alt="image"></p>
+<h2 id="代码模拟"><a href="#代码模拟" class="headerlink" title="代码模拟"></a>代码模拟</h2><h3 id="哲学家抽象类"><a href="#哲学家抽象类" class="headerlink" title="哲学家抽象类"></a>哲学家抽象类</h3><p>定义哲学家的吃饭，思考动作和 身份标识id，左右筷子属性。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractPhilosopher</span>  <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">protected</span> Chopsticks left;</span><br><span class="line">    <span class="keyword">protected</span> Chopsticks right;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AbstractPhilosopher</span><span class="params">(<span class="keyword">int</span> id,Chopsticks left,Chopsticks right)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id=id;</span><br><span class="line">        <span class="keyword">this</span>.left=left;</span><br><span class="line">        <span class="keyword">this</span>.right=right;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//哲学家不是在思考，就是在吃饭</span></span><br><span class="line">       <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            think();</span><br><span class="line">            eat();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">abstract</span>  <span class="keyword">void</span>  <span class="title">eat</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">think</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(String.format(<span class="string">"%s  thinking"</span>,<span class="keyword">this</span>.toString()));</span><br><span class="line">            Thread.sleep(<span class="keyword">new</span> Random().nextInt(<span class="number">2</span>)*<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doEat</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(String.format(<span class="string">"%s eating"</span>,<span class="keyword">this</span>.toString()));</span><br><span class="line">            Thread.sleep(<span class="keyword">new</span> Random().nextInt(<span class="number">2</span>)*<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> String.format(<span class="string">"Philosopher%d"</span>,<span class="keyword">this</span>.id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="筷子类"><a href="#筷子类" class="headerlink" title="筷子类"></a>筷子类</h3><p>筷子类充当锁对象，获取锁相当于拿起筷子，释放锁相当于放下筷子。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Chopsticks</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Chopsticks</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id=id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.format(<span class="string">"Chopsticks%d"</span>,id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="哲学家实现类"><a href="#哲学家实现类" class="headerlink" title="哲学家实现类"></a>哲学家实现类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeadLockPhilosopher</span> <span class="keyword">extends</span> <span class="title">AbstractPhilosopher</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DeadLockPhilosopher</span><span class="params">(<span class="keyword">int</span> id, Chopsticks left, Chopsticks right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(id, left, right);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         <span class="comment">//拿起左边筷子</span></span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>.left)&#123;</span><br><span class="line">            System.out.println(String.format(<span class="string">"%s拿起%s"</span>,<span class="keyword">this</span>.toString(),<span class="keyword">this</span>.left.toString()));</span><br><span class="line"></span><br><span class="line">            <span class="comment">//为了使死锁发生频率高点，在这里等下哲学家2获取锁</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>.right)&#123;</span><br><span class="line">                <span class="comment">//拿起右边筷子</span></span><br><span class="line">                System.out.println(String.format(<span class="string">"%s拿起%s"</span>,<span class="keyword">this</span>.toString(),<span class="keyword">this</span>.right.toString()));</span><br><span class="line">                <span class="keyword">this</span>.doEat();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="模拟"><a href="#模拟" class="headerlink" title="模拟"></a>模拟</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">         Chopsticks c1 = <span class="keyword">new</span> Chopsticks(<span class="number">1</span>);</span><br><span class="line">         Chopsticks c2 = <span class="keyword">new</span> Chopsticks(<span class="number">2</span>);</span><br><span class="line">         <span class="comment">//筷子c1是哲学家p1的左筷子，c2是p1的右筷子</span></span><br><span class="line">         DeadLockPhilosopher p1 = <span class="keyword">new</span> DeadLockPhilosopher(<span class="number">1</span>,c1,c2);</span><br><span class="line">          <span class="comment">//筷子c2是哲学家p2的左筷子，c1是p2的右筷子</span></span><br><span class="line">         DeadLockPhilosopher p2 = <span class="keyword">new</span> DeadLockPhilosopher(<span class="number">2</span>,c2,c1);</span><br><span class="line">         p1.start();</span><br><span class="line">         p2.start();</span><br><span class="line"></span><br><span class="line">         p1.join();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Philosopher1  thinking</span><br><span class="line">Philosopher2  thinking</span><br><span class="line">Philosopher2拿起Chopsticks2</span><br><span class="line">Philosopher1拿起Chopsticks1</span><br></pre></td></tr></table></figure></p>
+<p>哲学家p2拿起了筷子c2,哲学家p1拿起了筷子c1。产生死锁。</p>
+<h1 id="避免死锁的解决方法"><a href="#避免死锁的解决方法" class="headerlink" title="避免死锁的解决方法"></a>避免死锁的解决方法</h1><p>死锁的解决方法可以从死锁的产生条件入手。只要消除死锁四个必要条件之一就可以避免死锁。</p>
+<h2 id="粗粒锁法"><a href="#粗粒锁法" class="headerlink" title="粗粒锁法"></a>粗粒锁法</h2><p>通过一个大的锁来替代多个细粒度的锁。由于只有一个锁，死锁的必要条件占用并等待资源和循环等待资源都不成立。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BigLogPhilosopher</span> <span class="keyword">extends</span> <span class="title">AbstractPhilosopher</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span>  <span class="keyword">final</span>  <span class="keyword">static</span> Object GLOBAL_LOCK=<span class="keyword">new</span> Object();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BigLogPhilosopher</span><span class="params">(<span class="keyword">int</span> id, Chopsticks left, Chopsticks right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(id, left, right);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (GLOBAL_LOCK)&#123;</span><br><span class="line">            <span class="comment">//拿起左边</span></span><br><span class="line">            System.out.println(String.format(<span class="string">"%s拿起%s"</span>,<span class="keyword">this</span>.toString(),<span class="keyword">this</span>.left.toString()));</span><br><span class="line">            <span class="comment">//拿起右边筷子</span></span><br><span class="line">            System.out.println(String.format(<span class="string">"%s拿起%s"</span>,<span class="keyword">this</span>.toString(),<span class="keyword">this</span>.right.toString()));</span><br><span class="line">            <span class="keyword">this</span>.doEat();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>粗粒锁的缺点是降低了并发，浪费资源。如果有4个哲学家的情况下，一个哲学家吃饭，还剩下2根筷子可以给一个哲学家同时用餐。<br>但是用粗粒锁的方法同时只能一个哲学家吃饭。</p>
+<h2 id="锁排序法"><a href="#锁排序法" class="headerlink" title="锁排序法"></a>锁排序法</h2><p>锁排序是给锁进行排序，所有线程申请锁都按排好的顺序。从而消除循环等待条件。</p>
+<p>如哲学家问题中，给筷子排序，每次哲学家不按照左右顺序来拿筷子。而是都拿id小的筷子再拿大的。<br>所以哲学家p1,p2都会先拿筷子c1。当哲学家p1拿到筷子c1后，哲学家p2获取不到锁进入阻塞。死锁不会发送。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SortLockPhilosopher</span> <span class="keyword">extends</span> <span class="title">DeadLockPhilosopher</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SortLockPhilosopher</span><span class="params">(<span class="keyword">int</span> id, Chopsticks left, Chopsticks right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(id, left, right);</span><br><span class="line">        <span class="keyword">if</span>(left.getId()&gt;right.getId())&#123;</span><br><span class="line">            <span class="keyword">this</span>.left=right;</span><br><span class="line">            <span class="keyword">this</span>.right=left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    Chopsticks c1 = <span class="keyword">new</span> Chopsticks(<span class="number">1</span>);</span><br><span class="line">    Chopsticks c2 = <span class="keyword">new</span> Chopsticks(<span class="number">2</span>);</span><br><span class="line">    DeadLockPhilosopher p1 = <span class="keyword">new</span> SortLockPhilosopher(<span class="number">1</span>,c1,c2);</span><br><span class="line">    DeadLockPhilosopher p2 = <span class="keyword">new</span> SortLockPhilosopher(<span class="number">2</span>,c2,c1);</span><br><span class="line">    p1.start();</span><br><span class="line">    p2.start();</span><br><span class="line"></span><br><span class="line">    p1.join();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="用tryLock-long-TimeUnit"><a href="#用tryLock-long-TimeUnit" class="headerlink" title="用tryLock(long,TimeUnit)"></a>用tryLock(long,TimeUnit)</h2><p>第三种方法是通过tryLock(long,TimeUnit),固定时间内获取不了锁就获取失败返回false。哲学家问题中，可以在超时获取不到锁的情况下，将本来就持有的锁放下，即可消除占有并等待资源条件，避免死锁。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/06/懒加载中的DCL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -714,9 +877,10 @@
 <h5 id="锁消除"><a href="#锁消除" class="headerlink" title="锁消除"></a>锁消除</h5><p>为了保证数据的完整性，我们在进行操作时需要对这部分操作进行同步控制，但是在有些情况下，JVM检测到不可能存在共享数据竞争，这是JVM会对这些同步锁进行锁消除。锁消除的依据是JIT编译器借助逃逸分析技术分析锁对象是否只能给一个线程访问而没发布到其他线程，锁消除就是在JIT生成动态字节码时消除moniterenter(申请锁)和moniterexit（释放锁）两个字节码指令。</p>
 <p>注意：锁消除并不意味着可以随意加锁，JIT只会对执行频率足够多的地方进行优化。</p>
 <h5 id="锁粗化"><a href="#锁粗化" class="headerlink" title="锁粗化"></a>锁粗化</h5><p>使用锁时，我们会尽力将锁的范围缩小，只在操作共享变量时同步以减小锁竞争的范围。但是如果一系列的连续加锁解锁操作，频繁的获取释放锁可能会导致不必要的性能损耗，所以就是将多个连续的加锁、解锁操作（锁对象相同）连接在一起，扩展成一个范围更大的锁，这就是锁粗化。</p>
-<h5 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h5><p>大部分锁并没有被争用，且在其生命周期内也许至多被一个线程持有。所以一个内部锁第一次被获取时，会将Mark Word的偏向线程设为获取锁的线程，是否偏向锁标志设为1。获取偏向锁后不需要再执行cas,偏向锁只有竞争时才释放锁。<br>其他线程来竞争cas更新Mark Word失败，则说明存在争用，撤销偏向锁，锁升级为轻量锁</p>
+<h5 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h5><p>大部分锁并没有被争用，且在其生命周期内也许至多被一个线程持有。所以一个内部锁第一次被获取时，会将Mark Word的偏向线程设为获取锁的线程，是否偏向锁标志设为1。线程只要判断偏向线程是否是当前线程，是则说明当前线程获取锁了。否则会通过cas设置Mark work。失败的话，则说明存在争用，撤销偏向锁，锁升级为轻量锁</p>
 <p><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E5%81%8F%E5%90%91%E9%94%81.png" alt="image"></p>
-<h5 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h5><p>引入轻量级锁的主要目的是在没有多线程竞争的前提下，通过cas减少重量锁的使用。轻量锁依据是大部分锁再同步周期内不存在竞争。轻量锁进入同步代码块会先通过cas修改Mark Word，将锁标志位改成00表示轻量锁。再执行完代码块释放锁时会再次通过cas修改Mark Word。如果修改失败则说明同步周期内存在竞争，锁升级为重量锁。<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E8%BD%BB%E9%87%8F%E9%94%81.png" alt="image"></p>
+<h5 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h5><p>引入轻量级锁的主要目的是在没有多线程竞争的前提下，通过cas减少重量锁的使用。轻量锁依据是大部分锁再同步周期内不存在竞争。jvm会在进入同步块前会在当前线程的栈帧创建用于存储锁记录的空间，轻量锁进入同步代码块前会将mark work复制的锁记录中，通过cas将对象头中的Mark Word替换为指向锁记录的指针。cas成功则获取锁，将锁标志位改成00表示轻量锁。失败则尝试自旋获取锁。在执行完代码块释放锁时会通过cas将Mark Word替换回对象头。如果修改失败则说明同步周期内存在竞争，锁升级为重量锁。</p>
+<p>因为自旋会消耗cpu，所以轻量锁一旦升级为重量锁就不会恢复。<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E8%BD%BB%E9%87%8F%E9%94%81.png" alt="image"></p>
 
           
         
@@ -1700,286 +1864,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/11/线程同步-CAS与原子变量/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wujiazhen">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程序猿的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/11/线程同步-CAS与原子变量/" itemprop="url">线程同步-CAS与原子变量</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-11T10:06:01+08:00">
-                2018-08-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/多线程/" itemprop="url" rel="index">
-                    <span itemprop="name">多线程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="CAS简介"><a href="#CAS简介" class="headerlink" title="CAS简介"></a>CAS简介</h4><p>锁的开销极大。在某些场景，如保证一个变量的 read-modify-write操作的原子性。这种场景可以通过使用CAS解决而不需要用到锁。</p>
-<p>CAS,Compare and swap 比较并交换，是一种乐观锁的实现方式。是一个中由处理器保证原子性的if-then-act操作。它通过提供一个变量内存位置,预期值(旧值)和新值。将预期值和变量的当前值进行比较，如果相等即证明变量并没有被改变，将该变量修改成新值。如果不相等则进行重试（预期值会重新加载）,直到成功。</p>
-<p>Unsafe类中通过CAS修改int类型变量源码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">*var1  AtomicInteger对象</span></span><br><span class="line"><span class="comment">*var2  内存偏移量</span></span><br><span class="line"><span class="comment">*var4  增加的值</span></span><br><span class="line"><span class="comment">*var5  获取的变量原值，保存在var5用于当预期值</span></span><br><span class="line"><span class="comment">*compareAndSwapInt会比较内存值和var5相等的话就会改变内存值（即AtomicIntege * r对象中的变量）。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAddInt</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">int</span> var4)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">int</span> var5;</span><br><span class="line">      <span class="keyword">do</span> &#123;</span><br><span class="line">          <span class="comment">//获取内存的当前值</span></span><br><span class="line">          var5 = <span class="keyword">this</span>.getIntVolatile(var1, var2);</span><br><span class="line">      &#125; <span class="keyword">while</span>(!<span class="keyword">this</span>.compareAndSwapInt(var1, var2, var5, var5 + var4));</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> var5;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="原子变量"><a href="#原子变量" class="headerlink" title="原子变量"></a>原子变量</h4><p>以上代码是原子遍历AtomicInteger自增代码的实现片段。JDK基于CAS提供了保证共享变量read-modify-write操作原子性的类。</p>
-<table>
-<thead>
-<tr>
-<th>分组</th>
-<th>类名</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>基本类型</td>
-<td>AtomicInteger,AtomicLong,AtomicBoolean</td>
-</tr>
-<tr>
-<td>数组类型</td>
-<td>AtomicIntegerArray,AtomicLongArray,AtomicReferenceArray</td>
-</tr>
-<tr>
-<td>字段更新</td>
-<td>AtomicIntegerFieldUpdater,AtomicLongFieldUpdater,AtomicReferenceFieldUpdater</td>
-</tr>
-<tr>
-<td>引用型</td>
-<td>AtomicReference,AtomicStampedReference,AtomicMarkableReference</td>
-</tr>
-</tbody>
-</table>
-<h5 id="AtomicInteger"><a href="#AtomicInteger" class="headerlink" title="AtomicInteger"></a>AtomicInteger</h5><table>
-<thead>
-<tr>
-<th>方法</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>int accumulateAndGet(int x, IntBinaryOperator accumulatorFunction)</td>
-<td>使用将给定函数应用于当前值和给定值的结果原子更新当前值，返回更新后的值。  </td>
-</tr>
-<tr>
-<td>int addAndGet(int delta)</td>
-<td>将给定的值原子地添加到当前值。  </td>
-</tr>
-<tr>
-<td>boolean compareAndSet(int expect, int update)</td>
-<td>如果当前值 ==为预期值，则将该值原子设置为给定的更新值。  </td>
-</tr>
-<tr>
-<td>int decrementAndGet()</td>
-<td>原子减1当前值。  </td>
-</tr>
-<tr>
-<td>double doubleValue()</td>
-<td>返回此值 AtomicInteger为 double一个宽元转换后。  </td>
-</tr>
-<tr>
-<td>float floatValue()</td>
-<td>返回此值 AtomicInteger为 float一个宽元转换后。  </td>
-</tr>
-<tr>
-<td>int get()</td>
-<td>获取当前值。  </td>
-</tr>
-<tr>
-<td>int getAndAccumulate(int x, IntBinaryOperator accumulatorFunction)</td>
-<td>使用给定函数应用给当前值和给定值的结果原子更新当前值，返回上一个值。  </td>
-</tr>
-<tr>
-<td>int getAndAdd(int delta)</td>
-<td>将给定的值原子地添加到当前值。  </td>
-</tr>
-<tr>
-<td>int getAndDecrement()</td>
-<td>原子减1当前值。  </td>
-</tr>
-<tr>
-<td>int getAndIncrement()</td>
-<td>原子上增加一个当前值。  </td>
-</tr>
-<tr>
-<td>int getAndSet(int newValue)</td>
-<td>将原子设置为给定值并返回旧值。  </td>
-</tr>
-<tr>
-<td>int getAndUpdate(IntUnaryOperator updateFunction)</td>
-<td>用应用给定函数的结果原子更新当前值，返回上一个值。  </td>
-</tr>
-<tr>
-<td>int incrementAndGet()</td>
-<td>原子上增加一个当前值。  </td>
-</tr>
-<tr>
-<td>int intValue()</td>
-<td>将 AtomicInteger的值作为 int 。  </td>
-</tr>
-<tr>
-<td>void lazySet(int newValue)</td>
-<td>最终设定为给定值。  </td>
-</tr>
-<tr>
-<td>long longValue()</td>
-<td>返回此值 AtomicInteger为 long一个宽元转换后。  </td>
-</tr>
-<tr>
-<td>void set(int newValue)</td>
-<td>设置为给定值。  </td>
-</tr>
-<tr>
-<td>String toString()</td>
-<td>返回当前值的String表示形式。  </td>
-</tr>
-<tr>
-<td>int updateAndGet(IntUnaryOperator updateFunction)</td>
-<td>使用给定函数的结果原子更新当前值，返回更新的值。  </td>
-</tr>
-<tr>
-<td>boolean weakCompareAndSet(int expect, int update)</td>
-<td>如果当前值 ==为预期值，则将值设置为给定更新值。  </td>
-</tr>
-</tbody>
-</table>
-<h4 id="ABA问题"><a href="#ABA问题" class="headerlink" title="ABA问题"></a>ABA问题</h4><p>以上说到，CAS是将预期值和内存当前值比较，通过比较结果来判断其他线程是否修改过该变量。但是如果存在其他线程修改变量后又改回原值（即预期值），在某些场景就会存在问题。</p>
-<h5 id="ABA问题例子"><a href="#ABA问题例子" class="headerlink" title="ABA问题例子"></a>ABA问题例子</h5><p>银行账户 500元（共享变量）</p>
-<ol>
-<li>要取出50元，机器故障发送了2个请求A,B，此时两个请求的期望值都是500，新值450</li>
-<li>A请求执行完后，内存值变成450。所以第二个请求是不会成功的。</li>
-<li>但是如果在B请求执行前，C又往账户存了50块。这时银行帐号变成500。B请求预期值满足提交成功，银行账户最终存款为 450。</li>
-</ol>
-<p>这种情况下，存款少了50块。</p>
-<h5 id="ABA解决方案。"><a href="#ABA解决方案。" class="headerlink" title="ABA解决方案。"></a>ABA解决方案。</h5><p>ABA问题可以通过版本号来解决，每次修改操作都添加一个版本号。例如刚才的取款操作加个版本号 1，在存款操作执行后版本号+1，变为2。取款的第二次请求执行时就会判断版本号不是1，执行失败。</p>
-<p>原子变量AtomicStampedReference，AtomicMarkableReference 中处理了ABA问题。</p>
-<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
-<li>CAS只能保证一个共享变量的操作的原子性（原子性操作+原子性操作≠原子操作），如果要保持多个共享变量的操作的原子性，就必须使用锁。</li>
-<li>如果变量更新多次失败，循环时间长开销大。</li>
-<li>ABA问题</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2030,7 +1914,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

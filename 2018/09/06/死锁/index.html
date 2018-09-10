@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="多线程," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="死锁是常见的线程活性问题。多个线程互相等待对方而导致永远暂停称为死锁。常见的死锁q情况是线程A持有锁L1的情况下申请锁L2,线程B持有锁L2申请锁L1。线程A等待锁L2释放，线程B等待锁L1释放，从而互相等待永远暂停。 死锁的必要条件 资源互斥,资源同时只能被一个线程占用。 资源不可抢夺，资源被一个线程占用时，其他线程无法抢夺。 占用并等待资源，线程持有资源，并申请另外的资源而进入等待时。不会释放">
+<meta name="keywords" content="多线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="死锁">
+<meta property="og:url" content="http://yoursite.com/2018/09/06/死锁/index.html">
+<meta property="og:site_name" content="程序猿的博客">
+<meta property="og:description" content="死锁是常见的线程活性问题。多个线程互相等待对方而导致永远暂停称为死锁。常见的死锁q情况是线程A持有锁L1的情况下申请锁L2,线程B持有锁L2申请锁L1。线程A等待锁L2释放，线程B等待锁L1释放，从而互相等待永远暂停。 死锁的必要条件 资源互斥,资源同时只能被一个线程占用。 资源不可抢夺，资源被一个线程占用时，其他线程无法抢夺。 占用并等待资源，线程持有资源，并申请另外的资源而进入等待时。不会释放">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/wujiazhen2/pict/blob/master/thread/%E5%93%B2%E5%AD%A6%E5%AE%B6.png?raw=true">
+<meta property="og:updated_time" content="2018-09-07T01:10:57.486Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="死锁">
+<meta name="twitter:description" content="死锁是常见的线程活性问题。多个线程互相等待对方而导致永远暂停称为死锁。常见的死锁q情况是线程A持有锁L1的情况下申请锁L2,线程B持有锁L2申请锁L1。线程A等待锁L2释放，线程B等待锁L1释放，从而互相等待永远暂停。 死锁的必要条件 资源互斥,资源同时只能被一个线程占用。 资源不可抢夺，资源被一个线程占用时，其他线程无法抢夺。 占用并等待资源，线程持有资源，并申请另外的资源而进入等待时。不会释放">
+<meta name="twitter:image" content="https://github.com/wujiazhen2/pict/blob/master/thread/%E5%93%B2%E5%AD%A6%E5%AE%B6.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/06/死锁/"/>
+
+
+
+
+
+  <title>死锁 | 程序猿的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/06/死锁/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wujiazhen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">死锁</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-06T20:37:48+08:00">
+                2018-09-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>死锁是常见的线程活性问题。多个线程互相等待对方而导致永远暂停称为死锁。常见的死锁q情况是线程A持有锁L1的情况下申请锁L2,线程B持有锁L2申请锁L1。线程A等待锁L2释放，线程B等待锁L1释放，从而互相等待永远暂停。</p>
+<h1 id="死锁的必要条件"><a href="#死锁的必要条件" class="headerlink" title="死锁的必要条件"></a>死锁的必要条件</h1><ol>
+<li>资源互斥,资源同时只能被一个线程占用。</li>
+<li>资源不可抢夺，资源被一个线程占用时，其他线程无法抢夺。</li>
+<li>占用并等待资源，线程持有资源，并申请另外的资源而进入等待时。不会释放现有资源。</li>
+<li>循环等待资源，线程A持有锁L1的情况下申请锁L2,线程B持有锁L2申请锁L1。线程A等待锁L2释放，线程B等待锁L1释放。A持有L1等L2,B持有L2等L1 这就是循环等待。</li>
+</ol>
+<h1 id="哲学家用餐问题"><a href="#哲学家用餐问题" class="headerlink" title="哲学家用餐问题"></a>哲学家用餐问题</h1><p>哲学家用餐问题是经典的死锁问题。一群哲学家围着一个大圆桌坐下，每个哲学家面前都有一个碗和一根筷子。哲学家要么思考要么吃饭。哲学家吃饭时总是先拿起左手边的筷子再拿起右手边的筷子。只有拿到2根筷子的哲学家可以吃饭。哲学家吃饭吃着会放下筷子，再次思考。</p>
+<p>将问题简化，假设只有2个哲学家。哲学家p1想吃饭，先拿起他左边的筷子c1。这时哲学家p2也想吃饭,拿起他左边的筷子c2。哲学家相当于线程，筷子相当于锁。这样就进入死锁状态。<br><img src="https://github.com/wujiazhen2/pict/blob/master/thread/%E5%93%B2%E5%AD%A6%E5%AE%B6.png?raw=true" alt="image"></p>
+<h2 id="代码模拟"><a href="#代码模拟" class="headerlink" title="代码模拟"></a>代码模拟</h2><h3 id="哲学家抽象类"><a href="#哲学家抽象类" class="headerlink" title="哲学家抽象类"></a>哲学家抽象类</h3><p>定义哲学家的吃饭，思考动作和 身份标识id，左右筷子属性。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractPhilosopher</span>  <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">protected</span> Chopsticks left;</span><br><span class="line">    <span class="keyword">protected</span> Chopsticks right;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AbstractPhilosopher</span><span class="params">(<span class="keyword">int</span> id,Chopsticks left,Chopsticks right)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id=id;</span><br><span class="line">        <span class="keyword">this</span>.left=left;</span><br><span class="line">        <span class="keyword">this</span>.right=right;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//哲学家不是在思考，就是在吃饭</span></span><br><span class="line">       <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            think();</span><br><span class="line">            eat();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">abstract</span>  <span class="keyword">void</span>  <span class="title">eat</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">think</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(String.format(<span class="string">"%s  thinking"</span>,<span class="keyword">this</span>.toString()));</span><br><span class="line">            Thread.sleep(<span class="keyword">new</span> Random().nextInt(<span class="number">2</span>)*<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doEat</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(String.format(<span class="string">"%s eating"</span>,<span class="keyword">this</span>.toString()));</span><br><span class="line">            Thread.sleep(<span class="keyword">new</span> Random().nextInt(<span class="number">2</span>)*<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> String.format(<span class="string">"Philosopher%d"</span>,<span class="keyword">this</span>.id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="筷子类"><a href="#筷子类" class="headerlink" title="筷子类"></a>筷子类</h3><p>筷子类充当锁对象，获取锁相当于拿起筷子，释放锁相当于放下筷子。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Chopsticks</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Chopsticks</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id=id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.format(<span class="string">"Chopsticks%d"</span>,id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="哲学家实现类"><a href="#哲学家实现类" class="headerlink" title="哲学家实现类"></a>哲学家实现类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeadLockPhilosopher</span> <span class="keyword">extends</span> <span class="title">AbstractPhilosopher</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DeadLockPhilosopher</span><span class="params">(<span class="keyword">int</span> id, Chopsticks left, Chopsticks right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(id, left, right);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         <span class="comment">//拿起左边筷子</span></span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>.left)&#123;</span><br><span class="line">            System.out.println(String.format(<span class="string">"%s拿起%s"</span>,<span class="keyword">this</span>.toString(),<span class="keyword">this</span>.left.toString()));</span><br><span class="line"></span><br><span class="line">            <span class="comment">//为了使死锁发生频率高点，在这里等下哲学家2获取锁</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>.right)&#123;</span><br><span class="line">                <span class="comment">//拿起右边筷子</span></span><br><span class="line">                System.out.println(String.format(<span class="string">"%s拿起%s"</span>,<span class="keyword">this</span>.toString(),<span class="keyword">this</span>.right.toString()));</span><br><span class="line">                <span class="keyword">this</span>.doEat();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="模拟"><a href="#模拟" class="headerlink" title="模拟"></a>模拟</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">         Chopsticks c1 = <span class="keyword">new</span> Chopsticks(<span class="number">1</span>);</span><br><span class="line">         Chopsticks c2 = <span class="keyword">new</span> Chopsticks(<span class="number">2</span>);</span><br><span class="line">         <span class="comment">//筷子c1是哲学家p1的左筷子，c2是p1的右筷子</span></span><br><span class="line">         DeadLockPhilosopher p1 = <span class="keyword">new</span> DeadLockPhilosopher(<span class="number">1</span>,c1,c2);</span><br><span class="line">          <span class="comment">//筷子c2是哲学家p2的左筷子，c1是p2的右筷子</span></span><br><span class="line">         DeadLockPhilosopher p2 = <span class="keyword">new</span> DeadLockPhilosopher(<span class="number">2</span>,c2,c1);</span><br><span class="line">         p1.start();</span><br><span class="line">         p2.start();</span><br><span class="line"></span><br><span class="line">         p1.join();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Philosopher1  thinking</span><br><span class="line">Philosopher2  thinking</span><br><span class="line">Philosopher2拿起Chopsticks2</span><br><span class="line">Philosopher1拿起Chopsticks1</span><br></pre></td></tr></table></figure></p>
+<p>哲学家p2拿起了筷子c2,哲学家p1拿起了筷子c1。产生死锁。</p>
+<h1 id="避免死锁的解决方法"><a href="#避免死锁的解决方法" class="headerlink" title="避免死锁的解决方法"></a>避免死锁的解决方法</h1><p>死锁的解决方法可以从死锁的产生条件入手。只要消除死锁四个必要条件之一就可以避免死锁。</p>
+<h2 id="粗粒锁法"><a href="#粗粒锁法" class="headerlink" title="粗粒锁法"></a>粗粒锁法</h2><p>通过一个大的锁来替代多个细粒度的锁。由于只有一个锁，死锁的必要条件占用并等待资源和循环等待资源都不成立。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BigLogPhilosopher</span> <span class="keyword">extends</span> <span class="title">AbstractPhilosopher</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span>  <span class="keyword">final</span>  <span class="keyword">static</span> Object GLOBAL_LOCK=<span class="keyword">new</span> Object();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BigLogPhilosopher</span><span class="params">(<span class="keyword">int</span> id, Chopsticks left, Chopsticks right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(id, left, right);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (GLOBAL_LOCK)&#123;</span><br><span class="line">            <span class="comment">//拿起左边</span></span><br><span class="line">            System.out.println(String.format(<span class="string">"%s拿起%s"</span>,<span class="keyword">this</span>.toString(),<span class="keyword">this</span>.left.toString()));</span><br><span class="line">            <span class="comment">//拿起右边筷子</span></span><br><span class="line">            System.out.println(String.format(<span class="string">"%s拿起%s"</span>,<span class="keyword">this</span>.toString(),<span class="keyword">this</span>.right.toString()));</span><br><span class="line">            <span class="keyword">this</span>.doEat();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>粗粒锁的缺点是降低了并发，浪费资源。如果有4个哲学家的情况下，一个哲学家吃饭，还剩下2根筷子可以给一个哲学家同时用餐。<br>但是用粗粒锁的方法同时只能一个哲学家吃饭。</p>
+<h2 id="锁排序法"><a href="#锁排序法" class="headerlink" title="锁排序法"></a>锁排序法</h2><p>锁排序是给锁进行排序，所有线程申请锁都按排好的顺序。从而消除循环等待条件。</p>
+<p>如哲学家问题中，给筷子排序，每次哲学家不按照左右顺序来拿筷子。而是都拿id小的筷子再拿大的。<br>所以哲学家p1,p2都会先拿筷子c1。当哲学家p1拿到筷子c1后，哲学家p2获取不到锁进入阻塞。死锁不会发送。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SortLockPhilosopher</span> <span class="keyword">extends</span> <span class="title">DeadLockPhilosopher</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SortLockPhilosopher</span><span class="params">(<span class="keyword">int</span> id, Chopsticks left, Chopsticks right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(id, left, right);</span><br><span class="line">        <span class="keyword">if</span>(left.getId()&gt;right.getId())&#123;</span><br><span class="line">            <span class="keyword">this</span>.left=right;</span><br><span class="line">            <span class="keyword">this</span>.right=left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    Chopsticks c1 = <span class="keyword">new</span> Chopsticks(<span class="number">1</span>);</span><br><span class="line">    Chopsticks c2 = <span class="keyword">new</span> Chopsticks(<span class="number">2</span>);</span><br><span class="line">    DeadLockPhilosopher p1 = <span class="keyword">new</span> SortLockPhilosopher(<span class="number">1</span>,c1,c2);</span><br><span class="line">    DeadLockPhilosopher p2 = <span class="keyword">new</span> SortLockPhilosopher(<span class="number">2</span>,c2,c1);</span><br><span class="line">    p1.start();</span><br><span class="line">    p2.start();</span><br><span class="line"></span><br><span class="line">    p1.join();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="用tryLock-long-TimeUnit"><a href="#用tryLock-long-TimeUnit" class="headerlink" title="用tryLock(long,TimeUnit)"></a>用tryLock(long,TimeUnit)</h2><p>第三种方法是通过tryLock(long,TimeUnit),固定时间内获取不了锁就获取失败返回false。哲学家问题中，可以在超时获取不到锁的情况下，将本来就持有的锁放下，即可消除占有并等待资源条件，避免死锁。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/06/懒加载中的DCL/" rel="next" title="懒加载中的DCL">
+                <i class="fa fa-chevron-left"></i> 懒加载中的DCL
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">wujiazhen</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wujiazhen2" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#死锁的必要条件"><span class="nav-number">1.</span> <span class="nav-text">死锁的必要条件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#哲学家用餐问题"><span class="nav-number">2.</span> <span class="nav-text">哲学家用餐问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码模拟"><span class="nav-number">2.1.</span> <span class="nav-text">代码模拟</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#哲学家抽象类"><span class="nav-number">2.1.1.</span> <span class="nav-text">哲学家抽象类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#筷子类"><span class="nav-number">2.1.2.</span> <span class="nav-text">筷子类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哲学家实现类"><span class="nav-number">2.1.3.</span> <span class="nav-text">哲学家实现类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模拟"><span class="nav-number">2.1.4.</span> <span class="nav-text">模拟</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#避免死锁的解决方法"><span class="nav-number">3.</span> <span class="nav-text">避免死锁的解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#粗粒锁法"><span class="nav-number">3.1.</span> <span class="nav-text">粗粒锁法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁排序法"><span class="nav-number">3.2.</span> <span class="nav-text">锁排序法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用tryLock-long-TimeUnit"><span class="nav-number">3.3.</span> <span class="nav-text">用tryLock(long,TimeUnit)</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wujiazhen</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
