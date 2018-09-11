@@ -866,11 +866,16 @@
           
             <p>synchronized关键字是jdk提供用于实现内部锁。</p>
 <h4 id="synchronized实现机制"><a href="#synchronized实现机制" class="headerlink" title="synchronized实现机制"></a>synchronized实现机制</h4><p>synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去改代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。</p>
-<h5 id="monitor"><a href="#monitor" class="headerlink" title="monitor"></a>monitor</h5><p>Monitor对象是jvm实现的，c++中的对象。synchronized通过monitor来实现互斥。每个对象内部都有一个唯一的monitor。synchronized(lock)时，是获取到了lock对象的monitor.而没有获取到锁的线程进入同步队列等待锁的释放再尝试获取。其中monitor的本质是依赖于底层操作系统的Mutex Lock实现，操作系统实现线程之间的切换需要从用户态到内核态的切换，切换成本非常高。</p>
+<h5 id="monitor"><a href="#monitor" class="headerlink" title="monitor"></a>monitor</h5><ol>
+<li>Monitor对象是jvm实现的，c++中的对象。</li>
+<li>每个对象内部都有一个唯一的monitor,monitor的获取是互斥的。</li>
+<li>synchronized通过monitor来实现互斥。</li>
+<li>monitor的本质是依赖于底层操作系统的Mutex Lock实现，操作系统实现线程之间的切换需要从用户态到内核态的切换，切换成本非常高。</li>
+</ol>
 <h5 id="javap反汇编分析"><a href="#javap反汇编分析" class="headerlink" title="javap反汇编分析"></a>javap反汇编分析</h5><p>通过javap将下列代码反汇编<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> i=<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>)&#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">       i++;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>test1用synchronized代码块，通过monitorenter获取锁，执行完后用monitorexit释放锁。<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/synchronized%E6%B1%87%E7%BC%96.png" alt="image"></p>
 <p>test2是synchronized方法，jvm通过ACC_SYNCHRONIZED标志，内部实现。<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/synchronized2.png" alt="image"></p>
-<p>无论是monitorenter/monitorexit还是ACC_SYNCHRONIZED，最终都是通过获取锁对象的monitor实现。进入synchronized代码块前会通过monitorenter来获取monitor对象。获取失败的线程进入同步队列中等待。获取monitor对象的线程执行完后通过monitorexit指令来释放锁。释放锁会通知同步队列中阻塞的线程出队列再次申请锁。<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/synchronized%E5%92%8C%E7%AD%89%E5%BE%85%E5%94%A4%E9%86%92%E6%9C%BA%E5%88%B6.png" alt="image"></p>
+<p>无论是monitorenter/monitorexit还是ACC_SYNCHRONIZED，最终都是通过获取锁对象的monitor实现互斥。进入synchronized代码块前会通过monitorenter来获取monitor对象。获取失败的线程进入同步队列中等待。获取monitor对象的线程执行完后通过monitorexit指令来释放锁。释放锁会通知同步队列中阻塞的线程出队列再次申请锁。<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/synchronized%E5%92%8C%E7%AD%89%E5%BE%85%E5%94%A4%E9%86%92%E6%9C%BA%E5%88%B6.png" alt="image"></p>
 <h4 id="Synchronized-1-6的优化"><a href="#Synchronized-1-6的优化" class="headerlink" title="Synchronized 1.6的优化"></a>Synchronized 1.6的优化</h4><p>锁的强度分四种级别，依次是：无锁状态、偏向锁状态、轻量级锁状态、重量级锁状态。他们会随着竞争的激烈而逐渐升级。</p>
 <p>锁的相关信息存在对象的对象头的Mark Word：<br>Mark Word是hotSpot虚拟机的对象的对象头中的一部分，用于存储对象滋生运行时数据，如hashcode,GC分代年龄、锁状态标志，线程持有锁,偏向线程id,偏向时间戳等信息。</p>
 <p><strong>Mark Word结构</strong><br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/MarkWord.png" alt="image"></p>
@@ -879,9 +884,22 @@
 <p>注意：锁消除并不意味着可以随意加锁，JIT只会对执行频率足够多的地方进行优化。</p>
 <h5 id="锁粗化"><a href="#锁粗化" class="headerlink" title="锁粗化"></a>锁粗化</h5><p>使用锁时，我们会尽力将锁的范围缩小，只在操作共享变量时同步以减小锁竞争的范围。但是如果一系列的连续加锁解锁操作，频繁的获取释放锁可能会导致不必要的性能损耗，所以就是将多个连续的加锁、解锁操作（锁对象相同）连接在一起，扩展成一个范围更大的锁，这就是锁粗化。</p>
 <h5 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h5><p>大部分锁并没有被争用，且在其生命周期内也许至多被一个线程持有。所以一个内部锁第一次被获取时，会将Mark Word的偏向线程设为获取锁的线程，是否偏向锁标志设为1。线程只要判断偏向线程是否是当前线程，是则说明当前线程获取锁了。否则会通过cas设置Mark work。失败的话，则说明存在争用，撤销偏向锁，锁升级为轻量锁</p>
+<h6 id="偏向锁获取和撤销流程"><a href="#偏向锁获取和撤销流程" class="headerlink" title="偏向锁获取和撤销流程"></a>偏向锁获取和撤销流程</h6><ol>
+<li>获取对象头的Mark Word；</li>
+<li>判断Mark Word偏向锁标志位是否为1,锁标志位为 01。否，则cas竞争锁。是的话，该锁是偏向锁进入（3）;</li>
+<li>判断Mark Work中的线程ID是否设置，没设置则进入步骤（4）；如果指向当前线程，则执行同步代码块；如果指向其它线程，进入步骤（5）；</li>
+<li>通过CAS原子指令设置Mark Word的线程ID为当前线程ID，如果执行CAS成功，则执行同步代码块，否则进入步骤（5）；</li>
+<li>如果执行CAS失败，表示当前存在多个线程竞争锁，当达到全局安全点（safepoint），获得偏向锁的线程被挂起，撤销偏向锁，并升级为轻量级，升级完成后被阻塞在安全点的线程继续执行同步代码块；（偏向锁会一直被持有<code>Mark Word中的ThreadId一直指向获取锁的线程</code>,直到其他线程来竞争锁）</li>
+</ol>
 <p><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E5%81%8F%E5%90%91%E9%94%81.png" alt="image"></p>
-<h5 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h5><p>引入轻量级锁的主要目的是在没有多线程竞争的前提下，通过cas减少重量锁的使用。轻量锁依据是大部分锁再同步周期内不存在竞争。jvm会在进入同步块前会在当前线程的栈帧创建用于存储锁记录的空间，轻量锁进入同步代码块前会将mark work复制的锁记录中，通过cas将对象头中的Mark Word替换为指向锁记录的指针。cas成功则获取锁，将锁标志位改成00表示轻量锁。失败则尝试自旋获取锁。在执行完代码块释放锁时会通过cas将Mark Word替换回对象头。如果修改失败则说明同步周期内存在竞争，锁升级为重量锁。</p>
+<h5 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h5><p>引入轻量级锁的主要目的是在没有多线程竞争的前提下，通过cas减少重量锁的使用。轻量锁依据是大部分锁再同步周期内不存在竞争。</p>
+<h6 id="轻量锁获取和撤销流程"><a href="#轻量锁获取和撤销流程" class="headerlink" title="轻量锁获取和撤销流程"></a>轻量锁获取和撤销流程</h6><ol>
+<li>jvm会在进入同步块前会在当前线程的栈帧创建用于存储锁记录的空间。</li>
+<li>轻量锁进入同步代码块前会将mark work复制到锁记录中，通过cas将对象头中的Mark Word替换为指向锁记录的指针。cas成功则获取锁，将锁标志位改成00表示轻量锁。失败则尝试自旋获取锁。</li>
+<li>在执行完代码块释放锁时会通过cas将Mark Word替换回对象头。cas成功则释放锁。如果失败则说明同步周期内存在竞争，锁升级为重量锁。</li>
+</ol>
 <p>因为自旋会消耗cpu，所以轻量锁一旦升级为重量锁就不会恢复。<br><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E8%BD%BB%E9%87%8F%E9%94%81.png" alt="image"></p>
+<h5 id="重量锁"><a href="#重量锁" class="headerlink" title="重量锁"></a>重量锁</h5><p>重量锁就是通过Monitor实现的互斥锁。monitor的本质是依赖于底层操作系统的Mutex Lock实现，操作系统实现线程之间的切换需要从用户态到内核态的切换，切换成本非常高。</p>
 
           
         
