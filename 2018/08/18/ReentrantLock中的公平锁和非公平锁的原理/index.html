@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="多线程," />
+  <meta name="keywords" content="多线程,AQS," />
 
 
 
@@ -80,14 +80,14 @@
 
 
 <meta name="description" content="ReentrantLockReentrantLock内部是通过AQS实现锁的功能，有公平锁和非公平锁两种实现。  公平锁，即锁的获取顺序按线程申请锁的先后顺序。 非公平锁，当一个线程t1申请锁时，锁刚好释放。即使已有其他线程在t1之前申请锁排队，线程t1还是会获取锁。这样减少了线程的等待唤醒的可能，减少上下文切换带来的开销。因为获取锁的顺序和申请顺序可能不一致所以叫非公平锁。  前置技能(先了解前">
-<meta name="keywords" content="多线程">
+<meta name="keywords" content="多线程,AQS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ReentrantLock中的公平锁和非公平锁的原理">
 <meta property="og:url" content="http://yoursite.com/2018/08/18/ReentrantLock中的公平锁和非公平锁的原理/index.html">
 <meta property="og:site_name" content="程序猿的博客">
 <meta property="og:description" content="ReentrantLockReentrantLock内部是通过AQS实现锁的功能，有公平锁和非公平锁两种实现。  公平锁，即锁的获取顺序按线程申请锁的先后顺序。 非公平锁，当一个线程t1申请锁时，锁刚好释放。即使已有其他线程在t1之前申请锁排队，线程t1还是会获取锁。这样减少了线程的等待唤醒的可能，减少上下文切换带来的开销。因为获取锁的顺序和申请顺序可能不一致所以叫非公平锁。  前置技能(先了解前">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-06T02:56:26.771Z">
+<meta property="og:updated_time" content="2018-09-12T08:28:39.409Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ReentrantLock中的公平锁和非公平锁的原理">
 <meta name="twitter:description" content="ReentrantLockReentrantLock内部是通过AQS实现锁的功能，有公平锁和非公平锁两种实现。  公平锁，即锁的获取顺序按线程申请锁的先后顺序。 非公平锁，当一个线程t1申请锁时，锁刚好释放。即使已有其他线程在t1之前申请锁排队，线程t1还是会获取锁。这样减少了线程的等待唤醒的可能，减少上下文切换带来的开销。因为获取锁的顺序和申请顺序可能不一致所以叫非公平锁。  前置技能(先了解前">
@@ -377,7 +377,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+            <a href="/tags/多线程-AQS/" rel="tag"># 多线程,AQS</a>
           
         </div>
       
@@ -390,8 +390,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/16/JUC之AQS中的CLH队列/" rel="next" title="JUC之AQS中的CLH队列">
-                <i class="fa fa-chevron-left"></i> JUC之AQS中的CLH队列
+              <a href="/2018/08/17/JUC之AQS的Condition等待队列/" rel="next" title="JUC之AQS的Condition等待队列">
+                <i class="fa fa-chevron-left"></i> JUC之AQS的Condition等待队列
               </a>
             
           </div>
@@ -479,7 +479,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -501,7 +501,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
