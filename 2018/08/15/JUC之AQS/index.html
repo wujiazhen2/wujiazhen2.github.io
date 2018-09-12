@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="AQS是jdk提供的一个用于实现阻塞锁和依赖于先进先出等待队列的相关同步器（信号量，事件等）。AQS是concurrent包的基石。 AQS 状态。它依赖一个int类型的原子变量来表示状态。1private volatile int state;//共享变量，使用volatile修饰保证线程可见性 对state操作的基本方法12345protected final int getState()pr">
+<meta name="description" content="AbstractQueuedSynchronizer简称 AQS。AQS是jdk提供的一个用于实现阻塞锁和依赖于先进先出等待队列的相关同步器（信号量，事件等）。AQS是concurrent包的基石。 AQS 状态。它依赖一个int类型的原子变量来表示状态。1private volatile int state;//共享变量，使用volatile修饰保证线程可见性 对state操作的基本方法1234">
 <meta name="keywords" content="多线程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JUC之AQS">
 <meta property="og:url" content="http://yoursite.com/2018/08/15/JUC之AQS/index.html">
 <meta property="og:site_name" content="程序猿的博客">
-<meta property="og:description" content="AQS是jdk提供的一个用于实现阻塞锁和依赖于先进先出等待队列的相关同步器（信号量，事件等）。AQS是concurrent包的基石。 AQS 状态。它依赖一个int类型的原子变量来表示状态。1private volatile int state;//共享变量，使用volatile修饰保证线程可见性 对state操作的基本方法12345protected final int getState()pr">
+<meta property="og:description" content="AbstractQueuedSynchronizer简称 AQS。AQS是jdk提供的一个用于实现阻塞锁和依赖于先进先出等待队列的相关同步器（信号量，事件等）。AQS是concurrent包的基石。 AQS 状态。它依赖一个int类型的原子变量来表示状态。1private volatile int state;//共享变量，使用volatile修饰保证线程可见性 对state操作的基本方法1234">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-06T01:49:31.073Z">
+<meta property="og:updated_time" content="2018-09-12T02:07:58.057Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JUC之AQS">
-<meta name="twitter:description" content="AQS是jdk提供的一个用于实现阻塞锁和依赖于先进先出等待队列的相关同步器（信号量，事件等）。AQS是concurrent包的基石。 AQS 状态。它依赖一个int类型的原子变量来表示状态。1private volatile int state;//共享变量，使用volatile修饰保证线程可见性 对state操作的基本方法12345protected final int getState()pr">
+<meta name="twitter:description" content="AbstractQueuedSynchronizer简称 AQS。AQS是jdk提供的一个用于实现阻塞锁和依赖于先进先出等待队列的相关同步器（信号量，事件等）。AQS是concurrent包的基石。 AQS 状态。它依赖一个int类型的原子变量来表示状态。1private volatile int state;//共享变量，使用volatile修饰保证线程可见性 对state操作的基本方法1234">
 
 
 
@@ -342,7 +342,7 @@
       
 
       
-        <p>AQS是jdk提供的一个用于实现阻塞锁和依赖于先进先出等待队列的相关同步器（信号量，事件等）。AQS是concurrent包的基石。</p>
+        <p>AbstractQueuedSynchronizer简称 AQS。AQS是jdk提供的一个用于实现阻塞锁和依赖于先进先出等待队列的相关同步器（信号量，事件等）。AQS是concurrent包的基石。</p>
 <h4 id="AQS-状态。"><a href="#AQS-状态。" class="headerlink" title="AQS 状态。"></a>AQS 状态。</h4><p>它依赖一个int类型的原子变量来表示状态。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> state;<span class="comment">//共享变量，使用volatile修饰保证线程可见性</span></span><br></pre></td></tr></table></figure></p>
 <p>对state操作的基本方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getState</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(<span class="keyword">int</span> newState)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">compareAndSetState</span><span class="params">(<span class="keyword">int</span> expect, <span class="keyword">int</span> update)</span></span></span><br></pre></td></tr></table></figure></p>
 <p>子类必须实现其protected的方法用于改变这个状态和根据该状态的获取和释放定义状态的含义。</p>
