@@ -249,6 +249,311 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/14/JUC之Semaphore/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wujiazhen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/14/JUC之Semaphore/" itemprop="url">JUC之Semaphore</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-14T10:06:01+08:00">
+                2018-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="流量控制-Semaphore"><a href="#流量控制-Semaphore" class="headerlink" title="流量控制 Semaphore"></a>流量控制 Semaphore</h4><p>Semaphore是一个计数的信号量。初始化时分配一个配额permits。在访问前需要用acquire()方法申请一个配额，访问结束后调用release()释放配置。申请配额时如果配额不足将会阻塞。</p>
+<h4 id="使用例子"><a href="#使用例子" class="headerlink" title="使用例子"></a>使用例子</h4><p>例子：有2个足球，4个人射门练习。每个人射门后都要把球拿回来,后面的人才能射球。这里足球就是配额。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Player</span> <span class="keyword">implements</span>  <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Semaphore semaphore;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Player</span><span class="params">(Semaphore semaphore)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.semaphore=semaphore;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            semaphore.acquire();</span><br><span class="line">            <span class="comment">//踢完还剩余的球</span></span><br><span class="line">            System.out.println(<span class="string">"踢球。。。。"</span>+semaphore.availablePermits());</span><br><span class="line">            <span class="keyword">int</span> millis = <span class="keyword">new</span> Random().nextInt(<span class="number">4</span>)+<span class="number">1</span>;</span><br><span class="line">            Thread.sleep(millis*<span class="number">1000</span>);</span><br><span class="line">            System.out.println(String.format(<span class="string">"捡球花时间%d秒"</span>,millis));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            semaphore.release();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span>  <span class="keyword">static</span>  <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Player(semaphore)).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">1000000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">踢球。。。。1</span><br><span class="line">踢球。。。。0</span><br><span class="line">捡球花时间4秒</span><br><span class="line">捡球花时间4秒</span><br><span class="line">踢球。。。。0</span><br><span class="line">踢球。。。。0</span><br><span class="line">捡球花时间1秒</span><br><span class="line">捡球花时间2秒</span><br></pre></td></tr></table></figure></p>
+<h4 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">acquire</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">从该信号量获取许可证，阻止直到可用，或线程为 interrupted 。  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> permits)</span> </span></span><br><span class="line"><span class="function">从该信号量获取给定数量的许可证，阻止直到所有可用，否则线程为 interrupted 。  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">acquireUninterruptibly</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">从这个信号灯获取许可证，阻止一个可用的。  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">acquireUninterruptibly</span><span class="params">(<span class="keyword">int</span> permits)</span> </span></span><br><span class="line"><span class="function">从该信号量获取给定数量的许可证，阻止直到所有可用。  </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">availablePermits</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">返回此信号量中当前可用的许可数。  </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">drainPermits</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">获取并返回所有可立即获得的许可证。  </span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Collection&lt;Thread&gt; <span class="title">getQueuedThreads</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">返回一个包含可能正在等待获取的线程的集合。  </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getQueueLength</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">返回等待获取的线程数的估计。  </span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">hasQueuedThreads</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">查询任何线程是否等待获取。  </span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isFair</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">如果此信号量的公平设置为真，则返回 <span class="keyword">true</span> 。  </span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">reducePermits</span><span class="params">(<span class="keyword">int</span> reduction)</span> </span></span><br><span class="line"><span class="function">缩小可用许可证的数量。  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">release</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">释放许可证，将其返回到信号量。  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">release</span><span class="params">(<span class="keyword">int</span> permits)</span> </span></span><br><span class="line"><span class="function">释放给定数量的许可证，将其返回到信号量。  </span></span><br><span class="line"><span class="function">String <span class="title">toString</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">返回一个标识此信号量的字符串及其状态。  </span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">从这个信号量获得许可证，只有在调用时可以使用该许可证。  </span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> permits)</span> </span></span><br><span class="line"><span class="function">从这个信号量获取给定数量的许可证，只有在调用时全部可用。  </span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> permits, <span class="keyword">long</span> timeout, TimeUnit unit)</span> </span></span><br><span class="line"><span class="function">从该信号量获取给定数量的许可证，如果在给定的等待时间内全部可用，并且当前线程尚未 interrupted 。  </span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span> </span></span><br><span class="line"><span class="function">如果在给定的等待时间内可用，并且当前线程尚未 到达 interrupted，则从该信号量获取许可。</span></span><br></pre></td></tr></table></figure>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ol>
+<li>Semaphore内部是由共享锁实现的。</li>
+<li>Semaphore支持公平锁和非公平锁。默认是非公平锁。可以通过构造函数设置。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/13/JUC之CyclicBarrier/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wujiazhen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/13/JUC之CyclicBarrier/" itemprop="url">JUC之CyclicBarrier</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-13T10:06:01+08:00">
+                2018-08-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h4><p>CyclicBarrier和CountDownLatch功能相似。CyclicBarrier是所有参与线程互相等待对方执行到某点，再一起执行后面程序。</p>
+<p>与CountDownLatch一样，CyclicBarrier的构造函数也需要一个int类型的参数<br>parties，表示参与者数量。每一个线程调用cyclicBarrier对象的await方法就会进入等待。直到参与线程数量到达parties时，唤醒所有线程。</p>
+<h4 id="使用例子"><a href="#使用例子" class="headerlink" title="使用例子"></a>使用例子</h4><p>场景：所有参与者到位等待,一起开始执行。（比赛参赛选手都到位准备好了，裁判再鸣枪）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">final</span> CyclicBarrier cyclicBarrier = <span class="keyword">new</span> CyclicBarrier(<span class="number">5</span>);</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span> ;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">           <span class="keyword">final</span> <span class="keyword">int</span> c=i;</span><br><span class="line">           <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">               <span class="meta">@Override</span></span><br><span class="line">               <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                   <span class="keyword">try</span> &#123;</span><br><span class="line">                       System.out.println(String.format(<span class="string">"参与者%d等待"</span>,c));</span><br><span class="line">                       cyclicBarrier.await();</span><br><span class="line">                       System.out.println(String.format(<span class="string">"参与者%d执行"</span>,c));</span><br><span class="line">                   &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                       e.printStackTrace();</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;.start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">参与者3等待</span><br><span class="line">参与者1等待</span><br><span class="line">参与者2等待</span><br><span class="line">参与者4等待</span><br><span class="line">参与者0等待</span><br><span class="line">参与者3执行</span><br><span class="line">参与者0执行</span><br><span class="line">参与者1执行</span><br><span class="line">参与者2执行</span><br><span class="line">参与者4执行</span><br></pre></td></tr></table></figure></p>
+<h4 id="CyclicBarrier和CountDownLatch的区别"><a href="#CyclicBarrier和CountDownLatch的区别" class="headerlink" title="CyclicBarrier和CountDownLatch的区别"></a>CyclicBarrier和CountDownLatch的区别</h4><ol>
+<li>CyclicBarrier内部用条件变量Condition实现，会产生上下文切换。CountDownLatch使用共享锁实现。</li>
+<li>CyclicBarrier当parties=0时，在唤醒所有线程同时，还会重置parties。<br>CountDownLatch不能重置回滚，只能使用一次。</li>
+</ol>
+<h4 id="CyclicBarrier使用场景"><a href="#CyclicBarrier使用场景" class="headerlink" title="CyclicBarrier使用场景"></a>CyclicBarrier使用场景</h4><ol>
+<li><p>迭代算法并发化。迭代中，由多个工作线程完成工作。使用await等待所有工作线程完成工作，再将结果作为下一轮迭代的输入。</p>
+</li>
+<li><p>模拟高并发。保证线程同时开始其操作来模拟高并发测试。</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/12/JUC之CountDownLatch/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1663,7 +1968,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1674,7 +1979,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1685,7 +1990,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
