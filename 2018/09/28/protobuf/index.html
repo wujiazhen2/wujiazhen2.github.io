@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="编解码,jprotobuf," />
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="使用jprotobuf API进行序列化与反序列化操作1234567891011121314Codec&amp;lt;SimpleTypeTest&amp;gt; simpleTypeCodec = ProtobufProxy        .create(SimpleTypeTest.class);SimpleTypeTest stt = new SimpleTypeTest();stt.name = &quot;abc">
+<meta name="description" content="maven导包12345678910&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;com.google.protobuf&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;protobuf-java&amp;lt;/artifactId&amp;gt;    &amp;lt;version&amp;gt;3.5.1&amp;lt;/version&amp;gt;&amp;lt;/dependency&amp;">
+<meta name="keywords" content="编解码,jprotobuf">
 <meta property="og:type" content="article">
 <meta property="og:title" content="protobuf">
 <meta property="og:url" content="http://yoursite.com/2018/09/28/protobuf/index.html">
 <meta property="og:site_name" content="程序猿的博客">
-<meta property="og:description" content="使用jprotobuf API进行序列化与反序列化操作1234567891011121314Codec&amp;lt;SimpleTypeTest&amp;gt; simpleTypeCodec = ProtobufProxy        .create(SimpleTypeTest.class);SimpleTypeTest stt = new SimpleTypeTest();stt.name = &quot;abc">
+<meta property="og:description" content="maven导包12345678910&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;com.google.protobuf&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;protobuf-java&amp;lt;/artifactId&amp;gt;    &amp;lt;version&amp;gt;3.5.1&amp;lt;/version&amp;gt;&amp;lt;/dependency&amp;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-28T08:00:40.514Z">
+<meta property="og:updated_time" content="2018-10-08T07:17:33.619Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="protobuf">
-<meta name="twitter:description" content="使用jprotobuf API进行序列化与反序列化操作1234567891011121314Codec&amp;lt;SimpleTypeTest&amp;gt; simpleTypeCodec = ProtobufProxy        .create(SimpleTypeTest.class);SimpleTypeTest stt = new SimpleTypeTest();stt.name = &quot;abc">
+<meta name="twitter:description" content="maven导包12345678910&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;com.google.protobuf&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;protobuf-java&amp;lt;/artifactId&amp;gt;    &amp;lt;version&amp;gt;3.5.1&amp;lt;/version&amp;gt;&amp;lt;/dependency&amp;">
 
 
 
@@ -292,6 +293,39 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编解码/" itemprop="url" rel="index">
+                    <span itemprop="name">编解码</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编解码/jprotobuf/" itemprop="url" rel="index">
+                    <span itemprop="name">jprotobuf</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -319,8 +353,10 @@
       
 
       
-        <h2 id="使用jprotobuf-API进行序列化与反序列化操作"><a href="#使用jprotobuf-API进行序列化与反序列化操作" class="headerlink" title="使用jprotobuf API进行序列化与反序列化操作"></a>使用jprotobuf API进行序列化与反序列化操作</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Codec&lt;SimpleTypeTest&gt; simpleTypeCodec = ProtobufProxy</span><br><span class="line">        .create(SimpleTypeTest.class);</span><br><span class="line"></span><br><span class="line">SimpleTypeTest stt = <span class="keyword">new</span> SimpleTypeTest();</span><br><span class="line">stt.name = <span class="string">"abc"</span>;</span><br><span class="line">stt.setValue(<span class="number">100</span>);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 序列化</span></span><br><span class="line">    <span class="keyword">byte</span>[] bb = simpleTypeCodec.encode(stt);</span><br><span class="line">    <span class="comment">// 反序列化</span></span><br><span class="line">    SimpleTypeTest newStt = simpleTypeCodec.decode(bb);</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="由注解对象动态生成Protobuf的IDL描述文件内容"><a href="#由注解对象动态生成Protobuf的IDL描述文件内容" class="headerlink" title="由注解对象动态生成Protobuf的IDL描述文件内容"></a>由注解对象动态生成Protobuf的IDL描述文件内容</h2><p>JProtobuf提供一个非常实用的功能，可以动态生成Protobuf的IDL描述文件内容</p>
+        <h1 id="maven导包"><a href="#maven导包" class="headerlink" title="maven导包"></a>maven导包</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.google.protobuf<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>protobuf-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baidu<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jprotobuf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h1><p>@Protobuf 修饰字段<br>@ProtobufClass 修饰类，支持默认字段识别能力。相等于所有字段都用@Protobuf修饰了。</p>
+<h1 id="使用jprotobuf-API进行序列化与反序列化操作"><a href="#使用jprotobuf-API进行序列化与反序列化操作" class="headerlink" title="使用jprotobuf API进行序列化与反序列化操作"></a>使用jprotobuf API进行序列化与反序列化操作</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Codec&lt;SimpleTypeTest&gt; simpleTypeCodec = ProtobufProxy</span><br><span class="line">        .create(SimpleTypeTest.class);</span><br><span class="line"></span><br><span class="line">SimpleTypeTest stt = <span class="keyword">new</span> SimpleTypeTest();</span><br><span class="line">stt.name = <span class="string">"abc"</span>;</span><br><span class="line">stt.setValue(<span class="number">100</span>);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 序列化</span></span><br><span class="line">    <span class="keyword">byte</span>[] bb = simpleTypeCodec.encode(stt);</span><br><span class="line">    <span class="comment">// 反序列化</span></span><br><span class="line">    SimpleTypeTest newStt = simpleTypeCodec.decode(bb);</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="由注解对象动态生成Protobuf的IDL描述文件内容"><a href="#由注解对象动态生成Protobuf的IDL描述文件内容" class="headerlink" title="由注解对象动态生成Protobuf的IDL描述文件内容"></a>由注解对象动态生成Protobuf的IDL描述文件内容</h1><p>JProtobuf提供一个非常实用的功能，可以动态生成Protobuf的IDL描述文件内容</p>
 <p>//返回的内容即为 Protobuf的IDL描述文件<br>String code = ProtobufIDLGenerator.getIDL(SimpleTypeTest.class);</p>
 
       
@@ -337,6 +373,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/编解码/" rel="tag"># 编解码</a>
+          
+            <a href="/tags/jprotobuf/" rel="tag"># jprotobuf</a>
+          
+        </div>
+      
 
       
       
@@ -346,8 +390,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/27/Spring/" rel="next" title="Spring">
-                <i class="fa fa-chevron-left"></i> Spring
+              <a href="/2018/09/27/SpringIOC/" rel="next" title="Spring IOC">
+                <i class="fa fa-chevron-left"></i> Spring IOC
               </a>
             
           </div>
@@ -435,7 +479,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -446,7 +490,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -457,7 +501,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -500,7 +544,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用jprotobuf-API进行序列化与反序列化操作"><span class="nav-number">1.</span> <span class="nav-text">使用jprotobuf API进行序列化与反序列化操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#由注解对象动态生成Protobuf的IDL描述文件内容"><span class="nav-number">2.</span> <span class="nav-text">由注解对象动态生成Protobuf的IDL描述文件内容</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#maven导包"><span class="nav-number">1.</span> <span class="nav-text">maven导包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注解"><span class="nav-number">2.</span> <span class="nav-text">注解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用jprotobuf-API进行序列化与反序列化操作"><span class="nav-number">3.</span> <span class="nav-text">使用jprotobuf API进行序列化与反序列化操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#由注解对象动态生成Protobuf的IDL描述文件内容"><span class="nav-number">4.</span> <span class="nav-text">由注解对象动态生成Protobuf的IDL描述文件内容</span></a></li></ol></div>
             
 
           </div>
