@@ -249,6 +249,332 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/30/jexl解析字符串为java代码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wujiazhen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/30/jexl解析字符串为java代码/" itemprop="url">jexl-解析字符串为java代码</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-30T21:27:50+08:00">
+                2018-09-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>jexl可以将字符串解析成java代码来执行</p>
+<ol>
+<li><p>maven导入jar</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.commons<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-jexl3<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>代码例子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1. 创建jexl引擎</span></span><br><span class="line">JexlEngine jexlEngine = <span class="keyword">new</span> Engine();</span><br><span class="line"><span class="comment">//2. 设置变量，可以设置对象来引用对象方法</span></span><br><span class="line">JexlContext jc = <span class="keyword">new</span> MapContext();</span><br><span class="line">jc.set(<span class="string">"b"</span>,<span class="number">1</span>);</span><br><span class="line">jc.set(<span class="string">"a"</span>,<span class="number">2</span>);</span><br><span class="line"><span class="comment">//3. 创建执行的java表达式  </span></span><br><span class="line">JexlExpression expression = jexlEngine.createExpression(<span class="string">"a+b"</span>);</span><br><span class="line"><span class="comment">//4. 计算结果</span></span><br><span class="line">Object evaluate = expression.evaluate(jc);</span><br><span class="line">System.out.println(evaluate);</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/30/Caffeine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wujiazhen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/30/Caffeine/" itemprop="url">高性能java缓存库-Caffeine</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-30T09:46:05+08:00">
+                2018-09-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/缓存/" itemprop="url" rel="index">
+                    <span itemprop="name">缓存</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/缓存/caffeine/" itemprop="url" rel="index">
+                    <span itemprop="name">caffeine</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Caffeine简介"><a href="#Caffeine简介" class="headerlink" title="Caffeine简介"></a>Caffeine简介</h1><p>Caffeine基于java8的高性能，接近最优的缓存库。Caffeine提供的内存缓存使用参考Google guava的API。Caffeine是基于Google guava和 ConcurrentLinkedHashMap的设计经验上改进的成果。</p>
+<p>Caffeine可以通过建造者模式灵活的组合以下特性：</p>
+<ol>
+<li>通过异步自动加载实体到缓存中</li>
+<li>基于大小的回收策略</li>
+<li>基于时间的回收策略</li>
+<li>自动刷新</li>
+<li>key自动封装虚引用</li>
+<li>value自动封装弱引用或软引用</li>
+<li>实体过期或被删除的通知</li>
+<li>写入外部资源</li>
+<li>统计累计访问缓存</li>
+</ol>
+<h1 id="加载策略"><a href="#加载策略" class="headerlink" title="加载策略"></a>加载策略</h1><p>Caffeine提供了3种加载策略:手动加载，同步加载，异步加载</p>
+<h2 id="手动加载"><a href="#手动加载" class="headerlink" title="手动加载"></a>手动加载</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Cache&lt;Key, Graph&gt; cache = Caffeine.newBuilder()</span><br><span class="line">    .expireAfterWrite(<span class="number">10</span>, TimeUnit.MINUTES)</span><br><span class="line">    .maximumSize(<span class="number">10_000</span>)</span><br><span class="line">    .build();</span><br><span class="line"><span class="comment">// 检索一个entry，如果没有则为null</span></span><br><span class="line">Graph graph = cache.getIfPresent(key);</span><br><span class="line"><span class="comment">// 检索一个entry，如果entry为null，则通过key创建一个entry并加入缓存</span></span><br><span class="line">graph = cache.get(key, k -&gt; createExpensiveGraph(key));</span><br><span class="line"><span class="comment">// 插入或更新一个实体</span></span><br><span class="line">cache.put(key, graph);</span><br><span class="line"><span class="comment">// 移除一个实体</span></span><br><span class="line">cache.invalidate(key);</span><br></pre></td></tr></table></figure>
+<h2 id="同步加载"><a href="#同步加载" class="headerlink" title="同步加载"></a>同步加载</h2><p>构造Cache时候，build方法传入一个CacheLoader实现类。实现load方法，通过key加载value。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">LoadingCache&lt;Key, Graph&gt; cache = Caffeine.newBuilder()</span><br><span class="line">    .maximumSize(<span class="number">10_000</span>)</span><br><span class="line">    .expireAfterWrite(<span class="number">10</span>, TimeUnit.MINUTES)</span><br><span class="line">    .build(key -&gt; createExpensiveGraph(key));</span><br><span class="line"><span class="comment">//如果缓存种没有对应的value，通过createExpensiveGraph方法加载</span></span><br><span class="line">Graph graph = cache.get(key);</span><br><span class="line"></span><br><span class="line">Map&lt;Key, Graph&gt; graphs = cache.getAll(keys);</span><br></pre></td></tr></table></figure></p>
+<h2 id="异步加载"><a href="#异步加载" class="headerlink" title="异步加载"></a>异步加载</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">AsyncLoadingCache&lt;Key, Graph&gt; cache = Caffeine.newBuilder()</span><br><span class="line">    .maximumSize(<span class="number">10_000</span>)</span><br><span class="line">    .expireAfterWrite(<span class="number">10</span>, TimeUnit.MINUTES)</span><br><span class="line">    .buildAsync((key, executor) -&gt; createExpensiveGraphAsync(key, executor));</span><br><span class="line">CompletableFuture&lt;Graph&gt; graph = cache.get(key);</span><br><span class="line">CompletableFuture&lt;Map&lt;Key, Graph&gt;&gt; graphs = cache.getAll(keys);</span><br></pre></td></tr></table></figure>
+<p>AsyncLoadingCache 是 LoadingCache 的变体， 可以异步计算实体在一个线程池(Executor)上并且返回 CompletableFuture. </p>
+<h1 id="回收策略"><a href="#回收策略" class="headerlink" title="回收策略"></a>回收策略</h1><p>Caffeine提供了3种回收策略：基于大小回收，基于时间回收，基于引用回收</p>
+<h2 id="基于大小回收"><a href="#基于大小回收" class="headerlink" title="基于大小回收"></a>基于大小回收</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基于实体数量淘汰实体</span></span><br><span class="line">LoadingCache&lt;Key, Graph&gt; graphs = Caffeine.newBuilder()</span><br><span class="line">    .maximumSize(<span class="number">10_000</span>)</span><br><span class="line">    .build(key -&gt; createExpensiveGraph(key));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过权重来计算，每个实体都有不同的权重，总权重到达最高时淘汰实体。</span></span><br><span class="line">LoadingCache&lt;Key, Graph&gt; graphs = Caffeine.newBuilder()</span><br><span class="line">    .maximumWeight(<span class="number">10_000</span>)</span><br><span class="line">    .weigher((Key key, Graph graph) -&gt; graph.vertices().size())</span><br><span class="line">    .build(key -&gt; createExpensiveGraph(key));</span><br></pre></td></tr></table></figure>
+<p>到达最大大小时淘汰最近最少使用的实体</p>
+<h2 id="基于时间回收"><a href="#基于时间回收" class="headerlink" title="基于时间回收"></a>基于时间回收</h2><ol>
+<li><p>实体被访问之后，在实体被读或被写后的一段时间后过期</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LoadingCache&lt;Key, Graph&gt; graphs = Caffeine.newBuilder()</span><br><span class="line">    .expireAfterAccess(<span class="number">5</span>, TimeUnit.MINUTES)</span><br><span class="line">    .build(key -&gt; createExpensiveGraph(key));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>基于写之后，在实体被写入后的一段时间后过期</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LoadingCache&lt;Key, Graph&gt; graphs = Caffeine.newBuilder()</span><br><span class="line">    .expireAfterWrite(<span class="number">10</span>, TimeUnit.MINUTES)</span><br><span class="line">    .build(key -&gt; createExpensiveGraph(key));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自定义策略Expiry，可以自定义在实体被读，被更新，被创建后的时间过期。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">LoadingCache&lt;Key, Graph&gt; graphs = Caffeine.newBuilder()</span><br><span class="line">    .expireAfter(<span class="keyword">new</span> Expiry&lt;Key, Graph&gt;() &#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">expireAfterCreate</span><span class="params">(Key key, Graph graph, <span class="keyword">long</span> currentTime)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Use wall clock time, rather than nanotime, if from an external resource</span></span><br><span class="line">        <span class="keyword">long</span> seconds = graph.creationDate().plusHours(<span class="number">5</span>)</span><br><span class="line">            .minus(System.currentTimeMillis(), MILLIS)</span><br><span class="line">            .toEpochSecond();</span><br><span class="line">        <span class="keyword">return</span> TimeUnit.SECONDS.toNanos(seconds);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">expireAfterUpdate</span><span class="params">(Key key, Graph graph, </span></span></span><br><span class="line"><span class="function"><span class="params">          <span class="keyword">long</span> currentTime, <span class="keyword">long</span> currentDuration)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> currentDuration;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">expireAfterRead</span><span class="params">(Key key, Graph graph,</span></span></span><br><span class="line"><span class="function"><span class="params">          <span class="keyword">long</span> currentTime, <span class="keyword">long</span> currentDuration)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> currentDuration;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    .build(key -&gt; createExpensiveGraph(key));</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="基于引用回收"><a href="#基于引用回收" class="headerlink" title="基于引用回收"></a>基于引用回收</h2><p>java种有四种引用：强引用，软引用，弱引用和虚引用，caffeine可以将值封装成弱引用或软引用。<br>软引用：如果一个对象只具有软引用，则内存空间足够，垃圾回收器就不会回收它；如果内存空间不足了，就会回收这些对象的内存。<br>弱引用：弱引用的对象拥有更短暂的生命周期。在垃圾回收器线程扫描它所管辖的内存区域的过程中，一旦发现了只具有弱引用的对象，不管当前内存空间足够与否，都会回收它的内存<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">LoadingCache&lt;Key, Graph&gt; graphs = Caffeine.newBuilder()</span><br><span class="line">    .weakKeys()</span><br><span class="line">    .weakValues()</span><br><span class="line">    .build(key -&gt; createExpensiveGraph(key));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">LoadingCache&lt;Key, Graph&gt; graphs = Caffeine.newBuilder()</span><br><span class="line">    .softValues()</span><br><span class="line">    .build(key -&gt; createExpensiveGraph(key));</span><br></pre></td></tr></table></figure></p>
+<h1 id="自动刷新"><a href="#自动刷新" class="headerlink" title="自动刷新"></a>自动刷新</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LoadingCache&lt;Key, Graph&gt; graphs = Caffeine.newBuilder()</span><br><span class="line">    .maximumSize(<span class="number">10_000</span>)</span><br><span class="line">    .refreshAfterWrite(<span class="number">1</span>, TimeUnit.MINUTES)</span><br><span class="line">    .build(key -&gt; createExpensiveGraph(key));</span><br></pre></td></tr></table></figure>
+<p>在写后的持续时间过后，调用createExpensiveGraph刷新</p>
+<h1 id="移除通知"><a href="#移除通知" class="headerlink" title="移除通知"></a>移除通知</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Cache&lt;Key, Graph&gt; graphs = Caffeine.newBuilder()</span><br><span class="line">    .removalListener((Key key, Graph graph, RemovalCause cause) -&gt;</span><br><span class="line">        System.out.printf(<span class="string">"Key %s was removed (%s)%n"</span>, key, cause))</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
+<p>通过removalListener添加实体移除监听器</p>
+<h1 id="写到外部存储"><a href="#写到外部存储" class="headerlink" title="写到外部存储"></a>写到外部存储</h1><p>通过CacheWriter 可以将缓存回写的外部存储中。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">LoadingCache&lt;Key, Graph&gt; graphs = Caffeine.newBuilder()</span><br><span class="line">  .writer(<span class="keyword">new</span> CacheWriter&lt;Key, Graph&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(Key key, Graph graph)</span> </span>&#123;</span><br><span class="line">      <span class="comment">// 写入到外部存储或二级缓存</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(Key key, Graph graph, RemovalCause cause)</span> </span>&#123;</span><br><span class="line">      <span class="comment">// 删除外部存储或者二级缓存</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  .build(key -&gt; createExpensiveGraph(key));</span><br></pre></td></tr></table></figure></p>
+<p>使用场景</p>
+<ol>
+<li>缓存同步数据库</li>
+<li>多级缓存同步</li>
+</ol>
+<p>注意，CacheWriter不能与弱键或AsyncLoadingCache一起使用</p>
+<h1 id="统计缓存使用情况"><a href="#统计缓存使用情况" class="headerlink" title="统计缓存使用情况"></a>统计缓存使用情况</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Cache&lt;Key, Graph&gt; graphs = Caffeine.newBuilder()</span><br><span class="line">    .maximumSize(<span class="number">10_000</span>)</span><br><span class="line">    .recordStats()</span><br><span class="line">    .build();</span><br></pre></td></tr></table></figure>
+<p>通过使用Caffeine.recordStats(), 可以转化成一个统计的集合. 通过 Cache.stats() 返回一个CacheStats。CacheStats提供以下统计方法</p>
+<p>hitRate(): 返回缓存命中率<br>evictionCount(): 缓存回收数量<br>averageLoadPenalty(): 加载新值的平均时间</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/28/protobuf/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1822,369 +2148,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/06/死锁/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wujiazhen">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程序猿的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/06/死锁/" itemprop="url">死锁</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-06T20:37:48+08:00">
-                2018-09-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/多线程/" itemprop="url" rel="index">
-                    <span itemprop="name">多线程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>死锁是常见的线程活性问题。多个线程互相等待对方而导致永远暂停称为死锁。常见的死锁q情况是线程A持有锁L1的情况下申请锁L2,线程B持有锁L2申请锁L1。线程A等待锁L2释放，线程B等待锁L1释放，从而互相等待永远暂停。</p>
-<h1 id="死锁的必要条件"><a href="#死锁的必要条件" class="headerlink" title="死锁的必要条件"></a>死锁的必要条件</h1><ol>
-<li>资源互斥,资源同时只能被一个线程占用。</li>
-<li>资源不可抢夺，资源被一个线程占用时，其他线程无法抢夺。</li>
-<li>占用并等待资源，线程持有资源，并申请另外的资源而进入等待时。不会释放现有资源。</li>
-<li>循环等待资源，线程A持有锁L1的情况下申请锁L2,线程B持有锁L2申请锁L1。线程A等待锁L2释放，线程B等待锁L1释放。A持有L1等L2,B持有L2等L1 这就是循环等待。</li>
-</ol>
-<h1 id="哲学家用餐问题"><a href="#哲学家用餐问题" class="headerlink" title="哲学家用餐问题"></a>哲学家用餐问题</h1><p>哲学家用餐问题是经典的死锁问题。一群哲学家围着一个大圆桌坐下，每个哲学家面前都有一个碗和一根筷子。哲学家要么思考要么吃饭。哲学家吃饭时总是先拿起左手边的筷子再拿起右手边的筷子。只有拿到2根筷子的哲学家可以吃饭。哲学家吃饭吃着会放下筷子，再次思考。</p>
-<p>将问题简化，假设只有2个哲学家。哲学家p1想吃饭，先拿起他左边的筷子c1。这时哲学家p2也想吃饭,拿起他左边的筷子c2。哲学家相当于线程，筷子相当于锁。这样就进入死锁状态。<br><img src="https://github.com/wujiazhen2/pict/blob/master/thread/%E5%93%B2%E5%AD%A6%E5%AE%B6.png?raw=true" alt="image"></p>
-<h2 id="代码模拟"><a href="#代码模拟" class="headerlink" title="代码模拟"></a>代码模拟</h2><h3 id="哲学家抽象类"><a href="#哲学家抽象类" class="headerlink" title="哲学家抽象类"></a>哲学家抽象类</h3><p>定义哲学家的吃饭，思考动作和 身份标识id，左右筷子属性。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractPhilosopher</span>  <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">protected</span> Chopsticks left;</span><br><span class="line">    <span class="keyword">protected</span> Chopsticks right;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AbstractPhilosopher</span><span class="params">(<span class="keyword">int</span> id,Chopsticks left,Chopsticks right)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id=id;</span><br><span class="line">        <span class="keyword">this</span>.left=left;</span><br><span class="line">        <span class="keyword">this</span>.right=right;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//哲学家不是在思考，就是在吃饭</span></span><br><span class="line">       <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            think();</span><br><span class="line">            eat();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">abstract</span>  <span class="keyword">void</span>  <span class="title">eat</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">think</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(String.format(<span class="string">"%s  thinking"</span>,<span class="keyword">this</span>.toString()));</span><br><span class="line">            Thread.sleep(<span class="keyword">new</span> Random().nextInt(<span class="number">2</span>)*<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doEat</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(String.format(<span class="string">"%s eating"</span>,<span class="keyword">this</span>.toString()));</span><br><span class="line">            Thread.sleep(<span class="keyword">new</span> Random().nextInt(<span class="number">2</span>)*<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> String.format(<span class="string">"Philosopher%d"</span>,<span class="keyword">this</span>.id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="筷子类"><a href="#筷子类" class="headerlink" title="筷子类"></a>筷子类</h3><p>筷子类充当锁对象，获取锁相当于拿起筷子，释放锁相当于放下筷子。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Chopsticks</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Chopsticks</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id=id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> String.format(<span class="string">"Chopsticks%d"</span>,id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="哲学家实现类"><a href="#哲学家实现类" class="headerlink" title="哲学家实现类"></a>哲学家实现类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeadLockPhilosopher</span> <span class="keyword">extends</span> <span class="title">AbstractPhilosopher</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DeadLockPhilosopher</span><span class="params">(<span class="keyword">int</span> id, Chopsticks left, Chopsticks right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(id, left, right);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         <span class="comment">//拿起左边筷子</span></span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>.left)&#123;</span><br><span class="line">            System.out.println(String.format(<span class="string">"%s拿起%s"</span>,<span class="keyword">this</span>.toString(),<span class="keyword">this</span>.left.toString()));</span><br><span class="line"></span><br><span class="line">            <span class="comment">//为了使死锁发生频率高点，在这里等下哲学家2获取锁</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>.right)&#123;</span><br><span class="line">                <span class="comment">//拿起右边筷子</span></span><br><span class="line">                System.out.println(String.format(<span class="string">"%s拿起%s"</span>,<span class="keyword">this</span>.toString(),<span class="keyword">this</span>.right.toString()));</span><br><span class="line">                <span class="keyword">this</span>.doEat();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="模拟"><a href="#模拟" class="headerlink" title="模拟"></a>模拟</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">         Chopsticks c1 = <span class="keyword">new</span> Chopsticks(<span class="number">1</span>);</span><br><span class="line">         Chopsticks c2 = <span class="keyword">new</span> Chopsticks(<span class="number">2</span>);</span><br><span class="line">         <span class="comment">//筷子c1是哲学家p1的左筷子，c2是p1的右筷子</span></span><br><span class="line">         DeadLockPhilosopher p1 = <span class="keyword">new</span> DeadLockPhilosopher(<span class="number">1</span>,c1,c2);</span><br><span class="line">          <span class="comment">//筷子c2是哲学家p2的左筷子，c1是p2的右筷子</span></span><br><span class="line">         DeadLockPhilosopher p2 = <span class="keyword">new</span> DeadLockPhilosopher(<span class="number">2</span>,c2,c1);</span><br><span class="line">         p1.start();</span><br><span class="line">         p2.start();</span><br><span class="line"></span><br><span class="line">         p1.join();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Philosopher1  thinking</span><br><span class="line">Philosopher2  thinking</span><br><span class="line">Philosopher2拿起Chopsticks2</span><br><span class="line">Philosopher1拿起Chopsticks1</span><br></pre></td></tr></table></figure></p>
-<p>哲学家p2拿起了筷子c2,哲学家p1拿起了筷子c1。产生死锁。</p>
-<h1 id="避免死锁的解决方法"><a href="#避免死锁的解决方法" class="headerlink" title="避免死锁的解决方法"></a>避免死锁的解决方法</h1><p>死锁的解决方法可以从死锁的产生条件入手。只要消除死锁四个必要条件之一就可以避免死锁。</p>
-<h2 id="粗粒锁法"><a href="#粗粒锁法" class="headerlink" title="粗粒锁法"></a>粗粒锁法</h2><p>通过一个大的锁来替代多个细粒度的锁。由于只有一个锁，死锁的必要条件占用并等待资源和循环等待资源都不成立。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BigLogPhilosopher</span> <span class="keyword">extends</span> <span class="title">AbstractPhilosopher</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span>  <span class="keyword">final</span>  <span class="keyword">static</span> Object GLOBAL_LOCK=<span class="keyword">new</span> Object();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BigLogPhilosopher</span><span class="params">(<span class="keyword">int</span> id, Chopsticks left, Chopsticks right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(id, left, right);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (GLOBAL_LOCK)&#123;</span><br><span class="line">            <span class="comment">//拿起左边</span></span><br><span class="line">            System.out.println(String.format(<span class="string">"%s拿起%s"</span>,<span class="keyword">this</span>.toString(),<span class="keyword">this</span>.left.toString()));</span><br><span class="line">            <span class="comment">//拿起右边筷子</span></span><br><span class="line">            System.out.println(String.format(<span class="string">"%s拿起%s"</span>,<span class="keyword">this</span>.toString(),<span class="keyword">this</span>.right.toString()));</span><br><span class="line">            <span class="keyword">this</span>.doEat();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>粗粒锁的缺点是降低了并发，浪费资源。如果有4个哲学家的情况下，一个哲学家吃饭，还剩下2根筷子可以给一个哲学家同时用餐。<br>但是用粗粒锁的方法同时只能一个哲学家吃饭。</p>
-<h2 id="锁排序法"><a href="#锁排序法" class="headerlink" title="锁排序法"></a>锁排序法</h2><p>锁排序是给锁进行排序，所有线程申请锁都按排好的顺序。从而消除循环等待条件。</p>
-<p>如哲学家问题中，给筷子排序，每次哲学家不按照左右顺序来拿筷子。而是都拿id小的筷子再拿大的。<br>所以哲学家p1,p2都会先拿筷子c1。当哲学家p1拿到筷子c1后，哲学家p2获取不到锁进入阻塞。死锁不会发送。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SortLockPhilosopher</span> <span class="keyword">extends</span> <span class="title">DeadLockPhilosopher</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SortLockPhilosopher</span><span class="params">(<span class="keyword">int</span> id, Chopsticks left, Chopsticks right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(id, left, right);</span><br><span class="line">        <span class="keyword">if</span>(left.getId()&gt;right.getId())&#123;</span><br><span class="line">            <span class="keyword">this</span>.left=right;</span><br><span class="line">            <span class="keyword">this</span>.right=left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    Chopsticks c1 = <span class="keyword">new</span> Chopsticks(<span class="number">1</span>);</span><br><span class="line">    Chopsticks c2 = <span class="keyword">new</span> Chopsticks(<span class="number">2</span>);</span><br><span class="line">    DeadLockPhilosopher p1 = <span class="keyword">new</span> SortLockPhilosopher(<span class="number">1</span>,c1,c2);</span><br><span class="line">    DeadLockPhilosopher p2 = <span class="keyword">new</span> SortLockPhilosopher(<span class="number">2</span>,c2,c1);</span><br><span class="line">    p1.start();</span><br><span class="line">    p2.start();</span><br><span class="line"></span><br><span class="line">    p1.join();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="用tryLock-long-TimeUnit"><a href="#用tryLock-long-TimeUnit" class="headerlink" title="用tryLock(long,TimeUnit)"></a>用tryLock(long,TimeUnit)</h2><p>第三种方法是通过tryLock(long,TimeUnit),固定时间内获取不了锁就获取失败返回false。哲学家问题中，可以在超时获取不到锁的情况下，将本来就持有的锁放下，即可消除占有并等待资源条件，避免死锁。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/06/懒加载中的DCL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wujiazhen">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程序猿的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/06/懒加载中的DCL/" itemprop="url">懒加载中的DCL</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-06T14:44:40+08:00">
-                2018-09-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/多线程/" itemprop="url" rel="index">
-                    <span itemprop="name">多线程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>java中经常会使用延迟一些高开销对象的初始化过程，等到使用再加载，称之为懒加载。</p>
-<h1 id="单例中懒汉式"><a href="#单例中懒汉式" class="headerlink" title="单例中懒汉式"></a>单例中懒汉式</h1><p>下面时单例中的懒汉式代码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Instance <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;   <span class="comment">//1</span></span><br><span class="line">        instance=<span class="keyword">new</span> Instance();  <span class="comment">//2</span></span><br><span class="line">    &#125;</span><br><span class="line">    retrun instance;  <span class="comment">//3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这代码子是典型的 check-then-act的模式，在多线程情况下存在多线程安全问题。例如线程1执行完步骤1还未执行2时，让出执行权。线程2进来会将instance初始化。线程1唤醒时会再次初始化对象，破坏了单例。</p>
-<h2 id="DCL实现懒汉式"><a href="#DCL实现懒汉式" class="headerlink" title="DCL实现懒汉式"></a>DCL实现懒汉式</h2><p>为了解决线程安全问题，getInstance方法要加锁。但是根据getInstance方法的作用。锁再instance对象初始化完毕后就没作用。 所以采用DCL (Double-Checked Locking)双层检查锁的方式。通过第一次检查如果instance初始化了就直接跳过加锁代码，返回instance。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Instance&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Instance</span><span class="params">()</span></span>&#123;&#125;;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Instance instance;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Instance <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;  <span class="comment">//1</span></span><br><span class="line">            <span class="keyword">synchronized</span>(lock)&#123;</span><br><span class="line">                <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;   <span class="comment">//2</span></span><br><span class="line">                    instance=<span class="keyword">new</span> Instance();  <span class="comment">//3</span></span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;  <span class="comment">//4</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="DCL实现懒汉式存在问题"><a href="#DCL实现懒汉式存在问题" class="headerlink" title="DCL实现懒汉式存在问题"></a>DCL实现懒汉式存在问题</h2><p>这种写法看上去解决了线程安全，也兼顾了效率。其实不然，这种代码会导致getInstanceh返回一个没有初始化完成的Instance对象。</p>
-<p>问题出现在第三步，instance=new Instance()这行代码可以用下面三行伪代码表示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">menory=allocate();    //1.分配内存</span><br><span class="line">ctorInstance(menory); //2.初始化</span><br><span class="line">instance=menory;      //3.赋值给instance</span><br></pre></td></tr></table></figure></p>
-<p>intra-thread semantics（线程内语义）允许那些在单线程内，不会改变单线程程序执行结果的重排序。重排序后的顺序：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">menory=allocate();    //1.分配内存</span><br><span class="line">instance=menory;      //2.赋值给instance</span><br><span class="line">ctorInstance(menory); //3.初始化</span><br></pre></td></tr></table></figure></p>
-<p>对单线程来说只要Instance初始化在该线程访问Instance对象之前都是不会改变执行结果。</p>
-<p>注意:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">happens-before的锁定规则是“一个unLock操作先行发生于后面对同一个锁的lock操作”并不会禁止锁内部的重排序。</span><br></pre></td></tr></table></figure></p>
-<p>在这种情况下，如果线程1执行步骤2 <code>instance=menory</code>后，线程2获取执行权判断<code>if(instance==null)</code>时，instance不为null,线程2将会返回一个未初始化完成的instance对象。</p>
-<table>
-<thead>
-<tr>
-<th>执行顺序</th>
-<th>线程1</th>
-<th>线程2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>分配内存</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td>设置instance指向内存空间</td>
-<td></td>
-</tr>
-<tr>
-<td>3</td>
-<td></td>
-<td>判断instance是否为null</td>
-</tr>
-<tr>
-<td>4</td>
-<td></td>
-<td>初次访问Instance对象</td>
-</tr>
-<tr>
-<td>5</td>
-<td>初始化Instance对象</td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>初次访问Instance对象</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><h3 id="使用volatile-DCL"><a href="#使用volatile-DCL" class="headerlink" title="使用volatile+DCL"></a>使用volatile+DCL</h3><p>该问题产生的原因是2和3的重排序导致的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">menory=allocate();    //1.分配内存</span><br><span class="line">instance=menory;      //2.赋值给instance</span><br><span class="line">ctorInstance(menory); //3.初始化</span><br></pre></td></tr></table></figure></p>
-<p>那么解决方案可以是禁止2和3的重排序。</p>
-<p>通过将instance变量设置为volatile变量<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Instance&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Instance</span><span class="params">()</span></span>&#123;&#125;;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span>  Instance instance;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Instance <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;  </span><br><span class="line">            <span class="keyword">synchronized</span>(lock)&#123;</span><br><span class="line">                <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;   </span><br><span class="line">                    instance=<span class="keyword">new</span> Instance();  </span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>volatile变量会通过内存屏障来禁止重排序。</p>
-<h3 id="通过类加载实现"><a href="#通过类加载实现" class="headerlink" title="通过类加载实现"></a>通过类加载实现</h3><p>jvm类加载后，执行类初始化时,会去获取锁同步多线程初始化类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">InstanceFactory</span>()</span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">InstanceHolder</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span>  Instance  instance= <span class="keyword">new</span> Instance();</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="function"><span class="keyword">public</span> Instance <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">return</span>  InstanceHolder.instance;</span><br><span class="line">       &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="执行图"><a href="#执行图" class="headerlink" title="执行图"></a>执行图</h4><p><img src="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E7%B1%BB%E5%88%9D%E5%A7%8B%E5%8C%96%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B.png" alt="image"></p>
-<p>这里初始化过程虽然也发生了重排序，但是对于线程2来说这个操作是原子性的。线程2只能看到操作未开始或者已经结束之后。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2235,7 +2198,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2246,7 +2209,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2257,7 +2220,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -249,6 +249,441 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/12/JUC之CountDownLatch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wujiazhen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/12/JUC之CountDownLatch/" itemprop="url">JUC之CountDownLatch</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-12T10:06:01+08:00">
+                2018-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="CountDownLatch简介"><a href="#CountDownLatch简介" class="headerlink" title="CountDownLatch简介"></a>CountDownLatch简介</h4><p>一个线程需要等到其他线程进行某操作后在运行，可以使用CountDownLatch。</p>
+<p>CountDownLatch构造方法,带有一个int类型的参数。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CountDownLatch</span><span class="params">(<span class="keyword">int</span> count)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>当一个线程调用countDownLatch.await()时，线程会等待。直到其他线程执行<br>countDownLatch.countDown()。每执行一个countDown方法，初始化的count会减一,直到count=0时，等待线程才被唤醒。</p>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>假设场景顾客餐厅吃饭，需要等待做饭，炒菜，上汤都完成了，才开始吃饭。<br>代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//顾客线程</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> <span class="keyword">implements</span>  <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> CountDownLatch countDownLatch;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Customer</span><span class="params">(CountDownLatch countDownLatch)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.countDownLatch=countDownLatch;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"点完菜，等待开吃"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.countDownLatch.await();</span><br><span class="line">            System.out.println(<span class="string">"开饭了。。。。。。。。"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span>  <span class="keyword">static</span>  <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> CountDownLatch countDownLatch = <span class="keyword">new</span> CountDownLatch(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        Thread customer = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Customer(countDownLatch));</span><br><span class="line">        <span class="comment">//顾客进餐厅点菜</span></span><br><span class="line">        customer.start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(<span class="string">"做饭"</span>);</span><br><span class="line">                &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">                    countDownLatch.countDown();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.start();</span><br><span class="line">        <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(<span class="string">"炒菜"</span>);</span><br><span class="line">                &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">                    countDownLatch.countDown();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.start();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(<span class="string">"上汤"</span>);</span><br><span class="line">                &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">                    countDownLatch.countDown();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.start();</span><br><span class="line"></span><br><span class="line">        customer.join();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">点完菜，等待开吃</span><br><span class="line">做饭</span><br><span class="line">炒菜</span><br><span class="line">上汤</span><br><span class="line">开饭了。。。。。。。。</span><br></pre></td></tr></table></figure></p>
+<p>结果正确，等待做饭，炒菜，上汤都完成了，才开始吃饭。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ol>
+<li>countDownLatch内部通过共享锁实现</li>
+<li>countDown方法最好放在finally代码块中执行，防止线程永远等待</li>
+<li>CountDownLatch再 count减到0之后，再次执行countDown不会有影响，count不变。</li>
+<li>await方法有重载方法<br><code>public boolean await(long timeout, TimeUnit unit)</code>,等待一段时间后恢复。</li>
+<li>countDownLatch只能使用一次，count=0时，不能回滚再次使用。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/11/线程同步-CAS与原子变量/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wujiazhen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/11/线程同步-CAS与原子变量/" itemprop="url">线程同步-CAS与原子变量</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-11T10:06:01+08:00">
+                2018-08-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="CAS简介"><a href="#CAS简介" class="headerlink" title="CAS简介"></a>CAS简介</h4><p>锁的开销极大。在某些场景，如保证一个变量的 read-modify-write操作的原子性。这种场景可以通过使用CAS解决而不需要用到锁。</p>
+<p>CAS,Compare and swap 比较并交换，是一种乐观锁的实现方式。是一个中由处理器保证原子性的if-then-act操作。它通过提供一个变量内存位置,预期值(旧值)和新值。将预期值和变量的当前值进行比较，如果相等即证明变量并没有被改变，将该变量修改成新值。如果不相等则进行重试（预期值会重新加载）,直到成功。</p>
+<p>Unsafe类中通过CAS修改int类型变量源码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">*var1  AtomicInteger对象</span></span><br><span class="line"><span class="comment">*var2  内存偏移量</span></span><br><span class="line"><span class="comment">*var4  增加的值</span></span><br><span class="line"><span class="comment">*var5  获取的变量原值，保存在var5用于当预期值</span></span><br><span class="line"><span class="comment">*compareAndSwapInt会比较内存值和var5相等的话就会改变内存值（即AtomicIntege * r对象中的变量）。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAddInt</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">int</span> var4)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">int</span> var5;</span><br><span class="line">      <span class="keyword">do</span> &#123;</span><br><span class="line">          <span class="comment">//获取内存的当前值</span></span><br><span class="line">          var5 = <span class="keyword">this</span>.getIntVolatile(var1, var2);</span><br><span class="line">      &#125; <span class="keyword">while</span>(!<span class="keyword">this</span>.compareAndSwapInt(var1, var2, var5, var5 + var4));</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> var5;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="原子变量"><a href="#原子变量" class="headerlink" title="原子变量"></a>原子变量</h4><p>以上代码是原子遍历AtomicInteger自增代码的实现片段。JDK基于CAS提供了保证共享变量read-modify-write操作原子性的类。</p>
+<table>
+<thead>
+<tr>
+<th>分组</th>
+<th>类名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基本类型</td>
+<td>AtomicInteger,AtomicLong,AtomicBoolean</td>
+</tr>
+<tr>
+<td>数组类型</td>
+<td>AtomicIntegerArray,AtomicLongArray,AtomicReferenceArray</td>
+</tr>
+<tr>
+<td>字段更新</td>
+<td>AtomicIntegerFieldUpdater,AtomicLongFieldUpdater,AtomicReferenceFieldUpdater</td>
+</tr>
+<tr>
+<td>引用型</td>
+<td>AtomicReference,AtomicStampedReference,AtomicMarkableReference</td>
+</tr>
+</tbody>
+</table>
+<h5 id="AtomicInteger"><a href="#AtomicInteger" class="headerlink" title="AtomicInteger"></a>AtomicInteger</h5><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int accumulateAndGet(int x, IntBinaryOperator accumulatorFunction)</td>
+<td>使用将给定函数应用于当前值和给定值的结果原子更新当前值，返回更新后的值。  </td>
+</tr>
+<tr>
+<td>int addAndGet(int delta)</td>
+<td>将给定的值原子地添加到当前值。  </td>
+</tr>
+<tr>
+<td>boolean compareAndSet(int expect, int update)</td>
+<td>如果当前值 ==为预期值，则将该值原子设置为给定的更新值。  </td>
+</tr>
+<tr>
+<td>int decrementAndGet()</td>
+<td>原子减1当前值。  </td>
+</tr>
+<tr>
+<td>double doubleValue()</td>
+<td>返回此值 AtomicInteger为 double一个宽元转换后。  </td>
+</tr>
+<tr>
+<td>float floatValue()</td>
+<td>返回此值 AtomicInteger为 float一个宽元转换后。  </td>
+</tr>
+<tr>
+<td>int get()</td>
+<td>获取当前值。  </td>
+</tr>
+<tr>
+<td>int getAndAccumulate(int x, IntBinaryOperator accumulatorFunction)</td>
+<td>使用给定函数应用给当前值和给定值的结果原子更新当前值，返回上一个值。  </td>
+</tr>
+<tr>
+<td>int getAndAdd(int delta)</td>
+<td>将给定的值原子地添加到当前值。  </td>
+</tr>
+<tr>
+<td>int getAndDecrement()</td>
+<td>原子减1当前值。  </td>
+</tr>
+<tr>
+<td>int getAndIncrement()</td>
+<td>原子上增加一个当前值。  </td>
+</tr>
+<tr>
+<td>int getAndSet(int newValue)</td>
+<td>将原子设置为给定值并返回旧值。  </td>
+</tr>
+<tr>
+<td>int getAndUpdate(IntUnaryOperator updateFunction)</td>
+<td>用应用给定函数的结果原子更新当前值，返回上一个值。  </td>
+</tr>
+<tr>
+<td>int incrementAndGet()</td>
+<td>原子上增加一个当前值。  </td>
+</tr>
+<tr>
+<td>int intValue()</td>
+<td>将 AtomicInteger的值作为 int 。  </td>
+</tr>
+<tr>
+<td>void lazySet(int newValue)</td>
+<td>最终设定为给定值。  </td>
+</tr>
+<tr>
+<td>long longValue()</td>
+<td>返回此值 AtomicInteger为 long一个宽元转换后。  </td>
+</tr>
+<tr>
+<td>void set(int newValue)</td>
+<td>设置为给定值。  </td>
+</tr>
+<tr>
+<td>String toString()</td>
+<td>返回当前值的String表示形式。  </td>
+</tr>
+<tr>
+<td>int updateAndGet(IntUnaryOperator updateFunction)</td>
+<td>使用给定函数的结果原子更新当前值，返回更新的值。  </td>
+</tr>
+<tr>
+<td>boolean weakCompareAndSet(int expect, int update)</td>
+<td>如果当前值 ==为预期值，则将值设置为给定更新值。  </td>
+</tr>
+</tbody>
+</table>
+<h4 id="ABA问题"><a href="#ABA问题" class="headerlink" title="ABA问题"></a>ABA问题</h4><p>以上说到，CAS是将预期值和内存当前值比较，通过比较结果来判断其他线程是否修改过该变量。但是如果存在其他线程修改变量后又改回原值（即预期值），在某些场景就会存在问题。</p>
+<h5 id="ABA问题例子"><a href="#ABA问题例子" class="headerlink" title="ABA问题例子"></a>ABA问题例子</h5><p>银行账户 500元（共享变量）</p>
+<ol>
+<li>要取出50元，机器故障发送了2个请求A,B，此时两个请求的期望值都是500，新值450</li>
+<li>A请求执行完后，内存值变成450。所以第二个请求是不会成功的。</li>
+<li>但是如果在B请求执行前，C又往账户存了50块。这时银行帐号变成500。B请求预期值满足提交成功，银行账户最终存款为 450。</li>
+</ol>
+<p>这种情况下，存款少了50块。</p>
+<h5 id="ABA解决方案。"><a href="#ABA解决方案。" class="headerlink" title="ABA解决方案。"></a>ABA解决方案。</h5><p>ABA问题可以通过版本号来解决，每次修改操作都添加一个版本号。例如刚才的取款操作加个版本号 1，在存款操作执行后版本号+1，变为2。取款的第二次请求执行时就会判断版本号不是1，执行失败。</p>
+<p>原子变量AtomicStampedReference，AtomicMarkableReference 中处理了ABA问题。</p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
+<li>CAS只能保证一个共享变量的操作的原子性（原子性操作+原子性操作≠原子操作），如果要保持多个共享变量的操作的原子性，就必须使用锁。</li>
+<li>如果变量更新多次失败，循环时间长开销大。</li>
+<li>ABA问题</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/09/线程间协作-等待唤醒机制/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1228,7 +1663,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1239,7 +1674,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1250,7 +1685,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
