@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="程序猿的博客">
 <meta property="og:description" content="EventListenerSupport是apache lang3包提供用于处理事件监听的解决方案。 pom12345 &amp;lt;dependency&amp;gt;        &amp;lt;groupId&amp;gt;org.apache.commons&amp;lt;/groupId&amp;gt;        &amp;lt;artifactId&amp;gt;commons-lang3&amp;lt;/artifactId&amp;gt;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-20T07:12:38.170Z">
+<meta property="og:updated_time" content="2018-10-23T02:01:34.598Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="EventListenerSupport实现事件监听">
 <meta name="twitter:description" content="EventListenerSupport是apache lang3包提供用于处理事件监听的解决方案。 pom12345 &amp;lt;dependency&amp;gt;        &amp;lt;groupId&amp;gt;org.apache.commons&amp;lt;/groupId&amp;gt;        &amp;lt;artifactId&amp;gt;commons-lang3&amp;lt;/artifactId&amp;gt;">
@@ -357,7 +357,7 @@
 <li><p>向EventListenerSupport注册监听器</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eventListener.addListener(<span class="keyword">new</span> TestListener());</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>事件发生时,触发监听器.fire方法会返回IListener的代理类.运行IListener的方法,会通过代理允许所有注册监听器的相同方法.</p>
+<li><p>事件发生时,触发监听器.fire方法会返回IListener的代理类.运行IListener的方法,会通过代理运行所有注册监听器的相同方法.</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eventListener.fire().onListener();</span><br></pre></td></tr></table></figure></li>
 </ol>
 
@@ -481,7 +481,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -492,7 +492,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -503,7 +503,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
