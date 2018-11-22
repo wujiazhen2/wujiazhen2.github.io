@@ -249,6 +249,370 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/java中的阻塞队列/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wujiazhen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/18/java中的阻塞队列/" itemprop="url">java中的阻塞队列</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-18T20:34:59+08:00">
+                2018-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>阻塞队列是指支持阻塞添加和阻塞移除两种操作的队列.<br>java中提供了7种阻塞队列:<br>ArrayBlockingQueue：一个由数组结构组成的有界阻塞队列。<br>LinkedBlockingQueue：一个由链表结构组成的有界阻塞队列。<br>PriorityBlockingQueue：一个支持优先级排序的无界阻塞队列。<br>DelayQueue：一个使用优先级队列实现的无界阻塞队列。<br>SynchronousQueue：一个不存储元素的阻塞队列。<br>LinkedTransferQueue：一个由链表结构组成的无界阻塞队列。<br>LinkedBlockingDeque：一个由链表结构组成的双向阻塞队列。</p>
+<h1 id="阻塞队列的增删查方法"><a href="#阻塞队列的增删查方法" class="headerlink" title="阻塞队列的增删查方法"></a>阻塞队列的增删查方法</h1><table>
+<thead>
+<tr>
+<th>处理方式/方法</th>
+<th>抛出异常</th>
+<th>返回值</th>
+<th>阻塞</th>
+<th>超时退出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>插入</td>
+<td>add(e)</td>
+<td>offer(e)</td>
+<td>put(e)</td>
+<td>offer(e,time,unit)</td>
+</tr>
+<tr>
+<td>移除</td>
+<td>remove()</td>
+<td>poll()</td>
+<td>take()</td>
+<td>poll(time,unit)</td>
+</tr>
+<tr>
+<td>检查</td>
+<td>element()</td>
+<td>peek()</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="队列简介"><a href="#队列简介" class="headerlink" title="队列简介"></a>队列简介</h1><h2 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h2><p>ArrayBlockingQueue是一个由数组结构组成的有界阻塞队列。支持公平队列和非公平队列。会按照线程阻塞的顺序来让线程访问队列。默认是非公平队列，可以通过构造函数设置。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ArrayBlockingQueue(<span class="keyword">int</span> capacity);</span><br><span class="line">ArrayBlockingQueue(<span class="keyword">int</span> capacity, <span class="keyword">boolean</span> fair);</span><br></pre></td></tr></table></figure></p>
+<h2 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h2><p>LinkedBlockingQueue是一个由链表结构组成的有界阻塞队列。默认长度和最大长度都是Integer.MAX_VALUE，可以通过构造函数设置长度。</p>
+<h2 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h2><p>PrioriityBlockingQueue是一个使用优先级队列实现的无界阻塞队列。队列中元素默认按照自然顺序的升序排序。相等的元素不能保证其顺序。<br>队列中的元素必须可以比较（即满足下面条件的其中之一）</p>
+<ol>
+<li><p>构造队列是传递Comparator，作为元素的比较器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PriorityBlockingQueue(<span class="keyword">int</span> initialCapacity,</span><br><span class="line">                                 Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>元素自身实现Comparable接口</p>
+</li>
+</ol>
+<h2 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h2><p>DelayQueue支持延迟获取元素的无界阻塞队列，依据优先级队列PriorityQueue实现。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DelayQueue&lt;E extends Delayed&gt;</span><br></pre></td></tr></table></figure></p>
+<p>DelayQueue中的元素必须实现Delayed。</p>
+<h3 id="实现Delayed接口"><a href="#实现Delayed接口" class="headerlink" title="实现Delayed接口"></a>实现Delayed接口</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DelayedElement</span> <span class="keyword">implements</span> <span class="title">Delayed</span></span>&#123;</span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">long</span> time;</span><br><span class="line">     <span class="keyword">private</span> String id;</span><br><span class="line">     <span class="comment">//1.构造函数设置延迟多久运行</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="title">DelayedElement</span><span class="params">(String id,<span class="keyword">long</span> time,TimeUnit unit)</span></span>&#123;</span><br><span class="line">         <span class="keyword">this</span>.id=id;</span><br><span class="line">         <span class="keyword">this</span>.time=System.nanoTime()+TimeUnit.NANOSECONDS.convert(time,unit);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">//2.获取还需要延迟多久</span></span><br><span class="line">     <span class="meta">@Override</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getDelay</span><span class="params">(TimeUnit unit)</span> </span>&#123;</span><br><span class="line">         <span class="keyword">return</span> unit.convert(time-System.nanoTime(),TimeUnit.NANOSECONDS);</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">//3. 比较，按time升序排序</span></span><br><span class="line">     <span class="meta">@Override</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Delayed o)</span> </span>&#123;</span><br><span class="line">         <span class="keyword">long</span> diff = getDelay(TimeUnit.NANOSECONDS) - o.getDelay(TimeUnit.NANOSECONDS);</span><br><span class="line">         <span class="keyword">return</span> (diff &lt; <span class="number">0</span>) ? -<span class="number">1</span> : (diff &gt; <span class="number">0</span>) ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="meta">@Override</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">         <span class="comment">//纳秒转成毫秒输出</span></span><br><span class="line">         <span class="keyword">return</span> String.format(<span class="string">"id:%s,seconds:%d"</span>,id,TimeUnit.SECONDS.convert(time,TimeUnit.NANOSECONDS));</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">DelayQueue delayQueue=<span class="keyword">new</span> DelayQueue();</span><br><span class="line"><span class="comment">//延迟5秒执行</span></span><br><span class="line">delayQueue.add(<span class="keyword">new</span> DelayedElement(<span class="string">"1"</span>,<span class="number">5</span>,TimeUnit.SECONDS));</span><br><span class="line"><span class="comment">//延迟2秒执行</span></span><br><span class="line">delayQueue.add(<span class="keyword">new</span> DelayedElement(<span class="string">"2"</span>,<span class="number">2</span>,TimeUnit.SECONDS));</span><br><span class="line"><span class="comment">//延迟1秒执行</span></span><br><span class="line">delayQueue.add(<span class="keyword">new</span> DelayedElement(<span class="string">"3"</span>,<span class="number">1</span>,TimeUnit.SECONDS));</span><br><span class="line"><span class="comment">//阻塞等待</span></span><br><span class="line">System.out.println(delayQueue.take());</span><br><span class="line">System.out.println(delayQueue.take());</span><br><span class="line">System.out.println(delayQueue.take());</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：<br>id=3的最先运行，id=2的在id=3运行后1秒运行，id=1的在id=3运行后4秒运行。和预想结果一直。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">id:3,seconds:78285</span><br><span class="line">id:2,seconds:78286</span><br><span class="line">id:1,seconds:78289</span><br></pre></td></tr></table></figure>
+<p>ScheduledThreadPoolExecutor实现延迟执行和固定周期执行依靠的DelayedWorkQueue与DelayQueue类似。ScheduledFutureTask是Delayed的实现。</p>
+<h2 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h2><p>SynchronousQueue：一个不存储元素的阻塞队列。SynchronousQueue内部没有容器存储数据,每一个put操作，都需要等待一个take操作。否则不能再添加元素。<br>支持公平和非公平模式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SynchronousQueue(<span class="keyword">boolean</span> fair)</span><br></pre></td></tr></table></figure>
+<p>适用于生产者消费者模式的数据传递。</p>
+<h2 id="LinkedTransferQueue"><a href="#LinkedTransferQueue" class="headerlink" title="LinkedTransferQueue"></a>LinkedTransferQueue</h2><p>LinkedTransferQueue是一个由链表结构组成的无界阻塞队列。<br>LinkedTransferQueue实现了一个重要的接口TransferQueue，该接口含有下面几个重要方法：</p>
+<ol>
+<li>transfer(E e)：若当前存在一个正在等待获取的消费者线程，即立刻移交之；否则，会插入当前元素e到队列部，并且等待进入阻塞状态，到有消费者线程取走该元素。</li>
+<li>tryTransfer(E e)：若当前存在一个正在等待获取的消费者线程（使用take()或者poll()函数），使用该方法即刻转移/传输对象元素e；若不存在，则返回false，并且不进入队列。这是一个不阻塞的操作。</li>
+<li>tryTransfer(E e, long timeout, TimeUnit unit)：若当前存在一个正在等待获取的消费者线程，会立即传给它;否则将插入元素e到队列尾部，并且等待被消费者线程获取消费掉；若在指定的时间内元素e无法被消费者线程取，则返回false，同时该元素被移除。</li>
+<li>hasWaitingConsumer()：判断是否存在消费者线程。</li>
+<li>getWaitingConsumerCount()：获取所有等待获取元素的消费线程数量。</li>
+</ol>
+<h2 id="LinkedBlockingDeque"><a href="#LinkedBlockingDeque" class="headerlink" title="LinkedBlockingDeque"></a>LinkedBlockingDeque</h2><p>LinkedBlockingDeque是一个由链表结构组成的双向阻塞队列。可以从队列的两端添加或者移除元素。因为有两个操作入口，也减少多线程入队时的竞争。增加了以First和Last结尾的操作函数，用于从头操作队列或者从尾部操作队列。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/EventListenerSupport实现事件监听/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wujiazhen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/18/EventListenerSupport实现事件监听/" itemprop="url">EventListenerSupport实现事件监听</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-18T17:11:40+08:00">
+                2018-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工具类/" itemprop="url" rel="index">
+                    <span itemprop="name">工具类</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>EventListenerSupport是apache lang3包提供用于处理事件监听的解决方案。</p>
+<p>pom<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.commons<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-lang3<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><ol>
+<li><p>创建监听器接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onListener</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过接口创建EventListenerSupport</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EventListenerSupport&lt;IListener&gt; eventListener = EventListenerSupport.create(IListener.class);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实现监听器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestListener</span> <span class="keyword">implements</span> <span class="title">IListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onListener</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"test"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>向EventListenerSupport注册监听器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eventListener.addListener(<span class="keyword">new</span> TestListener());</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>事件发生时,触发监听器.fire方法会返回IListener的代理类.运行IListener的方法,会通过代理运行所有注册监听器的相同方法.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eventListener.fire().onListener();</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/14/CurrentHashMap源码解析（jdk1-8）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1625,320 +1989,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/15/JUC之AQS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wujiazhen">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程序猿的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/15/JUC之AQS/" itemprop="url">JUC之AQS</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-15T10:06:01+08:00">
-                2018-08-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/多线程/" itemprop="url" rel="index">
-                    <span itemprop="name">多线程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>AbstractQueuedSynchronizer简称 AQS。AQS是jdk提供的一个用于实现阻塞锁和依赖于先进先出等待队列的相关同步器（信号量，事件等）。AQS是concurrent包的基石。</p>
-<h4 id="AQS-状态。"><a href="#AQS-状态。" class="headerlink" title="AQS 状态。"></a>AQS 状态。</h4><p>它依赖一个int类型的原子变量来表示状态。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> state;<span class="comment">//共享变量，使用volatile修饰保证线程可见性</span></span><br></pre></td></tr></table></figure></p>
-<p>对state操作的基本方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getState</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(<span class="keyword">int</span> newState)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">compareAndSetState</span><span class="params">(<span class="keyword">int</span> expect, <span class="keyword">int</span> update)</span></span></span><br></pre></td></tr></table></figure></p>
-<p>子类必须实现其protected的方法用于改变这个状态和根据该状态的获取和释放定义状态的含义。</p>
-<h4 id="AQS实现同步器"><a href="#AQS实现同步器" class="headerlink" title="AQS实现同步器"></a>AQS实现同步器</h4><p>AQS支持两种<code>独占</code>和<code>共享</code>两种同步方式。独占的实现有ReentrantLock，共享的实现有CountDownLatch,Semaphore。读写锁的读锁用了共享锁，写锁用来独占锁。AQS是通过重写以下方法来实现同步。</p>
-<ol>
-<li>共享锁是满足一定条件的都可以获取锁，具体实现逻辑在tryAcquireShared中实现。</li>
-<li>独占锁是同时只能有一个线程占用锁。</li>
-</ol>
-<h5 id="通过AQS实现锁需要重写的方法"><a href="#通过AQS实现锁需要重写的方法" class="headerlink" title="通过AQS实现锁需要重写的方法"></a>通过AQS实现锁需要重写的方法</h5><p>AQS用了模板设计模式，我们不用关心获取资源失败，线程排队，线程阻塞/唤醒等一系列复杂的实现，这些都在AQS中为我们处理好了。我们只需要负责好自己的那个环节就好，也就是获取/释放共享资源state。用户可以根据自己的要求很轻松的扩展AQS。</p>
-<p>实现独占锁要重写的方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//独占式获取同步状态，试着获取，成功返回true，反之为false</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryRelease</span><span class="params">(<span class="keyword">int</span> arg)</span></span></span><br><span class="line"><span class="function"><span class="comment">//释放锁方法，返回true代表成功释放</span></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> arg)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">是否在独占模式下被线程占用，<span class="keyword">true</span>为被占用。</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">isHeldExclusively</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure></p>
-<p>实现共享锁要重写的方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//返回值大于0则是成功占用锁，小于0则是阻塞</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">tryAcquireShared</span><span class="params">(<span class="keyword">int</span> arg)</span></span></span><br><span class="line"><span class="function"><span class="comment">//释放锁方法，返回true代表成功释放</span></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryReleaseShared</span><span class="params">(<span class="keyword">int</span> arg)</span></span></span><br></pre></td></tr></table></figure></p>
-<h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><p>独占和共享方式都有3个占用锁方法和一个释放锁方法。内部调用了上面实现的tryAcquire和tryRelease。</p>
-<p>独占锁使用方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> arg)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">//通过首先检查中断状态,如果中断，中止</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquireInterruptibly</span><span class="params">(<span class="keyword">int</span> arg)</span></span></span><br><span class="line"><span class="function">                                <span class="keyword">throws</span> InterruptedException</span></span><br><span class="line"><span class="function"><span class="comment">//阻塞时长超出设置事件则跳出                                </span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryAcquireNanos</span><span class="params">(<span class="keyword">int</span> arg,</span></span></span><br><span class="line"><span class="function"><span class="params">                                     <span class="keyword">long</span> nanosTimeout)</span></span></span><br><span class="line"><span class="function">                              <span class="keyword">throws</span> InterruptedException</span></span><br><span class="line"><span class="function">                              </span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">release</span><span class="params">(<span class="keyword">int</span> arg)</span></span></span><br></pre></td></tr></table></figure></p>
-<p>共享锁使用方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//占用共享锁方法,最终都是调用了实现的tryAcquireShared方法。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquireShared</span><span class="params">(<span class="keyword">int</span> arg)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">//通过首先检查中断状态,如果中断，中止</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquireSharedInterruptibly</span><span class="params">(<span class="keyword">int</span> arg)</span></span></span><br><span class="line"><span class="function">                                      <span class="keyword">throws</span> InterruptedException</span></span><br><span class="line"><span class="function"><span class="comment">//阻塞时长超出设置事件则跳出。                              </span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryAcquireSharedNanos</span><span class="params">(<span class="keyword">int</span> arg,</span></span></span><br><span class="line"><span class="function"><span class="params">                                           <span class="keyword">long</span> nanosTimeout)</span></span></span><br><span class="line"><span class="function">                                    <span class="keyword">throws</span> InterruptedException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">//释放锁方法</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">releaseShared</span><span class="params">(<span class="keyword">int</span> arg)</span></span></span><br></pre></td></tr></table></figure>
-<h4 id="独占锁实现"><a href="#独占锁实现" class="headerlink" title="独占锁实现"></a>独占锁实现</h4><p>JDK文档中带的一个独占锁例子.</p>
-<p>这例子实现的是不可重入的独占锁，只允许一个线程持有锁。</p>
-<p>这里state=0时表示锁还没被占用，state=1时表示锁处于占用状态。这样一个线程占用锁时，通过cas把state置为1，通过setExclusiveOwnerThread方法设置当前线程为独占线程。其他线程再通过cas时，因为旧值不为0，所以cas失败,返回false表示占用锁失败。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.AbstractQueuedSynchronizer;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Mutex</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="comment">//实现的独占锁</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Sync</span> <span class="keyword">extends</span> <span class="title">AbstractQueuedSynchronizer</span> </span>&#123;</span><br><span class="line">        <span class="comment">//是否处于占用状态</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">isHeldExclusively</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> getState() == <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//这里获取锁，通过cas将state设置为1，并设置独占线程。</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, <span class="number">1</span>)) &#123;</span><br><span class="line">                <span class="comment">//设置当前拥有独占访问权限的线程</span></span><br><span class="line">                setExclusiveOwnerThread(Thread.currentThread());</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//释放锁，将同步状态置为0</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryRelease</span><span class="params">(<span class="keyword">int</span> releases)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (getState() == <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalMonitorStateException();</span><br><span class="line">            setExclusiveOwnerThread(<span class="keyword">null</span>);</span><br><span class="line">            setState(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        <span class="comment">//同步对象完成一系列复杂的操作，我们仅需指向它即可</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> Sync sync = <span class="keyword">new</span> Sync();</span><br><span class="line">        <span class="comment">//加锁操作，代理到acquire（模板方法）上就行，acquire会调用我们重写的tryAcquire方法</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            sync.acquire(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> sync.tryAcquire(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//释放锁，代理到release（模板方法）上就行，release会调用我们重写的tryRelease方法。</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            sync.release(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isLocked</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> sync.isHeldExclusively();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="共享锁实现-CountDownLatch"><a href="#共享锁实现-CountDownLatch" class="headerlink" title="共享锁实现 CountDownLatch"></a>共享锁实现 CountDownLatch</h4><p>CountDownLatch就是通过AQS实现的共享锁，实现简单，容易理解。</p>
-<h5 id="基于AQS实现的共享锁"><a href="#基于AQS实现的共享锁" class="headerlink" title="基于AQS实现的共享锁"></a>基于AQS实现的共享锁</h5><p>CountDownLatch内部类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Sync</span> <span class="keyword">extends</span> <span class="title">AbstractQueuedSynchronizer</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">4982264981922014374L</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//CountDownLatch构造函数中会将count传过来，构建Sync锁。</span></span><br><span class="line">        Sync(<span class="keyword">int</span> count) &#123;</span><br><span class="line">            setState(count);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> getState();</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//count==0的时候才能成功占用锁。</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">tryAcquireShared</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> (getState() == <span class="number">0</span>) ? <span class="number">1</span> : -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//countDown方法会调用这里的逻辑，每次count-1,直到0才成功释放。</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryReleaseShared</span><span class="params">(<span class="keyword">int</span> releases)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// Decrement count; signal when transition to zero</span></span><br><span class="line">            <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">                <span class="keyword">int</span> c = getState();</span><br><span class="line">                <span class="keyword">if</span> (c == <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                <span class="keyword">int</span> nextc = c-<span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span> (compareAndSetState(c, nextc))</span><br><span class="line">                    <span class="keyword">return</span> nextc == <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>CountDownLatch.await()<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment">  这里调用了sync的acquireSharedInterruptibly(1),里面最终会调用重写的tryAcquireShared方法。可以看到只有state==0的时候才能占用成功，不然会阻塞。这里传入的参数1并没有作用。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">     sync.acquireSharedInterruptibly(<span class="number">1</span>);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
-<p>CountDownLatch.countDown()<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> 这里调用了AQS的releaseShared，会使用重写的tryReleaseShared实现。每次都会使state-1,直到state==0成功释放锁。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">countDown</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        sync.releaseShared(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/14/JUC之Semaphore/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wujiazhen">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程序猿的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/14/JUC之Semaphore/" itemprop="url">JUC之Semaphore</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-14T10:06:01+08:00">
-                2018-08-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/多线程/" itemprop="url" rel="index">
-                    <span itemprop="name">多线程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="流量控制-Semaphore"><a href="#流量控制-Semaphore" class="headerlink" title="流量控制 Semaphore"></a>流量控制 Semaphore</h4><p>Semaphore是一个计数的信号量。初始化时分配一个配额permits。在访问前需要用acquire()方法申请一个配额，访问结束后调用release()释放配置。申请配额时如果配额不足将会阻塞。</p>
-<h4 id="使用例子"><a href="#使用例子" class="headerlink" title="使用例子"></a>使用例子</h4><p>例子：有2个足球，4个人射门练习。每个人射门后都要把球拿回来,后面的人才能射球。这里足球就是配额。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Player</span> <span class="keyword">implements</span>  <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Semaphore semaphore;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Player</span><span class="params">(Semaphore semaphore)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.semaphore=semaphore;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            semaphore.acquire();</span><br><span class="line">            <span class="comment">//踢完还剩余的球</span></span><br><span class="line">            System.out.println(<span class="string">"踢球。。。。"</span>+semaphore.availablePermits());</span><br><span class="line">            <span class="keyword">int</span> millis = <span class="keyword">new</span> Random().nextInt(<span class="number">4</span>)+<span class="number">1</span>;</span><br><span class="line">            Thread.sleep(millis*<span class="number">1000</span>);</span><br><span class="line">            System.out.println(String.format(<span class="string">"捡球花时间%d秒"</span>,millis));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            semaphore.release();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span>  <span class="keyword">static</span>  <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Player(semaphore)).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">1000000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">踢球。。。。1</span><br><span class="line">踢球。。。。0</span><br><span class="line">捡球花时间4秒</span><br><span class="line">捡球花时间4秒</span><br><span class="line">踢球。。。。0</span><br><span class="line">踢球。。。。0</span><br><span class="line">捡球花时间1秒</span><br><span class="line">捡球花时间2秒</span><br></pre></td></tr></table></figure></p>
-<h4 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">acquire</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">从该信号量获取许可证，阻止直到可用，或线程为 interrupted 。  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> permits)</span> </span></span><br><span class="line"><span class="function">从该信号量获取给定数量的许可证，阻止直到所有可用，否则线程为 interrupted 。  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">acquireUninterruptibly</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">从这个信号灯获取许可证，阻止一个可用的。  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">acquireUninterruptibly</span><span class="params">(<span class="keyword">int</span> permits)</span> </span></span><br><span class="line"><span class="function">从该信号量获取给定数量的许可证，阻止直到所有可用。  </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">availablePermits</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">返回此信号量中当前可用的许可数。  </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">drainPermits</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">获取并返回所有可立即获得的许可证。  </span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Collection&lt;Thread&gt; <span class="title">getQueuedThreads</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">返回一个包含可能正在等待获取的线程的集合。  </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getQueueLength</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">返回等待获取的线程数的估计。  </span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">hasQueuedThreads</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">查询任何线程是否等待获取。  </span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isFair</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">如果此信号量的公平设置为真，则返回 <span class="keyword">true</span> 。  </span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">reducePermits</span><span class="params">(<span class="keyword">int</span> reduction)</span> </span></span><br><span class="line"><span class="function">缩小可用许可证的数量。  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">release</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">释放许可证，将其返回到信号量。  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">release</span><span class="params">(<span class="keyword">int</span> permits)</span> </span></span><br><span class="line"><span class="function">释放给定数量的许可证，将其返回到信号量。  </span></span><br><span class="line"><span class="function">String <span class="title">toString</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">返回一个标识此信号量的字符串及其状态。  </span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">从这个信号量获得许可证，只有在调用时可以使用该许可证。  </span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> permits)</span> </span></span><br><span class="line"><span class="function">从这个信号量获取给定数量的许可证，只有在调用时全部可用。  </span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> permits, <span class="keyword">long</span> timeout, TimeUnit unit)</span> </span></span><br><span class="line"><span class="function">从该信号量获取给定数量的许可证，如果在给定的等待时间内全部可用，并且当前线程尚未 interrupted 。  </span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span> </span></span><br><span class="line"><span class="function">如果在给定的等待时间内可用，并且当前线程尚未 到达 interrupted，则从该信号量获取许可。</span></span><br></pre></td></tr></table></figure>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ol>
-<li>Semaphore内部是由共享锁实现的。</li>
-<li>Semaphore支持公平锁和非公平锁。默认是非公平锁。可以通过构造函数设置。</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1989,7 +2039,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2000,7 +2050,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2011,7 +2061,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
