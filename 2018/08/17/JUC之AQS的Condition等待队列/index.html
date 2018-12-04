@@ -88,7 +88,7 @@
 <meta property="og:description" content="synchronized的线程等待唤醒机制是通过锁对象Monitor的 notify/notifyAll/wait实现，Monitor中的等待队列只有一条所以无法实现分组的等待唤醒。显示锁的等待唤醒方法可以通过一个或多个Condition来处理等待唤醒，一个Condition就是AQS中的一条等待队列。 AQS中的等待队列ReentrantLock的条件变量Condition就是一个Conditi">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/wujiazhen2/pict/blob/master/thread/conditionObject.png?raw=true">
-<meta property="og:updated_time" content="2018-09-12T08:41:42.629Z">
+<meta property="og:updated_time" content="2018-12-04T03:52:02.345Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JUC之AQS的Condition等待队列">
 <meta name="twitter:description" content="synchronized的线程等待唤醒机制是通过锁对象Monitor的 notify/notifyAll/wait实现，Monitor中的等待队列只有一条所以无法实现分组的等待唤醒。显示锁的等待唤醒方法可以通过一个或多个Condition来处理等待唤醒，一个Condition就是AQS中的一条等待队列。 AQS中的等待队列ReentrantLock的条件变量Condition就是一个Conditi">
@@ -379,7 +379,7 @@
 <li><p>将firstWaiter设置为现在头节点的下一个节点。并将当前节点的nextWaiter设置为null。transferForSignal唤醒线程失败（Node可能已取消导致失败）后，会唤醒下一个节点，直到有一个节点被唤醒。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doSignal</span><span class="params">(Node first)</span> </span>&#123;</span><br><span class="line">         <span class="keyword">do</span> &#123;</span><br><span class="line">             <span class="keyword">if</span> ( (firstWaiter = first.nextWaiter) == <span class="keyword">null</span>)</span><br><span class="line">                 lastWaiter = <span class="keyword">null</span>;</span><br><span class="line">             first.nextWaiter = <span class="keyword">null</span>;</span><br><span class="line">         &#125; <span class="keyword">while</span> (!transferForSignal(first) &amp;&amp;</span><br><span class="line">                  (first = firstWaiter) != <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>transferForSignal方法会通过cas更新Node的waitStatus属性为0。再将当前节点追加同步队列的尾部（这里可以结束await方法被唤醒时为什么有前驱节点）。再设置Node.waitStatus=Node.SIGNAL。唤醒线程。</p>
+<li><p>transferForSignal方法会通过cas更新Node的waitStatus属性为0。再将当前节点追加同步队列的尾部（这里可以解释await方法被唤醒时为什么有前驱节点）。再设置Node.waitStatus=Node.SIGNAL。唤醒线程。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">transferForSignal</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">       <span class="comment">/*</span></span><br><span class="line"><span class="comment">        * 节点被取消时，cas更新失败</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">       <span class="keyword">if</span> (!compareAndSetWaitStatus(node, Node.CONDITION, <span class="number">0</span>))</span><br><span class="line">           <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">       <span class="comment">//将节点追加同步队列队尾</span></span><br><span class="line">       Node p = enq(node);</span><br><span class="line">       <span class="keyword">int</span> ws = p.waitStatus;</span><br><span class="line">       <span class="comment">//只要节点状态不是取消，将节点状态设置成SIGNAL(作用可以看下CLH队列)</span></span><br><span class="line">       <span class="keyword">if</span> (ws &gt; <span class="number">0</span> || !compareAndSetWaitStatus(p, ws, Node.SIGNAL))</span><br><span class="line">           LockSupport.unpark(node.thread);</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
@@ -504,7 +504,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -515,7 +515,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -526,7 +526,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
