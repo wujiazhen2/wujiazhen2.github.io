@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去该代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitor Monitor对象是jvm实现的，c++中的对象。 每个对象内部都有一个唯一的monitor,mo">
+<meta name="description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去该代码块。使多个线程排队运行该代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitor Monitor对象是jvm实现的，c++中的对象。 每个对象内部都有一个唯一的monitor,mo">
 <meta name="keywords" content="多线程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="synchronized原理">
 <meta property="og:url" content="http://yoursite.com/2018/08/20/synchronized原理/index.html">
 <meta property="og:site_name" content="程序猿的博客">
-<meta property="og:description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去该代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitor Monitor对象是jvm实现的，c++中的对象。 每个对象内部都有一个唯一的monitor,mo">
+<meta property="og:description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去该代码块。使多个线程排队运行该代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitor Monitor对象是jvm实现的，c++中的对象。 每个对象内部都有一个唯一的monitor,mo">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/synchronized%E6%B1%87%E7%BC%96.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/synchronized2.png">
@@ -93,10 +93,10 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/MarkWord.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E5%81%8F%E5%90%91%E9%94%81.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/%E8%BD%BB%E9%87%8F%E9%94%81.png">
-<meta property="og:updated_time" content="2018-12-04T03:50:39.886Z">
+<meta property="og:updated_time" content="2018-12-04T03:55:17.617Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="synchronized原理">
-<meta name="twitter:description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去该代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitor Monitor对象是jvm实现的，c++中的对象。 每个对象内部都有一个唯一的monitor,mo">
+<meta name="twitter:description" content="synchronized关键字是jdk提供用于实现内部锁。 synchronized实现机制synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去该代码块。使多个线程排队运行该代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。 monitor Monitor对象是jvm实现的，c++中的对象。 每个对象内部都有一个唯一的monitor,mo">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/wujiazhen2/pict/master/thread/synchronized%E6%B1%87%E7%BC%96.png">
 
 
@@ -350,7 +350,7 @@
 
       
         <p>synchronized关键字是jdk提供用于实现内部锁。</p>
-<h4 id="synchronized实现机制"><a href="#synchronized实现机制" class="headerlink" title="synchronized实现机制"></a>synchronized实现机制</h4><p>synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去该代码块。使多个线程排队运行改代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。</p>
+<h4 id="synchronized实现机制"><a href="#synchronized实现机制" class="headerlink" title="synchronized实现机制"></a>synchronized实现机制</h4><p>synchronized代码块通过加锁的方式，只有获取到锁的线程才可以进去该代码块。使多个线程排队运行该代码块，保证代码块的原子性（对其他线程来说。只能看到别的线程还未执行或执行完毕的状态）。</p>
 <h5 id="monitor"><a href="#monitor" class="headerlink" title="monitor"></a>monitor</h5><ol>
 <li>Monitor对象是jvm实现的，c++中的对象。</li>
 <li>每个对象内部都有一个唯一的monitor,monitor的获取是互斥的。</li>
