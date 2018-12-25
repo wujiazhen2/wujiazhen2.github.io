@@ -249,6 +249,170 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/24/maven/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wujiazhen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/24/maven/" itemprop="url">maven</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-24T11:21:52+08:00">
+                2018-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/构建工具/" itemprop="url" rel="index">
+                    <span itemprop="name">构建工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Maven项目对象模型(POM)，可以通过一小段描述信息来管理项目的构建，报告和文档的项目管理工具软件。maven通过配置pom.xml配置文件来配置构建项目的方法和依赖。</p>
+<h1 id="pom常用配置标签"><a href="#pom常用配置标签" class="headerlink" title="pom常用配置标签"></a>pom常用配置标签</h1><ol>
+<li>groupId   一般都是域名倒过来，用于表示</li>
+<li>artfactId 功能命名</li>
+<li>version 版本号</li>
+<li>packaging  打包方式 默认是jar</li>
+<li>dependencyManagement<br>只能出现在父pom<br>统一版本号<br>声明 (子POM里用到再引)</li>
+<li>Dependency<br> 1.Type  默认jar<br> 2.scope<pre><code>a)compile  编译   例如spring-core
+b)test 测试
+c)provided编译  例如 servlet
+d)runtime运行时 例如JDBC驱动实现
+e)system 本地一些jar  例如短信jar
+</code></pre></li>
+</ol>
+<h1 id="依赖仲裁"><a href="#依赖仲裁" class="headerlink" title="依赖仲裁"></a>依赖仲裁</h1><p>依赖冲突时的仲裁方法</p>
+<ol>
+<li>最短路径原则</li>
+<li>加载先后原则</li>
+<li>exclusions</li>
+</ol>
+<h1 id="maven插件"><a href="#maven插件" class="headerlink" title="maven插件"></a>maven插件</h1><h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>Maven的生命周期是为了对所有的构建过程进行了抽象了，便于统一。<br>!(maven生命周期)[<a href="https://github.com/wujiazhen2/pict/blob/master/maven/maven%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png?raw=true]" target="_blank" rel="noopener">https://github.com/wujiazhen2/pict/blob/master/maven/maven%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png?raw=true]</a></p>
+<p>clean(清理)<br>cleanup(清理所有)<br>此生命周期旨在给工程做清理工作，它主要包含以下阶段：<br>pre-clean - 执行项目清理前所需要的工作。<br>clean - 清理上一次build项目生成的文件。<br>post-clean - 执行完成项目清理所需的工作.<br>default(默认)<br>validate - 验证项目是否正确且所有必要的信息都可用。<br>initialize - 初始化构建工作，如：设置参数，创建目录等。<br>generate-sources - 为包含在编译范围内的代码生成源代码.<br>process-sources - 处理源代码, 如过滤值.<br>generate-resources -<br>process-resources - 复制并处理资源文件，至目标目录，准备打包。<br>compile - 编译项目中的源代码.<br>process-classes - 为编译生成的文件做后期工作, 例如做Java类的字节码增强.<br>generate-test-sources - 为编译内容生成测试源代码.<br>process-test-sources - 处理测试源代码。<br>generate-test-resources -<br>process-test-resources - 复制并处理资源文件，至目标测试目录。<br>test-compile - 将需测试源代码编译到路径。一般来说，是编译/src/test/java目录下的java文件至目标输出的测试classpath目录中。<br>process-test-classes -<br>test - 使用合适的单元测试框架运行测试。这些测试代码不会被打包或部署。<br>prepare-package -<br>package - 接受编译好的代码，打包成可发布的格式，如 JAR 。<br>pre-integration-test -<br>integration-test - 按需求将发布包部署到运行环境。<br>post-integration-test -<br>verify -<br>install -将包安装到本地仓库，给其他本地引用提供依赖。<br>deploy -完成集成和发布工作，将最终包复制到远程仓库以便分享给其他开发人员。<br>site(站点)<br>pre-site - 执行一些生成项目站点前的准备工作。<br>site - 生成项目站点的文档。<br>post-site - 执行需完成站点生成的工作，如站点部署的准备工作。<br>site-deploy - 向制定的web服务器部署站点生成文件。 </p>
+<h2 id="自定义插件"><a href="#自定义插件" class="headerlink" title="自定义插件"></a>自定义插件</h2><p>a)<packaging>maven-plugin</packaging><br>b)extends AbstractMojo</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/28/netty/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1891,156 +2055,11 @@ ByteBufHolder
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/08/Spring中实用工具类/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wujiazhen">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程序猿的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/08/Spring中实用工具类/" itemprop="url">Spring中实用工具类</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-08T15:26:55+08:00">
-                2018-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="ResolvableType-泛型处理"><a href="#ResolvableType-泛型处理" class="headerlink" title="ResolvableType 泛型处理"></a>ResolvableType 泛型处理</h1><h2 id="获取接口上的泛型"><a href="#获取接口上的泛型" class="headerlink" title="获取接口上的泛型"></a>获取接口上的泛型</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ResolvableType resolvableType = ResolvableType.forClass(clazz);</span><br><span class="line">ResolvableType[] interfaces = resolvableType.getInterfaces();</span><br><span class="line"><span class="keyword">if</span>(interfaces==<span class="keyword">null</span> || interfaces.length==<span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line">Class&lt;?&gt; resolve = interfaces[<span class="number">0</span>].getGeneric(<span class="number">0</span>).resolve();</span><br><span class="line"><span class="keyword">return</span> resolve;</span><br></pre></td></tr></table></figure>
-<h2 id="获取父类上的泛型"><a href="#获取父类上的泛型" class="headerlink" title="获取父类上的泛型"></a>获取父类上的泛型</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ResolvableType resolvableType = ResolvableType.forClass(clazz);</span><br><span class="line">Class&lt;?&gt; resolve = resolvableType.getSuperType().getGeneric(<span class="number">0</span>).resolve();</span><br><span class="line"><span class="keyword">return</span> resolve;</span><br></pre></td></tr></table></figure>
-<h1 id="反射工具类-ReflectionUtils"><a href="#反射工具类-ReflectionUtils" class="headerlink" title="反射工具类 ReflectionUtils"></a>反射工具类 ReflectionUtils</h1><p>反射处理</p>
-<h1 id="ResourcePatternResolver"><a href="#ResourcePatternResolver" class="headerlink" title="ResourcePatternResolver"></a>ResourcePatternResolver</h1><p>PathMatchingResourcePatternResolver 用于加载资源，支持ant风格<br>配合MetadataReaderFactory获取资源元数据（class文件数据）</p>
-<h1 id="对象工具类-ObjectsUtils"><a href="#对象工具类-ObjectsUtils" class="headerlink" title="对象工具类 ObjectsUtils"></a>对象工具类 ObjectsUtils</h1><h1 id="ant路径匹配-AntPathMatcher"><a href="#ant路径匹配-AntPathMatcher" class="headerlink" title="ant路径匹配 AntPathMatcher"></a>ant路径匹配 AntPathMatcher</h1>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2086,7 +2105,7 @@ ByteBufHolder
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2097,7 +2116,7 @@ ByteBufHolder
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2108,7 +2127,7 @@ ByteBufHolder
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
