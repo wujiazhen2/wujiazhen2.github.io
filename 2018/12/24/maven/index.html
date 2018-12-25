@@ -87,10 +87,12 @@
 <meta property="og:site_name" content="程序猿的博客">
 <meta property="og:description" content="Maven项目对象模型(POM)，可以通过一小段描述信息来管理项目的构建，报告和文档的项目管理工具软件。maven通过配置pom.xml配置文件来配置构建项目的方法和依赖。 pom常用配置标签 groupId   一般都是域名倒过来，用于表示 artfactId 功能命名 version 版本号 packaging  打包方式 默认是jar dependencyManagement只能出现在父po">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-25T03:17:43.269Z">
+<meta property="og:image" content="https://github.com/wujiazhen2/pict/blob/master/maven/maven%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png?raw=true">
+<meta property="og:updated_time" content="2018-12-25T04:28:21.110Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="maven">
 <meta name="twitter:description" content="Maven项目对象模型(POM)，可以通过一小段描述信息来管理项目的构建，报告和文档的项目管理工具软件。maven通过配置pom.xml配置文件来配置构建项目的方法和依赖。 pom常用配置标签 groupId   一般都是域名倒过来，用于表示 artfactId 功能命名 version 版本号 packaging  打包方式 默认是jar dependencyManagement只能出现在父po">
+<meta name="twitter:image" content="https://github.com/wujiazhen2/pict/blob/master/maven/maven%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png?raw=true">
 
 
 
@@ -362,7 +364,7 @@ e)system 本地一些jar  例如短信jar
 <li>加载先后原则</li>
 <li>exclusions</li>
 </ol>
-<h1 id="maven插件"><a href="#maven插件" class="headerlink" title="maven插件"></a>maven插件</h1><h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>Maven的生命周期是为了对所有的构建过程进行了抽象了，便于统一。<br>!(maven生命周期)[<a href="https://github.com/wujiazhen2/pict/blob/master/maven/maven%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png?raw=true]" target="_blank" rel="noopener">https://github.com/wujiazhen2/pict/blob/master/maven/maven%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png?raw=true]</a></p>
+<h1 id="maven插件"><a href="#maven插件" class="headerlink" title="maven插件"></a>maven插件</h1><h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>Maven的生命周期是为了对所有的构建过程进行了抽象了，便于统一。<br><img src="https://github.com/wujiazhen2/pict/blob/master/maven/maven%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png?raw=true" alt="maven生命周期"></p>
 <p>clean(清理)<br>cleanup(清理所有)<br>此生命周期旨在给工程做清理工作，它主要包含以下阶段：<br>pre-clean - 执行项目清理前所需要的工作。<br>clean - 清理上一次build项目生成的文件。<br>post-clean - 执行完成项目清理所需的工作.<br>default(默认)<br>validate - 验证项目是否正确且所有必要的信息都可用。<br>initialize - 初始化构建工作，如：设置参数，创建目录等。<br>generate-sources - 为包含在编译范围内的代码生成源代码.<br>process-sources - 处理源代码, 如过滤值.<br>generate-resources -<br>process-resources - 复制并处理资源文件，至目标目录，准备打包。<br>compile - 编译项目中的源代码.<br>process-classes - 为编译生成的文件做后期工作, 例如做Java类的字节码增强.<br>generate-test-sources - 为编译内容生成测试源代码.<br>process-test-sources - 处理测试源代码。<br>generate-test-resources -<br>process-test-resources - 复制并处理资源文件，至目标测试目录。<br>test-compile - 将需测试源代码编译到路径。一般来说，是编译/src/test/java目录下的java文件至目标输出的测试classpath目录中。<br>process-test-classes -<br>test - 使用合适的单元测试框架运行测试。这些测试代码不会被打包或部署。<br>prepare-package -<br>package - 接受编译好的代码，打包成可发布的格式，如 JAR 。<br>pre-integration-test -<br>integration-test - 按需求将发布包部署到运行环境。<br>post-integration-test -<br>verify -<br>install -将包安装到本地仓库，给其他本地引用提供依赖。<br>deploy -完成集成和发布工作，将最终包复制到远程仓库以便分享给其他开发人员。<br>site(站点)<br>pre-site - 执行一些生成项目站点前的准备工作。<br>site - 生成项目站点的文档。<br>post-site - 执行需完成站点生成的工作，如站点部署的准备工作。<br>site-deploy - 向制定的web服务器部署站点生成文件。 </p>
 <h2 id="自定义插件"><a href="#自定义插件" class="headerlink" title="自定义插件"></a>自定义插件</h2><p>a)<packaging>maven-plugin</packaging><br>b)extends AbstractMojo</p>
 
